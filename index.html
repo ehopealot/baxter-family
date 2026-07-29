@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baxter Family AI: one assistant for the whole house</title>
+<meta name="description" content="Text Baxter like you'd text a person who never forgets. Reminders, lists, the errands nobody has time for — for everyone under one roof.">
+<meta property="og:title" content="Baxter Family AI: one assistant for the whole house">
+<meta property="og:description" content="Text Baxter like you'd text a person who never forgets. Reminders, lists, the errands nobody has time for — for everyone under one roof.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://family.bax.bot/">
+<link rel="canonical" href="https://family.bax.bot/">
+<!-- TODO: no og:image yet. Render one at 1200x630 from this page's own tokens,
+     the way bax.bot's og.png was made, then add og:image/width/height/alt here. -->
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23F2A177'/%3E%3Crect x='7' y='13' width='18' height='3' rx='1.5' fill='%233B2419'/%3E%3Crect x='7' y='19' width='11' height='3' rx='1.5' fill='%239E5124'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="mark" href="#main">
+      <span class="mark-badge" aria-hidden="true">B</span>
+      <span class="mark-name">Baxter Family AI</span>
+    </a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#what">What it does</a>
+      <a href="#signup">Sign up</a>
+    </nav>
+    <a class="btn btn-ghost topbar-cta" href="#signup">Get started</a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ───────────────────────── hero ─────────────────────────
+       DRAFT COPY. Written to the "shared household assistant" reading so the
+       page is real rather than lorem — replace with what the service actually
+       is. The #signup section below is the part that has to stay intact.
+       ───────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Baxter Family AI</p>
+        <h1>One assistant for the <em>whole house</em>.</h1>
+        <p class="lede">
+          Text Baxter the way you'd text someone who never forgets and never minds being
+          asked. The pickup times, the running list, the thing you meant to look up three
+          weeks ago.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-solid" href="#signup">Sign up for texts</a>
+          <a class="btn btn-ghost" href="#what">See what it does</a>
+        </div>
+        <ul class="hero-facts">
+          <li><span>Works over plain text messages</span></li>
+          <li><span>Everyone in the house, one Baxter</span></li>
+          <li><span>Stop any time by replying STOP</span></li>
+        </ul>
+      </div>
+
+      <div class="chat" role="img" aria-label="A conversation with Baxter Family AI. Sam texts asking what time swim practice is on Thursday and whether they have anything else that evening. Baxter replies that practice is at 5:15 and the only other thing is a dentist appointment for Rosa at 4, which is tight. Sam asks Baxter to add goggles to the list. Baxter confirms it is on the list and notes it also added sunscreen because the last bottle ran out on Sunday.">
+        <div class="chat-head">
+          <span class="ava ava-b ava-sm" aria-hidden="true">B</span>
+          <span class="chat-name">Baxter</span>
+          <span class="chat-meta">always on</span>
+        </div>
+        <ol class="chat-log" id="chat-log">
+          <li class="msg">
+            <span class="ava ava-m" aria-hidden="true">S</span>
+            <div class="msg-body">
+              <p class="msg-h"><b>sam</b><span>7:52 AM</span></p>
+              <p>what time is swim thursday? anything else that evening?</p>
+            </div>
+          </li>
+          <li class="msg is-bax">
+            <span class="ava ava-b" aria-hidden="true">B</span>
+            <div class="msg-body">
+              <p class="msg-h"><b>Baxter</b><span>7:52 AM</span></p>
+              <p>Practice at 5:15. Only other thing is Rosa's dentist at 4 — that's tight.</p>
+            </div>
+          </li>
+          <li class="msg">
+            <span class="ava ava-m" aria-hidden="true">S</span>
+            <div class="msg-body">
+              <p class="msg-h"><b>sam</b><span>7:54 AM</span></p>
+              <p>add goggles to the list</p>
+            </div>
+          </li>
+          <li class="msg is-bax">
+            <span class="ava ava-b" aria-hidden="true">B</span>
+            <div class="msg-body">
+              <p class="msg-h"><b>Baxter</b><span>7:54 AM</span></p>
+              <p>On the list. Added sunscreen too — the last bottle ran out Sunday.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── what it does ───────────────────────── -->
+  <section id="what" class="band" aria-labelledby="what-h">
+    <div class="wrap band-grid">
+      <div class="band-label"><span class="tick"></span>What it does</div>
+      <div class="band-body">
+        <h2 id="what-h">Just text it. Bax takes it from there.</h2>
+        <p class="band-lede">
+          Nothing to install and no app to open. You text a number, and Baxter works out
+          what you need.
+        </p>
+        <div class="cards">
+          <article class="card">
+            <h3>Keeps the week straight</h3>
+            <p>Who's where, when, and what collides with what. Ask what Thursday looks like
+              and get an answer, not a calendar to squint at.</p>
+          </article>
+          <article class="card">
+            <h3>Holds the list</h3>
+            <p>Groceries, the hardware store, the things you keep meaning to deal with.
+              Anyone in the house can add to it from wherever they are.</p>
+          </article>
+          <article class="card">
+            <h3>Nudges you</h3>
+            <p>Ask for a reminder and it books it — once on Thursday, or every weekday at
+              nine. It shows up whether or not anyone's around.</p>
+          </article>
+          <article class="card">
+            <h3>Shops around</h3>
+            <p>Four dishwashers, three insurance quotes, the same flight on six sites. It
+              reads the listings and tells you which one wins, and why.</p>
+          </article>
+          <article class="card">
+            <h3>Does the reading</h3>
+            <p>The forty-page report, the school handbook, the terms nobody reads. You get
+              the answer, not a stack of links.</p>
+          </article>
+          <article class="card">
+            <h3>Remembers</h3>
+            <p>What you decided, what you tried, what everyone's allergic to. Nothing gets
+              re-explained.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── signup / SMS opt-in ─────────────────────────
+       This section is the one carriers audit. It has to show, on our own domain
+       and adjacent to the point of consent: the program name, what we send,
+       message frequency, "message and data rates may apply", STOP/HELP, and
+       links to both legal pages. Don't thin it out for looks.
+       ───────────────────────────────────────────────────────────────────── -->
+  <section id="signup" class="band band-alt" aria-labelledby="signup-h">
+    <div class="wrap band-grid">
+      <div class="band-label"><span class="tick"></span>Sign up</div>
+      <div class="band-body">
+        <h2 id="signup-h">Get Baxter's number.</h2>
+        <p class="band-lede">
+          Add your mobile number below and Baxter will text you to say hello. That's the
+          whole setup.
+        </p>
+
+        <!-- Embed URL is the form's /viewform with ?embedded=true. Three things about
+             the linked form have to stay true, and all three are registration-critical:
+               1. the consent Checkboxes question is NOT marked Required — carriers deny
+                  registration when consent gates submitting the form;
+               2. its option is never pre-ticked;
+               3. the form is reachable with no Google sign-in ("Collect email addresses"
+                  and "Limit to 1 response" both put up a login wall, and a vetter who
+                  can't load it treats the opt-in as missing).
+             The consent wording must also match .disclosure below, and privacy.html §3
+             must list every field the form collects. A vetter compares all of them. -->
+        <div class="signup-embed">
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSc-kf-gPg3ARw6TE1HddT4ONCLI8OMKfzU_W3bILnndsfqudA/viewform?embedded=true"
+            title="Baxter Family AI SMS signup form"
+            loading="lazy">Loading…</iframe>
+        </div>
+        <p class="signup-fallback">
+          Form not loading? <a href="https://docs.google.com/forms/d/e/1FAIpQLSc-kf-gPg3ARw6TE1HddT4ONCLI8OMKfzU_W3bILnndsfqudA/viewform">Open
+          it in a new tab</a>, or just text <strong>JOIN</strong> to our number.
+        </p>
+
+        <div class="disclosure">
+          <h3>Before you sign up</h3>
+          <p>
+            By submitting your number and ticking the consent box, you agree to receive text
+            messages from <strong>Baxter Family AI</strong> at the number you provide.
+            Baxter Family AI is a service of Erik Hope, doing business as Baxter.
+          </p>
+          <dl class="plate">
+            <div>
+              <dt>What we send</dt>
+              <dd>Replies to what you text Baxter, plus the reminders and alerts you set up
+                yourself. No marketing, ever.</dd>
+            </div>
+            <div>
+              <dt>How often</dt>
+              <dd><strong>Message frequency varies</strong> — Baxter answers when you text it
+                and sends alerts when something you asked it to watch happens. There's no
+                fixed schedule and no broadcast.</dd>
+            </div>
+            <div>
+              <dt>Cost</dt>
+              <dd><strong>Message and data rates may apply.</strong> We don't charge for
+                texts, but your mobile carrier may. Carriers aren't liable for delayed or
+                undelivered messages.</dd>
+            </div>
+            <div>
+              <dt>Stopping</dt>
+              <dd>Reply <strong>STOP</strong> at any time to end all messages,
+                <strong>START</strong> to resume, or <strong>HELP</strong> for help. You can
+                also email <a href="mailto:privacy@bax.bot">privacy@bax.bot</a>.</dd>
+            </div>
+            <div>
+              <dt>Your number</dt>
+              <dd>We don't share it. No mobile information is shared with third parties or
+                affiliates for marketing or promotional purposes — see the
+                <a href="privacy.html">Privacy Policy</a>.</dd>
+            </div>
+          </dl>
+          <p class="disclosure-legal">
+            Consent isn't a condition of any purchase. See our
+            <a href="privacy.html">Privacy Policy</a> and
+            <a href="terms.html">Terms &amp; Conditions</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── self-host note ───────────────────────── -->
+  <section class="close" aria-labelledby="oss-h">
+    <div class="wrap band-grid close-inner">
+      <div class="band-label"><span class="tick"></span>Or run it yourself</div>
+      <div class="band-body">
+        <h2 id="oss-h">Baxter is open source.</h2>
+        <p class="band-lede">
+          Baxter Family AI is the version we host for you. If you'd rather run it on your own
+          machine — your keys, your hardware, nothing reported back to us — that's the
+          project it's built on, and it's free.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-ghost" href="https://bax.bot">Self-host Baxter<span aria-hidden="true">&nbsp;↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <span class="foot-mark">Baxter Family AI</span>
+    <span class="foot-dim">An assistant for the whole household.</span>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="https://bax.bot">Self-host it<span aria-hidden="true"> ↗</span></a>
+  </div>
+</footer>
+
+<!-- Analytics: GoatCounter — cookieless, pageview counts only. -->
+<script data-goatcounter="https://lawnmaster.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>
