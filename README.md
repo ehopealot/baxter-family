@@ -66,7 +66,26 @@ change both.
 account name, and mobile number; if you add a question to the form, add it there too —
 "policy lacks clear explanation of collected data" is a 30908 cause.
 
-Keep a screenshot of the finished form. Campaign resubmission asks for opt-in evidence.
+## The hosted opt-in screenshots
+
+Two PNGs in this directory are cited from the campaign's message flow and are **not
+decorative** — Twilio error [30896](https://www.twilio.com/docs/api/errors/30896) lists
+missing hosted screenshots as a rejection cause. Don't rename or delete them.
+
+| File | Served at | Shows |
+|---|---|---|
+| `optin.png` | `/optin.png` | The `#signup` section on our own domain, browser URL bar visible |
+| `optin-form.png` | `/optin-form.png` | The signup form in full — every field label, and the consent box |
+
+Re-shoot both whenever the form or `#signup` changes, so a reviewer sees what is actually
+live. Two rules when re-shooting, both learned the hard way:
+
+- **Use a private/incognito window.** Signed in, Google renders the account row at the top
+  of the form. That publishes the operator's email address on a public URL, and it reads
+  to a reviewer as a sign-in wall — the opposite of what the screenshot is meant to prove.
+- **Keep the `* Indicates required question` legend in frame.** The consent question has no
+  asterisk while the four fields above it do. That contrast is the evidence that consent
+  isn't required to submit, which is the single thing 30896 most often turns on.
 
 ## Why the split
 
