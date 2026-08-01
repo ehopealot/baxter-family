@@ -1071,30 +1071,48 @@ p { margin: 0; }
   line-height: 1.62;
 }
 
-/* ── SMS signup + consent disclosure ─────────────────────── */
+/* ── invite form + consent disclosure ────────────────────── */
 
-/* Google Forms iframes don't self-size — they scroll internally — so the frame
-   gets an explicit height rather than an aspect ratio. Boxed in the same hard
-   border as the chat panel so an embedded third-party form still reads as part
-   of the page. */
-.signup-embed {
+/* The page captures an email; the SMS consent form lives behind it. Fields are
+   boxed in the same hard border as everything else — squared corners, offset
+   shadow on focus rather than a glow, so inputs read as part of the chassis. */
+.signup-form {
   margin-top: 2rem;
-  max-width: 42rem;
+  max-width: 30rem;
+  display: grid;
+  gap: 1.1rem;
+}
+.field { display: grid; gap: 0.4rem; }
+.field label {
+  font: 500 0.78rem/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.field input {
+  font: 400 1rem/1.4 var(--sans);
+  color: var(--ink);
   background: var(--surface);
   border: 1.5px solid var(--ink-rule);
   border-radius: var(--radius);
-  overflow: hidden;
-}
-.signup-embed iframe {
-  display: block;
+  padding: 0.7rem 0.85rem;
   width: 100%;
-  height: clamp(34rem, 72vh, 56rem);
-  border: 0;
+  transition: box-shadow var(--tr), border-color var(--tr);
 }
+.field input::placeholder { color: var(--ink-3); }
+.field input:focus-visible {
+  outline: none;
+  border-color: var(--peach-deep);
+  box-shadow: 3px 3px 0 var(--peach);
+}
+/* :invalid alone would shout at an empty field before it is ever touched. */
+.field input:not(:placeholder-shown):invalid { border-color: var(--peach-deep); }
+
+.signup-form .btn-solid { justify-self: start; }
 
 .signup-fallback {
-  margin-top: 0.8rem;
-  max-width: 42rem;
+  margin-top: 1rem;
+  max-width: 30rem;
   font: 400 0.82rem/1.6 var(--mono);
   color: var(--ink-3);
 }
@@ -1141,3 +1159,7 @@ p { margin: 0; }
 @media (max-width: 620px) {
   .disclosure .plate > div { grid-template-columns: 1fr; gap: 0.3rem; }
 }
+
+/* Turnstile renders a fixed ~300x65 iframe; this just gives it room in the
+   grid and keeps it from butting against the submit button. */
+.cf-turnstile { min-height: 65px; }

@@ -18,6 +18,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<!-- Turnstile. The widget only mints the token; Formspark does the siteverify
+     call server-side, which is the half that actually stops anything — the
+     endpoint is public, so a widget alone would be decorative. -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -151,48 +155,63 @@
   </section>
 
   <!-- ───────────────────────── signup / SMS opt-in ─────────────────────────
-       This section is the one carriers audit. It has to show, on our own domain
-       and adjacent to the point of consent: the program name, what we send,
-       message frequency, "message and data rates may apply", STOP/HELP, and
-       links to both legal pages. Don't thin it out for looks.
+       Two-step now: this page captures an email, and the SMS signup form (where
+       consent is actually collected) is sent on from there.
+
+       The link to that form stays PUBLIC and stays on this page. The approved
+       campaign's message flow states opt-in happens at family.bax.bot/#signup
+       with no login or purchase required, and the hosted screenshots show it.
+       Putting the consent form behind an invite-only wall would make both of
+       those false. Keep "Already have an invite?" reachable.
+
+       The disclosure block below must also keep saying that leaving an email
+       here is NOT an SMS opt-in — consent happens on the signup form, against
+       an unticked box. Don't let this section imply otherwise.
        ───────────────────────────────────────────────────────────────────── -->
   <section id="signup" class="band band-alt" aria-labelledby="signup-h">
     <div class="wrap band-grid">
       <div class="band-label"><span class="tick"></span>Sign up</div>
       <div class="band-body">
-        <h2 id="signup-h">Get Baxter's number.</h2>
+        <h2 id="signup-h">Request an invite.</h2>
         <p class="band-lede">
-          Add your mobile number below and Baxter will text you to say hello. That's the
-          whole setup.
+          We're opening up a household at a time. Leave your name and email, and we'll send
+          you the signup form when there's room.
         </p>
 
-        <!-- Embed URL is the form's /viewform with ?embedded=true. Three things about
-             the linked form have to stay true, and all three are registration-critical:
-               1. the consent Checkboxes question is NOT marked Required — carriers deny
-                  registration when consent gates submitting the form;
-               2. its option is never pre-ticked;
-               3. the form is reachable with no Google sign-in ("Collect email addresses"
-                  and "Limit to 1 response" both put up a login wall, and a vetter who
-                  can't load it treats the opt-in as missing).
-             The consent wording must also match .disclosure below, and privacy.html §3
-             must list every field the form collects. A vetter compares all of them. -->
-        <div class="signup-embed">
-          <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLSc-kf-gPg3ARw6TE1HddT4ONCLI8OMKfzU_W3bILnndsfqudA/viewform?embedded=true"
-            title="Baxter Family AI SMS signup form"
-            loading="lazy">Loading…</iframe>
-        </div>
+        <form class="signup-form" action="https://submit-form.com/JLf4JW6hg" method="POST">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+          </div>
+          <!-- Formspark honeypot: hidden from people, irresistible to bots. -->
+          <input type="checkbox" name="_honeypot" tabindex="-1" autocomplete="off"
+                 aria-hidden="true" style="display:none">
+          <!-- Renders the challenge and posts cf-turnstile-response with the form.
+               data-theme is pinned light: the page has no dark mode, and "auto"
+               would hand a dark widget to anyone whose OS is set that way. -->
+          <div class="cf-turnstile"
+               data-sitekey="0x4AAAAAAEDQIGUcv8dkdD5w"
+               data-theme="light"></div>
+          <button class="btn btn-solid" type="submit">Request an invite</button>
+        </form>
+
         <p class="signup-fallback">
-          Form not loading? <a href="https://docs.google.com/forms/d/e/1FAIpQLSc-kf-gPg3ARw6TE1HddT4ONCLI8OMKfzU_W3bILnndsfqudA/viewform">Open
-          it in a new tab</a>.
+          Already have an invite? <a href="https://docs.google.com/forms/d/e/1FAIpQLSc-kf-gPg3ARw6TE1HddT4ONCLI8OMKfzU_W3bILnndsfqudA/viewform">Open
+          the signup form</a>.
         </p>
 
         <div class="disclosure">
-          <h3>Before you sign up</h3>
+          <h3>About the text messages</h3>
           <p>
-            By submitting your number and ticking the consent box, you agree to receive text
-            messages from <strong>Baxter Family AI</strong> at the number you provide.
-            Baxter Family AI is a service of Mirabelle Studios.
+            <strong>Leaving your email here does not sign you up for texts.</strong> When we
+            send you the signup form, you'll enter your mobile number and tick a consent box
+            there — that's the point you agree to receive text messages from
+            <strong>Baxter Family AI</strong>, a service of Mirabelle Studios. Here's what
+            you'd be agreeing to.
           </p>
           <dl class="plate">
             <div>
