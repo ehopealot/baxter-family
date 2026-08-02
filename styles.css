@@ -1,14 +1,14 @@
 /* ============================================================
-   Baxter Family AI — "peaches and cream, on 198X hardware"
+   Baxter Family AI: "peaches and cream, on 198X hardware"
    Cream stock with a peach cast, warm roasted-brown ink, and a
    coral blush carrying the product's "power / always-on" signal.
    The chassis stays hard-edged: squared corners, hard offset
    shadows, monospace display type. Peach on terminal hardware is
-   the point — soften the palette, not the build. The conversation
+   the point: soften the palette, not the build. The conversation
    panel, a boxed utility window with a coral status LED, is the
    signature element.
 
-   Plum is the secondary layer (links, chips, inline code): far
+   Plum is the secondary layer (links and hover states): far
    enough from the coral in hue to stay legible beside it, and
    still in the same dessert register as the rest.
 
@@ -19,195 +19,182 @@
    ============================================================ */
 
 :root {
-  --paper:      #FCEDDD;   /* cream stock, warmed toward the fruit */
-  --paper-alt:  #F7DFC9;
-  --surface:    #FFFAF4;
+	--paper: #fceddd; /* cream stock, warmed toward the fruit */
+	--paper-alt: #f7dfc9;
+	--surface: #fffaf4;
 
-  --ink:        #3B2419;   /* roasted brown, never neutral black */
-  --ink-2:      #5F4234;
-  --ink-3:      #7F5B4B;
+	--ink: #3b2419; /* roasted brown, never neutral black */
+	--ink-2: #5f4234;
+	--ink-3: #7f5b4b;
 
-  --peach:        #F2A177;   /* ripe peach — brand + "power" signal; carries ink, not white */
-  --peach-mid:    #E8895A;   /* deeper peach for hovers and the chat panel shadow */
-  --peach-deep:   #9E5124;   /* text-safe peach — small marks, links, focus ring */
-  --peach-tint:   #FBDCC6;
-  --peach-wash:   #FEF0E6;
+	--peach: #f2a177; /* ripe peach, brand + "power" signal; carries ink, not white */
+	--peach-mid: #e8895a; /* deeper peach for hovers and the chat panel shadow */
+	--peach-deep: #9e5124; /* text-safe peach: small marks, links, focus ring */
+	--peach-tint: #fbdcc6;
+	--peach-wash: #fef0e6;
 
-  --plum:       #A04C70;   /* secondary accent — the "reference / code" layer */
-  --plum-deep:  #7C2F51;   /* text-safe plum — inline code, links, chips */
-  --plum-tint:  #F2D9E3;
+	--plum: #a04c70; /* secondary accent, the "reference / code" layer */
+	--plum-deep: #7c2f51; /* text-safe plum: inline code, links, chips */
+	--plum-tint: #f2d9e3;
 
-  /* Brighter tints for speaker/reference text on the dark plate (terminal). */
-  --peach-on-dark:  #FFC09B;
-  --plum-on-dark: #E7A0BC;
+	/* Brighter peach for text and marks on the dark plate (chat head, close). */
+	--peach-on-dark: #ffc09b;
 
-  --plate:      #33201A;
-  --plate-ink:  #FBE9DC;
+	--plate: #33201a;
+	--plate-ink: #fbe9dc;
 
-  --rule:       #EAC9AE;   /* warm hairline */
-  --rule-soft:  #F2DBC6;
-  --ink-rule:   #3B2419;   /* hard, dark rule for boxed elements */
+	--rule: #eac9ae; /* warm hairline */
+	--rule-soft: #f2dbc6;
+	--ink-rule: #3b2419; /* hard, dark rule for boxed elements */
 
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+	--sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --wrap: 1200px;
-  --pad:  clamp(1.25rem, 4vw, 3rem);
+	--wrap: 1200px;
+	--pad: clamp(1.25rem, 4vw, 3rem);
 
-  /* Height the sticky topbar occupies, so anchor jumps can clear it. Grows
+	/* Height the sticky topbar occupies, so anchor jumps can clear it. Grows
      when the nav wraps to its own row below 900px. */
-  --topbar-h: 64px;
-  --tr: 0.16s ease;
-  --radius: 2px;   /* squared off — the retro-UI tell */
+	--topbar-h: 64px;
+	--tr: 0.16s ease;
+	--radius: 2px; /* squared off, the retro-UI tell */
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
 
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html {
+	scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
 
 body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--sans);
-  /* Width only. Pinning "wght" here would inherit past every font-weight
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--sans);
+	/* Width only. Pinning "wght" here would inherit past every font-weight
      declaration on the page and flatten bold text back to regular. */
-  font-variation-settings: "wdth" 100;
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+	font-variation-settings: "wdth" 100;
+	font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
 }
 
 .wrap {
-  max-width: var(--wrap);
-  margin-inline: auto;
-  padding-inline: var(--pad);
+	max-width: var(--wrap);
+	margin-inline: auto;
+	padding-inline: var(--pad);
 }
 
-a { color: inherit; }
+a {
+	color: inherit;
+}
+
+::selection {
+	background: var(--peach);
+	color: var(--ink);
+}
 
 /* Target of both the skip link and the wordmark, so it gets the same clearance
    the bands do. */
-#main { scroll-margin-top: var(--topbar-h); }
-#main:focus { outline: none; }
+#main {
+	scroll-margin-top: var(--topbar-h);
+}
+#main:focus {
+	outline: none;
+}
 
 :focus-visible {
-  outline: 2px solid var(--peach-deep);
-  outline-offset: 3px;
-  border-radius: 2px;
+	outline: 2px solid var(--peach-deep);
+	outline-offset: 3px;
+	border-radius: 2px;
 }
 
 .skip {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  background: var(--peach);
-  color: var(--ink);
-  padding: 0.6rem 1rem;
-  font: 600 0.8rem/1 var(--mono);
-  z-index: 50;
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	background: var(--peach);
+	color: var(--ink);
+	padding: 0.6rem 1rem;
+	font: 600 0.8rem / 1 var(--mono);
+	z-index: 50;
 }
-.skip:focus { left: 0; }
-
-.sr-only {
-  position: absolute;
-  width: 1px; height: 1px;
-  margin: -1px; padding: 0;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-code, pre { font-family: var(--mono); }
-
-/* ── code blocks + their copy button ─────────────────────── */
-
-/* .snip is added by app.js, wrapping the button and its <pre>. */
-.snip {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-.snip pre { width: 100%; }
-
-/* Without JS there's no wrapper and the <pre> carries its own top gap. With
-   it, that gap moves up to the wrapper so the button sits inside the spacing
-   rather than being pushed away from its own code block. */
-.steps .snip { margin-top: 0rem; }
-.steps .snip pre { margin-top: 0; }
-
-.copy {
-  /* 30px clears WCAG's 24px minimum. Forcing the 44px recommendation would
-     make the button taller than the code block it labels. */
-  min-height: 30px;
-  margin-bottom: 0.35rem;
-  padding: 0.3rem 0.6rem;
-  font: 500 0.68rem/1 var(--mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  /* Always visible rather than revealed on hover: it sits in the flow above
-     the block, so hiding it reserves the space anyway and costs discoverability
-     for nothing. */
-  color: var(--ink-3);
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: color var(--tr), border-color var(--tr), transform var(--tr);
-}
-.copy:hover { color: var(--plum-deep); border-color: var(--plum); }
-.copy:active { transform: translateY(1px); }
-
-@media (prefers-reduced-motion: reduce) {
-  .copy:active { transform: none; }
+.skip:focus {
+	left: 0;
 }
 
 /* ── shared type ─────────────────────────────────────────── */
 
 /* Display voice is the monospace: this is a thing you talk to in a terminal,
    so its headlines are set like terminal output. Body stays in the sans. */
-h1, h2, h3 {
-  font-family: var(--mono);
-  margin: 0;
-  text-wrap: balance;
+h1,
+h2,
+h3 {
+	font-family: var(--mono);
+	margin: 0;
+	text-wrap: balance;
 }
 
 h1 {
-  font-weight: 600;
-  font-size: clamp(2.1rem, 1.4rem + 2.7vw, 3.35rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  margin-block: 0.6rem 0;
+	font-weight: 700;
+	font-size: clamp(2.1rem, 1.3rem + 3.4vw, 4rem);
+	line-height: 1.02;
+	letter-spacing: -0.025em;
+	margin-block: 0.6rem 0;
 }
 h1 em {
-  font-style: normal;
-  color: var(--peach-deep);
-  white-space: nowrap;   /* keep "do-it-all" from breaking at its hyphens */
+	font-style: normal;
+	color: var(--peach-deep);
+	white-space: nowrap; /* keep "whole house" on one line */
 }
 
 h2 {
-  font-weight: 600;
-  font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.15rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+	font-weight: 700;
+	font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.15rem);
+	line-height: 1.1;
+	letter-spacing: -0.02em;
 }
 
 h3 {
-  font-weight: 600;
-  font-size: 1.02rem;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
+	font-weight: 600;
+	font-size: 1.02rem;
+	line-height: 1.35;
+	letter-spacing: -0.01em;
 }
 
-p { margin: 0; }
+p {
+	margin: 0;
+}
 
 .eyebrow {
-  font: 500 0.72rem/1 var(--mono);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--peach-deep);
+	font: 500 0.72rem / 1 var(--mono);
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--peach-deep);
+}
+
+/* The hero eyebrow carries the same tick every band label does. */
+.hero .eyebrow {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+}
+.hero .eyebrow::before {
+	content: "";
+	width: 22px;
+	height: 2px;
+	background: var(--peach-deep);
+	flex: none;
 }
 
 /* ── buttons ─────────────────────────────────────────────── */
@@ -215,205 +202,243 @@ p { margin: 0; }
 /* Hard offset shadow, collapses on press: the tactile chunk of a physical
    key or an old software-box button. */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font: 500 0.85rem/1 var(--mono);
-  letter-spacing: 0.02em;
-  text-decoration: none;
-  padding: 0.8rem 1.3rem;
-  border: 1.5px solid var(--ink-rule);
-  border-radius: var(--radius);
-  box-shadow: 3px 3px 0 var(--ink-rule);
-  transition: background-color var(--tr), color var(--tr),
-              border-color var(--tr), box-shadow var(--tr), transform var(--tr);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font: 500 0.85rem / 1 var(--mono);
+	letter-spacing: 0.02em;
+	text-decoration: none;
+	padding: 0.8rem 1.3rem;
+	border: 1.5px solid var(--ink-rule);
+	border-radius: var(--radius);
+	box-shadow: 3px 3px 0 var(--ink-rule);
+	transition:
+		background-color var(--tr),
+		color var(--tr),
+		border-color var(--tr),
+		box-shadow var(--tr),
+		transform var(--tr);
 }
-.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink-rule); }
+.btn:active {
+	transform: translate(2px, 2px);
+	box-shadow: 1px 1px 0 var(--ink-rule);
+}
 
 .btn-solid {
-  background: var(--peach);
-  color: var(--ink);
-  font-weight: 600;
+	background: var(--peach);
+	color: var(--ink);
+	font-weight: 600;
 }
-.btn-solid:hover { background: var(--peach-mid); }
+.btn-solid:hover {
+	background: var(--peach-mid);
+}
 
 .btn-ghost {
-  background: var(--surface);
-  color: var(--ink);
+	background: var(--surface);
+	color: var(--ink);
 }
-.btn-ghost:hover { color: var(--plum-deep); box-shadow: 3px 3px 0 var(--plum); }
-.btn-ghost:active { box-shadow: 1px 1px 0 var(--plum); }
+.btn-ghost:hover {
+	color: var(--plum-deep);
+	box-shadow: 3px 3px 0 var(--plum);
+}
+.btn-ghost:active {
+	box-shadow: 1px 1px 0 var(--plum);
+}
 
-.btn-lg { padding: 1rem 1.65rem; font-size: 0.95rem; }
+.btn-lg {
+	padding: 1rem 1.65rem;
+	font-size: 0.95rem;
+}
 
 /* Touch pointers get the 44px target; the topbar CTA sits under it otherwise,
    and below 900px it's the only tappable control in the header. */
 @media (pointer: coarse) {
-  .btn { min-height: 44px; }
+	.btn {
+		min-height: 44px;
+	}
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn:active { transform: none; }
+	.btn:active {
+		transform: none;
+	}
 }
 
 /* ── topbar ──────────────────────────────────────────────── */
 
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(252, 237, 221, 0.88);
-  backdrop-filter: blur(10px);
-  border-bottom: 1.5px solid var(--ink-rule);
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	background: rgba(252, 237, 221, 0.88);
+	backdrop-filter: blur(10px);
+	border-bottom: 1.5px solid var(--ink-rule);
 }
 
 .topbar-inner {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  min-height: 64px;
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+	min-height: 64px;
 }
 
 .mark {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  text-decoration: none;
-  margin-right: auto;
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	text-decoration: none;
+	margin-right: auto;
 }
 .mark-badge {
-  display: grid;
-  place-items: center;
-  width: 26px; height: 26px;
-  border-radius: var(--radius);
-  background: var(--peach);
-  color: var(--ink);
-  font: 600 0.85rem/1 var(--mono);
-  flex: none;
+	display: grid;
+	place-items: center;
+	width: 26px;
+	height: 26px;
+	border-radius: var(--radius);
+	background: var(--peach);
+	color: var(--ink);
+	font: 600 0.85rem / 1 var(--mono);
+	flex: none;
 }
 .mark-name {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: -0.01em;
+	font-family: var(--mono);
+	font-weight: 600;
+	font-size: 1.05rem;
+	letter-spacing: -0.01em;
 }
 
 .topnav {
-  display: flex;
-  gap: 1.5rem;
+	display: flex;
+	gap: 1.5rem;
 }
 .topnav a {
-  font: 400 0.82rem/1 var(--mono);
-  color: var(--ink-2);
-  text-decoration: none;
-  padding-block: 0.4rem;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
+	font: 400 0.82rem / 1 var(--mono);
+	color: var(--ink-2);
+	text-decoration: none;
+	padding-block: 0.4rem;
+	border-bottom: 2px solid transparent;
+	white-space: nowrap;
 }
-.topnav a:hover { color: var(--peach-deep); border-bottom-color: var(--peach-deep); }
-/* Set by app.js as you scroll. Same treatment as :hover, so the page teaches
-   one visual language for "this link points at where you are / are going". */
-.topnav a[aria-current] { color: var(--peach-deep); border-bottom-color: var(--peach-deep); }
+.topnav a:hover {
+	color: var(--peach-deep);
+	border-bottom-color: var(--peach-deep);
+}
 
-.topbar-cta { padding: 0.5rem 0.9rem; }
+.topbar-cta {
+	padding: 0.5rem 0.9rem;
+}
 
 /* The nav moves to its own row rather than disappearing, so phone visitors
    aren't left scrolling the whole page to reach Setup. */
 @media (max-width: 900px) {
-  :root { --topbar-h: 104px; }
+	:root {
+		--topbar-h: 104px;
+	}
 
-  /* row-gap has to be zeroed explicitly: the base rule sets `gap: 1.5rem`,
+	/* row-gap has to be zeroed explicitly: the base rule sets `gap: 1.5rem`,
      which would otherwise open 24px of dead space above the strip. */
-  .topbar-inner {
-    flex-wrap: wrap;
-    column-gap: 1rem;
-    row-gap: 0;
-    padding-block: 0.5rem 0;
-  }
+	.topbar-inner {
+		flex-wrap: wrap;
+		column-gap: 1rem;
+		row-gap: 0;
+		padding-block: 0.5rem 0;
+	}
 
-  .topnav {
-    order: 3;
-    width: 100%;
-    gap: 1.5rem;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    border-top: 1px solid var(--rule);
-    /* Bleed the strip to the viewport edges while its items stay on the
+	.topnav {
+		order: 3;
+		width: 100%;
+		gap: 1.5rem;
+		overflow-x: auto;
+		overscroll-behavior-inline: contain;
+		border-top: 1px solid var(--rule);
+		/* Bleed the strip to the viewport edges while its items stay on the
        same left edge as the wordmark above them. */
-    margin-inline: calc(var(--pad) * -1);
-    padding-inline: var(--pad);
-    scrollbar-width: none;
-    /* Fade the right edge so the strip reads as scrollable — the hidden
+		margin-inline: calc(var(--pad) * -1);
+		padding-inline: var(--pad);
+		scrollbar-width: none;
+		/* Fade the right edge so the strip reads as scrollable; the hidden
        scrollbar otherwise gives no hint that Setup is off-screen. */
-    -webkit-mask-image: linear-gradient(to right, #000 84%, transparent 100%);
-            mask-image: linear-gradient(to right, #000 84%, transparent 100%);
-  }
-  .topnav::-webkit-scrollbar { width: 0; height: 0; }
+		-webkit-mask-image: linear-gradient(to right, #000 84%, transparent 100%);
+		mask-image: linear-gradient(to right, #000 84%, transparent 100%);
+	}
+	.topnav::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+	}
 
-  .topnav a {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding-block: 0;
-  }
+	.topnav a {
+		flex: none;
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding-block: 0;
+	}
 }
 
 /* ── hero ────────────────────────────────────────────────── */
 
 .hero {
-  padding-block: clamp(3.5rem, 7vw, 6.5rem) clamp(3.5rem, 6vw, 6rem);
-  border-bottom: 1.5px solid var(--ink-rule);
-  /* Faint engineering grid on manila — graph paper from a technical manual,
+	padding-block: clamp(3.5rem, 7vw, 6.5rem) clamp(3.5rem, 6vw, 6rem);
+	border-bottom: 1.5px solid var(--ink-rule);
+	/* Faint engineering grid on manila: graph paper from a technical manual,
      not a SaaS gradient glow. */
-  background:
-    repeating-linear-gradient(to right, rgba(59, 36, 25, 0.045) 0 1px, transparent 1px 34px),
-    repeating-linear-gradient(to bottom, rgba(59, 36, 25, 0.045) 0 1px, transparent 1px 34px),
-    var(--paper);
+	background:
+		repeating-linear-gradient(
+			to right,
+			rgba(59, 36, 25, 0.045) 0 1px,
+			transparent 1px 34px
+		),
+		repeating-linear-gradient(
+			to bottom,
+			rgba(59, 36, 25, 0.045) 0 1px,
+			transparent 1px 34px
+		),
+		var(--paper);
 }
 
 .hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
-  gap: clamp(2.5rem, 5vw, 4.5rem);
-  align-items: center;
+	display: grid;
+	grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+	gap: clamp(2.5rem, 5vw, 4.5rem);
+	align-items: center;
 }
 
 .lede {
-  margin-top: 1.5rem;
-  max-width: 34em;
-  color: var(--ink-2);
-  font-size: 1.08rem;
-  line-height: 1.62;
+	margin-top: 1.5rem;
+	max-width: 34em;
+	color: var(--ink-2);
+	font-size: 1.08rem;
+	line-height: 1.62;
 }
 
 .cta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.85rem;
-  margin-top: 2rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.85rem;
+	margin-top: 2rem;
 }
 
 .hero-facts {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  margin: 2.25rem 0 0;
-  padding: 1.5rem 0 0;
-  border-top: 1px solid var(--rule);
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.5rem;
+	margin: 2.25rem 0 0;
+	padding: 1.5rem 0 0;
+	border-top: 1px solid var(--rule);
 }
 .hero-facts li {
-  font: 400 0.76rem/1.4 var(--mono);
-  color: var(--ink-3);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+	font: 400 0.76rem / 1.4 var(--mono);
+	color: var(--ink-3);
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
 }
 .hero-facts li::before {
-  content: "";
-  width: 10px; height: 2px;
-  background: var(--peach-deep);
-  flex: none;
+	content: "";
+	width: 10px;
+	height: 2px;
+	background: var(--peach-deep);
+	flex: none;
 }
 
 /* ── the conversation (signature) ────────────────────────── */
@@ -421,279 +446,321 @@ p { margin: 0; }
 /* A boxed utility window: dark title bar, squared corners, and a hard peach
    offset shadow that reads like registration/overprint on a printed card. */
 .chat {
-  background: var(--surface);
-  border: 1.5px solid var(--ink-rule);
-  border-radius: var(--radius);
-  box-shadow: 7px 7px 0 var(--peach-mid);
-  min-width: 0;
-  overflow: hidden;
+	background: var(--surface);
+	border: 1.5px solid var(--ink-rule);
+	border-radius: var(--radius);
+	box-shadow: 7px 7px 0 var(--peach-mid);
+	min-width: 0;
+	overflow: hidden;
 }
 
 .chat-head {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.7rem 1.1rem;
-  background: var(--ink);
-  color: var(--surface);
-  border-bottom: 2px solid var(--peach);
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	padding: 0.7rem 1.1rem;
+	background: var(--ink);
+	color: var(--surface);
+	border-bottom: 2px solid var(--peach);
 }
 .chat-name {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--surface);
+	font-family: var(--mono);
+	font-weight: 600;
+	font-size: 0.95rem;
+	color: var(--surface);
 }
 .chat-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin-left: auto;
-  font: 400 0.72rem/1 var(--mono);
-  color: rgba(255, 250, 244, 0.62);
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	margin-left: auto;
+	font: 400 0.72rem / 1 var(--mono);
+	color: rgba(255, 250, 244, 0.62);
 }
-/* The "always on" light. Green = powered / running on your machine. */
+/* The "always on" light: peach = powered. */
 .chat-meta::before {
-  content: "";
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--peach-on-dark);
-  flex: none;
-  animation: led 2.4s ease-in-out infinite;
+	content: "";
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--peach-on-dark);
+	flex: none;
+	animation: led 2.4s ease-in-out infinite;
 }
 @keyframes led {
-  0%, 100% { opacity: 1;    box-shadow: 0 0 6px 0 rgba(255, 192, 155, 0.75); }
-  50%      { opacity: 0.5;  box-shadow: 0 0 1px 0 rgba(255, 192, 155, 0.30); }
+	0%,
+	100% {
+		opacity: 1;
+		box-shadow: 0 0 6px 0 rgba(255, 192, 155, 0.75);
+	}
+	50% {
+		opacity: 0.5;
+		box-shadow: 0 0 1px 0 rgba(255, 192, 155, 0.3);
+	}
 }
 @media (prefers-reduced-motion: reduce) {
-  .chat-meta::before { animation: none; }
+	.chat-meta::before {
+		animation: none;
+	}
 }
 
 .chat-log {
-  list-style: none;
-  margin: 0;
-  padding: 0.9rem 0.5rem 1.1rem;
+	list-style: none;
+	margin: 0;
+	padding: 0.9rem 0.5rem 1.1rem;
 }
 
 .msg {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  gap: 0.7rem;
-  padding: 0.55rem 0.7rem;
-  border-radius: var(--radius);
+	display: grid;
+	grid-template-columns: 34px minmax(0, 1fr);
+	gap: 0.7rem;
+	padding: 0.55rem 0.7rem;
+	border-radius: var(--radius);
 }
-.msg.is-bax { background: var(--peach-wash); }
+.msg.is-bax {
+	background: var(--peach-wash);
+}
 
 .ava {
-  display: grid;
-  place-items: center;
-  width: 34px; height: 34px;
-  border-radius: 4px;
-  font: 600 0.8rem/1 var(--mono);
-  color: #fff;
-  flex: none;
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 4px;
+	font: 600 0.8rem / 1 var(--mono);
+	color: #fff;
+	flex: none;
 }
 /* Warm brown, kept dark enough to clear 4.5:1 against white for the initial. */
-.ava-m { background: #7C5647; }
-.ava-b { background: var(--peach); color: var(--ink); }
-.ava-sm { width: 24px; height: 24px; font-size: 0.66rem; }
+.ava-m {
+	background: #7c5647;
+}
+.ava-b {
+	background: var(--peach);
+	color: var(--ink);
+}
+.ava-sm {
+	width: 24px;
+	height: 24px;
+	font-size: 0.66rem;
+}
 
-.msg-body { min-width: 0; }
+.msg-body {
+	min-width: 0;
+}
 
 .msg-h {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-bottom: 0.15rem;
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+	margin-bottom: 0.15rem;
 }
 .msg-h b {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 0.9rem;
+	font-family: var(--mono);
+	font-weight: 600;
+	font-size: 0.9rem;
 }
 .msg-h span {
-  font: 400 0.68rem/1 var(--mono);
-  color: var(--ink-3);
+	font: 400 0.68rem / 1 var(--mono);
+	color: var(--ink-3);
 }
 
-.msg-body p + p { margin-top: 0.5rem; }
 .msg-body > p:not(.msg-h) {
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--ink-2);
+	font-size: 0.92rem;
+	line-height: 1.55;
+	color: var(--ink-2);
 }
-.at {
-  color: var(--plum-deep);
-  background: var(--plum-tint);
-  padding: 0.05em 0.3em;
-  border-radius: var(--radius);
-  font-weight: 600;
+/* Staged reveal: app.js adds .is-staged only when motion is welcome and the
+   script is actually running, so the conversation is complete without it. */
+.chat-log.is-staged .msg {
+	opacity: 0;
 }
-.ref {
-  font-family: var(--mono);
-  font-size: 0.88em;
-  color: var(--plum-deep);
-  background: var(--plum-tint);
-  padding: 0.08em 0.35em;
-  border-radius: var(--radius);
-}
-
-/* staggered reveal, set up by app.js only when motion is welcome */
-.chat-log.is-staged .msg { opacity: 0; }
 .chat-log.is-staged .msg.is-in {
-  opacity: 1;
-  animation: msgIn 0.3s ease-out both;
+	opacity: 1;
+	animation: msgIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes msgIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: none; }
+	from {
+		opacity: 0;
+		transform: translateY(7px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+/* .msg-body is the anchor; the reply's text <p> is the box. While .is-typing, the
+   subtree is hidden (the box stays the same) and the dots overlay it,
+   so the row's height matches the final reply and the panel never
+   resizes between the typing beat and the reply.
+
+   We use opacity instead of color: transparent so children with their
+   own color (refs, ems, bs) get hidden too. color: transparent
+   inherits, but a child's explicit color wins, which would leave
+   highlighted spans visible during the typing beat. */
+.msg-body { position: relative; }
+.msg-body > p:not(.msg-h) {
+	transition: opacity 0.28s ease;
+}
+.msg.is-typing .msg-body > p:not(.msg-h) {
+	opacity: 0;
+	/* Snap out of view so the text doesn't visibly fade away; we want the
+     reply to fade IN, not the text to fade OUT and then back in. */
+	transition: none;
+}
+
+/* The typing dots overlay the reply's text area. Absolute + inset:0 keeps
+   the row's height determined by the (still-present, hidden) text, not
+   the dots themselves. padding-top skips past msg-h so the dots land in
+   the area where the reply text will be. */
+.typing-dots {
+	position: absolute;
+	inset: 0;
+	padding-top: 1.2rem;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	opacity: 0;
+	transition: opacity 0.22s ease;
+	pointer-events: none;
+}
+.msg.is-typing .typing-dots {
+	opacity: 1;
+	/* Snap the dots on the moment typing starts, so the arriving row is
+     already mid-typing rather than fading the dots up after the fact. */
+	transition: opacity 0s;
+}
+.typing-dots i {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--ink-3);
+	animation: tdot 0.9s ease-in-out infinite;
+}
+.typing-dots i:nth-child(2) {
+	animation-delay: 0.15s;
+}
+.typing-dots i:nth-child(3) {
+	animation-delay: 0.3s;
+}
+@keyframes tdot {
+	0%,
+	60%,
+	100% {
+		opacity: 0.25;
+	}
+	30% {
+		opacity: 1;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chat-log.is-staged .msg { opacity: 1; animation: none; }
+	.chat-log.is-staged .msg {
+		opacity: 1;
+		animation: none;
+	}
+	.typing-dots i {
+		animation: none;
+	}
 }
 
 @media (max-width: 980px) {
-  .hero-grid { grid-template-columns: 1fr; }
-}
-
-/* ── reach / surfaces ────────────────────────────────────── */
-
-/* A dark strip right under the hero: the one line that sets Baxter apart (it
-   brings its own presence, so it never asks for your accounts) plus the channels
-   it shows up on. Dark surface makes the claim the loudest thing after the hero. */
-.reach {
-  background: var(--plate);
-  color: var(--plate-ink);
-  border-bottom: 1.5px solid var(--ink-rule);
-  padding-block: clamp(2.25rem, 4.5vw, 3.5rem);
-}
-.reach-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-}
-.reach-lead {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: clamp(1.2rem, 0.95rem + 1.05vw, 1.7rem);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  max-width: 28ch;
-}
-.reach-lead em { font-style: normal; color: var(--peach-on-dark); }
-.reach-surfaces {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem 0.85rem;
-}
-.reach-sub {
-  font: 500 0.7rem/1 var(--mono);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: rgba(251, 233, 220, 0.55);
-}
-.surface-list {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 0;
-  padding: 0;
-}
-.surface-list li {
-  font: 500 0.8rem/1 var(--mono);
-  padding: 0.42rem 0.72rem;
-  border: 1px solid rgba(251, 233, 220, 0.30);
-  border-radius: var(--radius);
-}
-.reach-more {
-  font: 400 0.75rem/1 var(--mono);
-  color: var(--peach-on-dark);
+	.hero-grid {
+		grid-template-columns: 1fr;
+	}
 }
 
 /* ── band scaffolding ────────────────────────────────────── */
 
 .band {
-  padding-block: clamp(3.5rem, 6vw, 6rem);
-  border-bottom: 1.5px solid var(--ink-rule);
-  scroll-margin-top: var(--topbar-h);  /* clears the sticky topbar on anchor jumps */
+	padding-block: clamp(3.5rem, 6vw, 6rem);
+	border-bottom: 1.5px solid var(--ink-rule);
+	scroll-margin-top: var(
+		--topbar-h
+	); /* clears the sticky topbar on anchor jumps */
 }
-.band-alt { background: var(--paper-alt); }
+.band-alt {
+	background: var(--paper-alt);
+}
 
 .band-grid {
-  display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
-  gap: clamp(1.75rem, 4vw, 3.5rem);
+	display: grid;
+	grid-template-columns: 190px minmax(0, 1fr);
+	gap: clamp(1.75rem, 4vw, 3.5rem);
 }
 
 .band-label {
-  font: 500 0.72rem/1 var(--mono);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--peach-deep);
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  height: fit-content;
-  padding-top: 0.5rem;
+	font: 500 0.72rem / 1 var(--mono);
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--peach-deep);
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	height: fit-content;
+	padding-top: 0.5rem;
 }
 .tick {
-  width: 22px;
-  height: 2px;
-  background: var(--peach-deep);
-  flex: none;
+	width: 22px;
+	height: 2px;
+	background: var(--peach-deep);
+	flex: none;
 }
 
 /* Grid items default to min-width:auto, which refuses to shrink below their
    content, so the panes inside these columns would push the page wide. */
-.band-body, .hero-copy { min-width: 0; }
+.band-body,
+.hero-copy {
+	min-width: 0;
+}
 
 .band-lede {
-  margin-top: 1.1rem;
-  max-width: 58ch;
-  color: var(--ink-2);
+	margin-top: 1.1rem;
+	max-width: 58ch;
+	color: var(--ink-2);
 }
-.band-lede code,
-.ops code,
-.plate code {
-  font-size: 0.9em;
-  color: var(--plum-deep);
-}
-
 @media (max-width: 860px) {
-  .band-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .band-label { padding-top: 0; }
+	.band-grid {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+	.band-label {
+		padding-top: 0;
+	}
 }
 
 /* ── ability cards ───────────────────────────────────────── */
 
 .cards {
-  margin-top: 2.75rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
-  gap: 2rem 2.5rem;
+	margin-top: 2.75rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+	gap: 2rem 2.5rem;
 }
 /* Open cells, not filled boxes: a short peach tick marks each one, the way the
    section labels do. Reads as an editorial feature list rather than a grid of
    SaaS product cards. */
-.card { padding: 0; }
-.card::before {
-  content: "";
-  display: block;
-  width: 28px;
-  height: 3px;
-  background: var(--peach-deep);
-  margin-bottom: 1.1rem;
+.card {
+	padding: 0;
 }
-.card h3 { color: var(--ink); }
+.card::before {
+	content: "";
+	display: block;
+	width: 28px;
+	height: 3px;
+	background: var(--peach-deep);
+	margin-bottom: 1.1rem;
+}
+.card h3 {
+	color: var(--ink);
+}
 .card p {
-  margin-top: 0.6rem;
-  font-size: 0.92rem;
-  line-height: 1.58;
-  color: var(--ink-2);
+	margin-top: 0.6rem;
+	font-size: 0.92rem;
+	line-height: 1.58;
+	color: var(--ink-2);
 }
 
 /* ── security plate ──────────────────────────────────────── */
@@ -701,465 +768,387 @@ p { margin: 0; }
 /* A spec sheet, deliberately quiet: one column, so each rule gets a full
    line to state itself. */
 .plate {
-  margin: 2.5rem 0 0;
-  border-top: 1.5px solid var(--ink-rule);
+	margin: 2.5rem 0 0;
+	border-top: 1.5px solid var(--ink-rule);
 }
 .plate > div {
-  display: grid;
-  grid-template-columns: 16rem minmax(0, 1fr);
-  gap: 1.5rem;
-  padding-block: 1rem;
-  border-bottom: 1px solid var(--rule);
-  align-items: baseline;
+	display: grid;
+	grid-template-columns: 16rem minmax(0, 1fr);
+	gap: 1.5rem;
+	padding-block: 1rem;
+	border-bottom: 1px solid var(--rule);
+	align-items: baseline;
 }
 /* The term is what you scan, so it has to outweigh the prose explaining it. */
 .plate dt {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 0.92rem;
-  line-height: 1.4;
-  color: var(--ink);
+	font-family: var(--mono);
+	font-weight: 600;
+	font-size: 0.92rem;
+	line-height: 1.4;
+	color: var(--ink);
 }
 .plate dd {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--ink-2);
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.55;
+	color: var(--ink-2);
 }
 
 @media (max-width: 620px) {
-  .plate > div { grid-template-columns: 1fr; gap: 0.35rem; }
-}
-
-/* ── self-hosted points ──────────────────────────────────── */
-
-.points {
-  list-style: none;
-  margin: 2.75rem 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 2rem 2.5rem;
-}
-/* Same open treatment as the ability cards, so the two grids read as one system. */
-.points li { padding: 0; }
-.points li::before {
-  content: "";
-  display: block;
-  width: 28px;
-  height: 3px;
-  background: var(--peach-deep);
-  margin-bottom: 1.1rem;
-}
-.points p {
-  margin-top: 0.6rem;
-  font-size: 0.92rem;
-  line-height: 1.58;
-  color: var(--ink-2);
-}
-
-/* ── steps ───────────────────────────────────────────────── */
-
-.steps {
-  list-style: none;
-  margin: 2.5rem 0 0;
-  padding: 0;
-}
-.steps li {
-  display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr);
-  gap: 0.5rem;
-  padding-block: 1.75rem;
-  border-top: 1px solid var(--rule);
-}
-.steps li:last-child { border-bottom: 1px solid var(--rule); }
-.step-n {
-  font: 600 0.85rem/1.4 var(--mono);
-  color: var(--peach-deep);
-  letter-spacing: 0.05em;
-}
-.steps p {
-  margin-top: 0.5rem;
-  max-width: 54ch;
-  font-size: 0.94rem;
-  color: var(--ink-2);
-}
-.steps code { color: var(--plum-deep); font-size: 0.9em; }
-/* Links inside body copy. `a { color: inherit }` above would otherwise leave
-   them indistinguishable from the sentence around them. */
-.steps p a {
-  color: var(--plum-deep);
-  font-weight: 500;
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-.steps p a:hover { color: var(--plum); }
-
-/* The page's one full-dark surface. A terminal should look like a terminal. */
-.steps pre {
-  margin: 1rem 0 0;
-  padding: 0.85rem 1rem;
-  background: var(--plate);
-  border-radius: var(--radius);
-  overflow-x: auto;
-  font-size: 0.8rem;
-  color: var(--plate-ink);
-}
-.steps pre code { color: inherit; font-size: 1em; }
-.steps pre .c { color: #B29383; }
-
-/* Terminal transcript: what `baxter shell` actually looks like. Same dark
-   surface as the code blocks, but a conversation rather than a command to
-   copy — so it's a plain block (no copy button) with prompt-coloured speakers.
-   peach = Baxter, plum = you, echoing the palette's roles. */
-.term {
-  padding: 1rem 1.1rem;
-  background: var(--plate);
-  color: var(--plate-ink);
-  border-radius: var(--radius);
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  line-height: 1.6;
-}
-.term .tl {
-  display: grid;
-  grid-template-columns: 3.6rem minmax(0, 1fr);
-  gap: 0 0.7rem;
-}
-.term .tl + .tl { margin-top: 0.55rem; }
-/* Prompts right-align so the "›" gutter forms one straight line down the block. */
-.term .tp {
-  text-align: right;
-  font-weight: 600;
-}
-.term .tp::after {
-  content: "\203A";
-  margin-left: 0.3rem;
-  font-weight: 400;
-  opacity: 0.5;
-}
-.term .tp-bax { color: var(--peach-on-dark); }
-.term .tp-you { color: var(--plum-on-dark); }
-.term .tt-ref { color: var(--plum-on-dark); }
-
-@media (max-width: 560px) {
-  /* minmax(0,…), not 1fr: a bare 1fr track keeps min-width:auto, so a wide
-     code block refuses to shrink and pushes the whole page sideways. */
-  .steps li { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
-}
-/* Same reason, for the step's content column at every width. */
-.steps li > div { min-width: 0; }
-
-/* ── ops list ────────────────────────────────────────────── */
-
-.ops { margin-top: 3rem; }
-.ops-h {
-  font: 500 0.72rem/1 var(--mono);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--peach-deep);
-}
-/* Same term/description shape as .plate, so it uses the same element. */
-.ops dl {
-  margin: 1.25rem 0 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 0.15rem 2.5rem;
-}
-.ops dl > div {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.75rem;
-  padding-block: 0.6rem;
-  border-bottom: 1px solid var(--rule);
-}
-.ops dt { flex: none; }
-.ops dt code { font-size: 0.8rem; color: var(--plum-deep); }
-.ops dd {
-  margin: 0;
-  font-size: 0.86rem;
-  color: var(--ink-2);
+	.plate > div {
+		grid-template-columns: 1fr;
+		gap: 0.35rem;
+	}
 }
 
 /* ── close ───────────────────────────────────────────────── */
 
+/* The page's second dark moment: the close picks up the chat window's title
+   bar (dark plate, peach accents) so the scroll ends on a peak instead of
+   fading out. */
 .close {
-  padding-block: clamp(4rem, 8vw, 7rem);
-  background: var(--paper);
-  text-align: left;
+	padding-block: clamp(4rem, 8vw, 7rem);
+	background: var(--plate);
+	color: var(--plate-ink);
+}
+.close .band-label {
+	color: var(--peach-on-dark);
+}
+.close .tick {
+	background: var(--peach-on-dark);
+}
+.close h2 {
+	color: var(--plate-ink);
 }
 .close-inner p {
-  margin-top: 1rem;
-  color: var(--ink-2);
+	margin-top: 1rem;
+	color: rgba(251, 233, 220, 0.78);
 }
-.close .btn { margin-top: 2.25rem; }
-
-/* ── 404 ─────────────────────────────────────────────────── */
-
-/* Scoped to the 404 body so index.html's layout is untouched: too little
-   content to fill the screen otherwise, leaving the footer stranded mid-page. */
-.page-404 {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+.close :focus-visible {
+	outline-color: var(--peach-on-dark);
 }
-.page-404 main { flex: 1; display: grid; }
-
-/* Reuses .close. The heading is an h1 here but sized to the h2 scale: a dead
-   end shouldn't shout louder than the homepage does. */
-.lost {
-  display: grid;
-  align-content: center;
+.close .btn {
+	margin-top: 2.25rem;
 }
-.lost h1 {
-  font-weight: 600;
-  font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.15rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-block: 0.9rem 0;
+/* The ink-rule key shadow vanishes against the plate; peach-deep keeps the
+   pressed-key depth legible on the dark surface. */
+.close .btn-solid {
+	box-shadow: 3px 3px 0 var(--peach-deep);
 }
-.lost .close-inner p {
-  max-width: 44ch;
-  margin-inline: auto;
+.close .btn-solid:active {
+	box-shadow: 1px 1px 0 var(--peach-deep);
 }
 
 /* ── footer ──────────────────────────────────────────────── */
 
 .foot {
-  border-top: 1.5px solid var(--ink-rule);
-  padding-block: 1.75rem;
-  background: var(--paper-alt);
+	border-top: 1.5px solid var(--ink-rule);
+	padding-block: 1.75rem;
+	background: var(--paper-alt);
 }
 .foot-inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem 1.5rem;
-  font: 400 0.78rem/1.5 var(--mono);
-  color: var(--ink-3);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6rem 1.5rem;
+	font: 400 0.78rem / 1.5 var(--mono);
+	color: var(--ink-3);
 }
 .foot-mark {
-  font-family: var(--mono);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  font-size: 1rem;
+	font-family: var(--mono);
+	font-weight: 600;
+	letter-spacing: -0.01em;
+	color: var(--ink);
+	font-size: 1rem;
 }
-.foot-dim { margin-right: auto; }
+.foot-dim {
+	margin-right: auto;
+}
 /* Underlined: an undecorated link beside grey footer text is easy to miss. */
 .foot a {
-  color: var(--ink-2);
-  text-decoration: underline;
-  text-decoration-color: var(--rule);
-  text-underline-offset: 0.25em;
+	color: var(--ink-2);
+	text-decoration: underline;
+	text-decoration-color: var(--rule);
+	text-underline-offset: 0.25em;
 }
-.foot a:hover { color: var(--peach-deep); text-decoration-color: var(--peach-deep); }
+.foot a:hover {
+	color: var(--peach-deep);
+	text-decoration-color: var(--peach-deep);
+}
 
 /* ── legal / long-form prose ─────────────────────────────── */
 
-/* The rest of the site is one scannable page; this is the opposite — thirteen
+/* The rest of the site is one scannable page; this is the opposite: thirteen
    sections someone reads top to bottom, or lands in the middle of from a table
    of contents. So: a narrow measure, real paragraph rhythm (the global
    `p { margin: 0 }` is a landing-page convenience that prose can't use), and
    section headings dialed well down from the display h2. */
 
 .legal {
-  padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
-  background: var(--paper);
+	padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
+	background: var(--paper);
 }
-.legal-inner { max-width: 44rem; }
+.legal-inner {
+	max-width: 44rem;
+}
 
-.legal h1 { font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem); }
+.legal h1 {
+	font-size: clamp(1.9rem, 1.4rem + 2vw, 2.9rem);
+}
 
 .legal-dates {
-  margin-top: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 1.5rem;
-  font: 400 0.78rem/1.5 var(--mono);
-  color: var(--ink-3);
+	margin-top: 1rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem 1.5rem;
+	font: 400 0.78rem / 1.5 var(--mono);
+	color: var(--ink-3);
 }
 
-.legal .lede { max-width: none; }
+.legal .lede {
+	max-width: none;
+}
 
-.legal p { margin-top: 1rem; }
-.legal p, .legal li { color: var(--ink-2); }
+.legal p {
+	margin-top: 1rem;
+}
+.legal p,
+.legal li {
+	color: var(--ink-2);
+}
 
 /* Numbered headings, so "§2" in the prose points somewhere findable. The rule
    above each is the section break; without it thirteen headings read as a wall. */
 .legal h2 {
-  margin-top: 3rem;
-  padding-top: 1.4rem;
-  border-top: 1.5px solid var(--ink-rule);
-  font-size: 1.32rem;
-  color: var(--ink);
+	margin-top: 3rem;
+	padding-top: 1.4rem;
+	border-top: 1.5px solid var(--ink-rule);
+	font-size: 1.32rem;
+	color: var(--ink);
 }
 .legal h3 {
-  margin-top: 1.9rem;
-  color: var(--ink);
+	margin-top: 1.9rem;
+	color: var(--ink);
 }
-.legal h3 + p { margin-top: 0.6rem; }
+.legal h3 + p {
+	margin-top: 0.6rem;
+}
 
 /* Anchor targets sit under the sticky topbar otherwise. */
-.legal :is(h2, h3)[id] { scroll-margin-top: calc(var(--topbar-h) + 1.5rem); }
+.legal :is(h2, h3)[id] {
+	scroll-margin-top: calc(var(--topbar-h) + 1.5rem);
+}
 
 .legal a {
-  color: var(--plum-deep);
-  text-decoration: underline;
-  text-decoration-color: var(--plum-tint);
-  text-underline-offset: 0.2em;
-  transition: text-decoration-color var(--tr);
+	color: var(--plum-deep);
+	text-decoration: underline;
+	text-decoration-color: var(--plum-tint);
+	text-underline-offset: 0.2em;
+	transition: text-decoration-color var(--tr);
 }
-.legal a:hover { text-decoration-color: var(--plum-deep); }
+.legal a:hover {
+	text-decoration-color: var(--plum-deep);
+}
 
 .legal-toc {
-  margin-top: 2.25rem;
-  padding: 1.1rem 1.35rem;
-  background: var(--surface);
-  border: 1.5px solid var(--ink-rule);
-  border-radius: var(--radius);
+	margin-top: 2.25rem;
+	padding: 1.1rem 1.35rem;
+	background: var(--surface);
+	border: 1.5px solid var(--ink-rule);
+	border-radius: var(--radius);
 }
 .legal-toc ol {
-  margin: 0;
-  padding-left: 1.6rem;
-  columns: 2;
-  column-gap: 2rem;
-  font: 400 0.85rem/1.9 var(--mono);
+	margin: 0;
+	padding-left: 1.6rem;
+	columns: 2;
+	column-gap: 2rem;
+	font: 400 0.85rem / 1.9 var(--mono);
 }
-.legal-toc li { break-inside: avoid; }
-.legal-toc a { text-decoration: none; color: var(--ink-2); }
-.legal-toc a:hover { color: var(--peach-deep); }
+.legal-toc li {
+	break-inside: avoid;
+}
+.legal-toc a {
+	text-decoration: none;
+	color: var(--ink-2);
+}
+.legal-toc a:hover {
+	color: var(--peach-deep);
+}
 
 @media (max-width: 560px) {
-  .legal-toc ol { columns: 1; }
+	.legal-toc ol {
+		columns: 1;
+	}
 }
 
 .legal-list {
-  margin-top: 1rem;
-  padding-left: 1.25rem;
+	margin-top: 1rem;
+	padding-left: 1.25rem;
 }
-.legal-list li { margin-top: 0.5rem; }
-.legal-list strong { color: var(--ink); }
+.legal-list li {
+	margin-top: 0.5rem;
+}
+.legal-list strong {
+	color: var(--ink);
+}
 
 /* Tighter term column than the homepage's 16rem: this measure is half as wide. */
-.legal .plate { margin-top: 1.75rem; }
-.legal .plate > div { grid-template-columns: 11rem minmax(0, 1fr); gap: 1.25rem; }
-
-@media (max-width: 620px) {
-  .legal .plate > div { grid-template-columns: 1fr; gap: 0.35rem; }
+.legal .plate {
+	margin-top: 1.75rem;
+}
+.legal .plate > div {
+	grid-template-columns: 11rem minmax(0, 1fr);
+	gap: 1.25rem;
 }
 
-/* The three disclosures carriers audit for — frequency, rates, and the
-   non-sharing pledge — plus the restatement of the pledge. Boxed so a reviewer
+@media (max-width: 620px) {
+	.legal .plate > div {
+		grid-template-columns: 1fr;
+		gap: 0.35rem;
+	}
+}
+
+/* The three disclosures carriers audit for (frequency, rates, and the
+   non-sharing pledge) plus the restatement of the pledge. Boxed so a reviewer
    skimming for them finds them without reading the section, and so they survive
    being quoted out of context. */
 .legal-callout {
-  margin-top: 1.25rem;
-  padding: 1rem 1.25rem;
-  background: var(--peach-wash);
-  border-left: 3px solid var(--peach-deep);
-  border-radius: var(--radius);
-  color: var(--ink-2);
+	margin-top: 1.25rem;
+	padding: 1rem 1.25rem;
+	background: var(--peach-wash);
+	border-left: 3px solid var(--peach-deep);
+	border-radius: var(--radius);
+	color: var(--ink-2);
 }
-.legal-callout strong { color: var(--ink); }
+.legal-callout strong {
+	color: var(--ink);
+}
 
 .legal-pledge {
-  background: var(--surface);
-  border-left-color: var(--ink-rule);
-  font-size: 0.95rem;
-  line-height: 1.62;
+	background: var(--surface);
+	border-left-color: var(--ink-rule);
+	font-size: 0.95rem;
+	line-height: 1.62;
 }
 
 /* ── invite form + consent disclosure ────────────────────── */
 
 /* The page captures an email; the SMS consent form lives behind it. Fields are
-   boxed in the same hard border as everything else — squared corners, offset
+   boxed in the same hard border as everything else: squared corners, offset
    shadow on focus rather than a glow, so inputs read as part of the chassis. */
 .signup-form {
-  margin-top: 2rem;
-  max-width: 30rem;
-  display: grid;
-  gap: 1.1rem;
+	margin-top: 2rem;
+	max-width: 30rem;
+	display: grid;
+	gap: 1.1rem;
 }
-.field { display: grid; gap: 0.4rem; }
+.field {
+	display: grid;
+	gap: 0.4rem;
+}
 .field label {
-  font: 500 0.78rem/1 var(--mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-2);
+	font: 500 0.78rem / 1 var(--mono);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink-2);
 }
 .field input {
-  font: 400 1rem/1.4 var(--sans);
-  color: var(--ink);
-  background: var(--surface);
-  border: 1.5px solid var(--ink-rule);
-  border-radius: var(--radius);
-  padding: 0.7rem 0.85rem;
-  width: 100%;
-  transition: box-shadow var(--tr), border-color var(--tr);
+	font: 400 1rem / 1.4 var(--sans);
+	color: var(--ink);
+	background: var(--surface);
+	border: 1.5px solid var(--ink-rule);
+	border-radius: var(--radius);
+	padding: 0.7rem 0.85rem;
+	width: 100%;
+	transition:
+		box-shadow var(--tr),
+		border-color var(--tr);
 }
-.field input::placeholder { color: var(--ink-3); }
+.field input::placeholder {
+	color: var(--ink-3);
+}
 .field input:focus-visible {
-  outline: none;
-  border-color: var(--peach-deep);
-  box-shadow: 3px 3px 0 var(--peach);
+	outline: none;
+	border-color: var(--peach-deep);
+	box-shadow: 3px 3px 0 var(--peach);
 }
-/* :invalid alone would shout at an empty field before it is ever touched. */
-.field input:not(:placeholder-shown):invalid { border-color: var(--peach-deep); }
+/* :user-invalid only fires after the field has been touched, so the empty
+   form doesn't shout on load. (The old :not(:placeholder-shown) guard never
+   matched, since these inputs have no placeholders, and did exactly that.) */
+.field input:user-invalid {
+	border-color: var(--peach-deep);
+}
 
-.signup-form .btn-solid { justify-self: start; }
+.signup-form .btn-solid {
+	justify-self: start;
+}
 
 .signup-fallback {
-  margin-top: 1rem;
-  max-width: 30rem;
-  font: 400 0.82rem/1.6 var(--mono);
-  color: var(--ink-3);
+	margin-top: 1rem;
+	max-width: 30rem;
+	font: 400 0.82rem / 1.6 var(--mono);
+	color: var(--ink-3);
 }
-.signup-fallback a { color: var(--plum-deep); text-decoration: underline; text-underline-offset: 0.2em; }
+.signup-fallback a {
+	color: var(--plum-deep);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
 
 /* The consent disclosures. Carriers check that frequency, rates, and STOP/HELP
    sit next to the point of consent rather than only in the policy, so this
    block stays adjacent to the form and stays complete. */
 .disclosure {
-  margin-top: 2.75rem;
-  max-width: 46rem;
-  padding: 1.5rem clamp(1.1rem, 3vw, 1.85rem);
-  background: var(--peach-wash);
-  border-left: 3px solid var(--peach-deep);
-  border-radius: var(--radius);
+	margin-top: 2.75rem;
+	max-width: 46rem;
+	padding: 1.5rem clamp(1.1rem, 3vw, 1.85rem);
+	background: var(--peach-wash);
+	border-left: 3px solid var(--peach-deep);
+	border-radius: var(--radius);
 }
-.disclosure h3 { color: var(--ink); }
+.disclosure h3 {
+	color: var(--ink);
+}
 .disclosure > p {
-  margin-top: 0.7rem;
-  color: var(--ink-2);
-  font-size: 0.95rem;
-  line-height: 1.6;
+	margin-top: 0.7rem;
+	color: var(--ink-2);
+	font-size: 0.95rem;
+	line-height: 1.6;
 }
-.disclosure .plate { margin-top: 1.35rem; border-top-color: var(--peach-deep); }
+.disclosure .plate {
+	margin-top: 1.35rem;
+	border-top-color: var(--peach-deep);
+}
 .disclosure .plate > div {
-  grid-template-columns: 8.5rem minmax(0, 1fr);
-  gap: 1.1rem;
-  border-bottom-color: var(--peach-tint);
+	grid-template-columns: 8.5rem minmax(0, 1fr);
+	gap: 1.1rem;
+	border-bottom-color: var(--peach-tint);
 }
-.disclosure .plate dd strong { color: var(--ink); }
+.disclosure .plate dd strong {
+	color: var(--ink);
+}
 .disclosure a {
-  color: var(--peach-deep);
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
+	color: var(--peach-deep);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
 }
 
 .disclosure-legal {
-  margin-top: 1.2rem;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: var(--ink-3);
+	margin-top: 1.2rem;
+	font-size: 0.85rem;
+	line-height: 1.6;
+	color: var(--ink-3);
 }
 
 @media (max-width: 620px) {
-  .disclosure .plate > div { grid-template-columns: 1fr; gap: 0.3rem; }
+	.disclosure .plate > div {
+		grid-template-columns: 1fr;
+		gap: 0.3rem;
+	}
 }
 
 /* Turnstile renders a fixed ~300x65 iframe; this just gives it room in the
    grid and keeps it from butting against the submit button. */
-.cf-turnstile { min-height: 65px; }
+.cf-turnstile {
+	min-height: 65px;
+}
