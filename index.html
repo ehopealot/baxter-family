@@ -154,19 +154,18 @@
     </div>
   </section>
 
-  <!-- ───────────────────────── signup / SMS opt-in ─────────────────────────
-       Two-step now: this page captures an email, and the SMS signup form (where
-       consent is actually collected) is sent on from there.
+  <!-- ───────────────────────── signup ─────────────────────────
+       Two-step: this page captures an email, and join.html (where consent is
+       actually collected) is sent on from there.
 
-       The link to that form stays PUBLIC and stays on this page. The approved
-       campaign's message flow states opt-in happens at family.bax.bot/#signup
-       with no login or purchase required, and the hosted screenshots show it.
-       Putting the consent form behind an invite-only wall would make both of
-       those false. Keep "Already have an invite?" reachable.
+       Messages go over iMessage via Sendblue, not carrier A2P, so the carrier
+       vetting block that used to live here is gone. Two things it carried are
+       NOT optional and stay on join.html: an unticked consent box, and a way
+       to opt out. Sendblue falls back to SMS for Android recipients, so the
+       rates line stays too, just proportionate rather than a wall.
 
-       The disclosure block below must also keep saying that leaving an email
-       here is NOT an SMS opt-in; consent happens on the signup form, against
-       an unticked box. Don't let this section imply otherwise.
+       Keep the line saying an email here is not itself a signup. An email
+       field sitting under messaging copy otherwise reads as the opt-in.
        ───────────────────────────────────────────────────────────────────── -->
   <section id="signup" class="band band-alt" aria-labelledby="signup-h">
     <div class="wrap band-grid">
@@ -199,57 +198,13 @@
           <button class="btn btn-solid" type="submit">Request an invite</button>
         </form>
 
-        <p class="signup-fallback">
-          Already have an invite? <a href="https://docs.google.com/forms/d/e/1FAIpQLSc-kf-gPg3ARw6TE1HddT4ONCLI8OMKfzU_W3bILnndsfqudA/viewform">Open
-          the signup form</a>.
+        <p class="signup-note">
+          This just puts you on the list; it doesn't start any messages. When there's room
+          we'll send you the <a href="join.html">signup form</a>, and that's where you give
+          us your number. Stop any time by replying STOP. See our
+          <a href="privacy.html">Privacy Policy</a> and
+          <a href="terms.html">Terms</a>.
         </p>
-
-        <div class="disclosure">
-          <h3>About the text messages</h3>
-          <p>
-            <strong>Leaving your email here does not sign you up for texts.</strong> When we
-            send you the signup form, you'll enter your mobile number and tick a consent box
-            there. That's the point you agree to receive text messages from
-            <strong>Baxter Family AI</strong>, a service of Mirabelle Studios. Here's what
-            you'd be agreeing to.
-          </p>
-          <dl class="plate">
-            <div>
-              <dt>What we send</dt>
-              <dd>Replies to what you text Baxter, plus the reminders and alerts you set up
-                yourself. No marketing, ever.</dd>
-            </div>
-            <div>
-              <dt>How often</dt>
-              <dd><strong>Message frequency varies</strong>. Baxter answers when you text it
-                and sends alerts when something you asked it to watch happens. There's no
-                fixed schedule and no broadcast.</dd>
-            </div>
-            <div>
-              <dt>Cost</dt>
-              <dd><strong>Message and data rates may apply.</strong> We don't charge for
-                texts, but your mobile carrier may. Carriers aren't liable for delayed or
-                undelivered messages.</dd>
-            </div>
-            <div>
-              <dt>Stopping</dt>
-              <dd>Reply <strong>STOP</strong> at any time to end all messages,
-                <strong>START</strong> to resume, or <strong>HELP</strong> for help. You can
-                also email <a href="mailto:privacy@bax.bot">privacy@bax.bot</a>.</dd>
-            </div>
-            <div>
-              <dt>Your number</dt>
-              <dd>We don't share it. No mobile information is shared with third parties or
-                affiliates for marketing or promotional purposes. See the
-                <a href="privacy.html">Privacy Policy</a>.</dd>
-            </div>
-          </dl>
-          <p class="disclosure-legal">
-            Consent isn't a condition of any purchase. See our
-            <a href="privacy.html">Privacy Policy</a> and
-            <a href="terms.html">Terms &amp; Conditions</a>.
-          </p>
-        </div>
       </div>
     </div>
   </section>

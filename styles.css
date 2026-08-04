@@ -37,6 +37,12 @@
 	--plum-deep: #7c2f51; /* text-safe plum: inline code, links, chips */
 	--plum-tint: #f2d9e3;
 
+	/* Alert. Pushed to hue 354 on purpose: the whole palette sits at hue 20, so
+	   a red any warmer than this reads as one more peach instead of a stop. */
+	--alert: #be1e2d;
+	--alert-deep: #8e1622; /* text-safe on the wash and on paper */
+	--alert-wash: #fce8e4;
+
 	/* Brighter peach for text and marks on the dark plate (chat head, close). */
 	--peach-on-dark: #ffc09b;
 
@@ -1083,72 +1089,87 @@ p {
 	justify-self: start;
 }
 
-.signup-fallback {
-	margin-top: 1rem;
-	max-width: 30rem;
-	font: 400 0.82rem / 1.6 var(--mono);
+/* Short consent note under a form. The carrier-vetting wall this replaced had
+   to be exhaustive; this only has to be honest and quick to read. */
+.signup-note {
+	margin-top: 1.4rem;
+	max-width: 34rem;
+	font-size: 0.9rem;
+	line-height: 1.65;
 	color: var(--ink-3);
 }
-.signup-fallback a {
+.signup-note a {
 	color: var(--plum-deep);
 	text-decoration: underline;
 	text-underline-offset: 0.2em;
 }
 
-/* The consent disclosures. Carriers check that frequency, rates, and STOP/HELP
-   sit next to the point of consent rather than only in the policy, so this
-   block stays adjacent to the form and stays complete. */
-.disclosure {
-	margin-top: 2.75rem;
-	max-width: 46rem;
-	padding: 1.5rem clamp(1.1rem, 3vw, 1.85rem);
-	background: var(--peach-wash);
-	border-left: 3px solid var(--peach-deep);
-	border-radius: var(--radius);
-}
-.disclosure h3 {
-	color: var(--ink);
-}
-.disclosure > p {
-	margin-top: 0.7rem;
-	color: var(--ink-2);
-	font-size: 0.95rem;
-	line-height: 1.6;
-}
-.disclosure .plate {
-	margin-top: 1.35rem;
-	border-top-color: var(--peach-deep);
-}
-.disclosure .plate > div {
-	grid-template-columns: 8.5rem minmax(0, 1fr);
-	gap: 1.1rem;
-	border-bottom-color: var(--peach-tint);
-}
-.disclosure .plate dd strong {
-	color: var(--ink);
-}
-.disclosure a {
-	color: var(--peach-deep);
-	text-decoration: underline;
-	text-underline-offset: 0.2em;
-}
-
-.disclosure-legal {
-	margin-top: 1.2rem;
-	font-size: 0.85rem;
-	line-height: 1.6;
+.field-hint {
+	margin-top: 0.1rem;
+	font-size: 0.82rem;
+	line-height: 1.5;
 	color: var(--ink-3);
 }
 
-@media (max-width: 620px) {
-	.disclosure .plate > div {
-		grid-template-columns: 1fr;
-		gap: 0.3rem;
-	}
+/* The box is a control, not a bullet, so it sits with the first line of the
+   label rather than floating above the block. */
+.consent {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 0.7rem;
+	align-items: start;
+	max-width: 34rem;
+}
+.consent input[type="checkbox"] {
+	width: 1.15rem;
+	height: 1.15rem;
+	margin: 0.15rem 0 0;
+	accent-color: var(--peach-deep);
+	cursor: pointer;
+}
+.consent label {
+	font-size: 0.9rem;
+	line-height: 1.6;
+	color: var(--ink-2);
+	cursor: pointer;
+	text-transform: none;
+	letter-spacing: normal;
+	font-family: var(--sans);
+	font-weight: 400;
 }
 
 /* Turnstile renders a fixed ~300x65 iframe; this just gives it room in the
    grid and keeps it from butting against the submit button. */
 .cf-turnstile {
 	min-height: 65px;
+}
+
+/* Invite gate on join.html: shown when ?key= is missing, malformed, unsigned,
+   or expired. Every one of those is a dead end, so it takes the alert red
+   rather than a neutral note — this is the only thing on the page, and it
+   should read as "stop" at a glance.
+
+   Same hard offset shadow the buttons and the chat panel use, in red. It pops
+   because the chassis is already built that way, not because it's louder. */
+.gate {
+	margin-top: 2rem;
+	max-width: 34rem;
+	padding: 1.15rem 1.35rem;
+	background: var(--alert-wash);
+	border: 1.5px solid var(--alert);
+	border-radius: var(--radius);
+	box-shadow: 4px 4px 0 var(--alert);
+}
+.gate p {
+	font-size: 0.95rem;
+	line-height: 1.65;
+	color: var(--alert-deep);
+}
+
+/* The household name becomes an address, so it is set in the mono face here to
+   match how it will look when they type it. */
+.field-hint code {
+	font-family: var(--mono);
+	font-size: 0.95em;
+	color: var(--plum-deep);
 }
