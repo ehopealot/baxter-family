@@ -1182,3 +1182,14 @@ p {
 	font-size: 0.95em;
 	color: var(--plum-deep);
 }
+
+/* "optional" beside a field label. Marking the one optional field is clearer
+   than starring the four required ones: the exception is what people need
+   told, and asterisks make a form look more demanding than it is. */
+.field-optional {
+	margin-left: 0.5rem;
+	font-weight: 400;
+	letter-spacing: 0.04em;
+	text-transform: none;
+	color: var(--ink-3);
+}
