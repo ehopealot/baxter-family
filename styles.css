@@ -72,6 +72,15 @@
 	box-sizing: border-box;
 }
 
+/* The `hidden` attribute is only `display: none` in the UA stylesheet, so any
+   author rule that sets `display` silently beats it — .signup-form's
+   `display: grid` did exactly that, and the invite gate rendered its refusal
+   with the form still sitting underneath it. !important rather than ordering,
+   so a later `display` on any future component can't reintroduce the bug. */
+[hidden] {
+	display: none !important;
+}
+
 html {
 	scroll-behavior: smooth;
 }
