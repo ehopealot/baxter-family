@@ -18,8 +18,8 @@
 	var INVITE_PUBLIC_JWK = {
 		kty: "EC",
 		crv: "P-256",
-		x: "REPLACE_ME",
-		y: "REPLACE_ME",
+		x: "k63MfLf1y1qVqNctnBUygDNYSVZqQg_-Q_SbHuD0MJ0",
+		y: "8x6h4t_9G5VJnv2nHITwGpdPs8hmPKcSOkJXucwCJRQ",
 	};
 
 	var form = document.getElementById("join-form");
