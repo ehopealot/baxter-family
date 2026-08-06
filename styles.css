@@ -62,7 +62,7 @@
 	/* Height the sticky topbar occupies, so anchor jumps can clear it. Grows
      when the nav wraps to its own row below 900px. */
 	--topbar-h: 64px;
-	--tr: 0.16s ease;
+	--tr: 0.2s ease;
 	--radius: 2px; /* squared off, the retro-UI tell */
 }
 
@@ -527,6 +527,12 @@ p {
 	width: min(20rem, 100%);
 	min-width: 0;
 }
+/* With JS but before app.js takes over, only the first panel shows. Otherwise
+   all three paint stacked and then collapse — the other half of the flash.
+   Once .is-tabbed lands, the hidden attribute drives it instead. */
+.has-js .demo-stage:not(.is-tabbed) .demo-panel:nth-child(n + 2) {
+	display: none;
+}
 .demo-stage.is-tabbed {
 	gap: 0;
 }
@@ -608,8 +614,8 @@ p {
 	grid-template-rows: 1fr;
 	justify-items: end;
 	transition:
-		grid-template-rows 0.42s cubic-bezier(0.22, 0.85, 0.3, 1),
-		opacity 0.34s ease-out;
+		grid-template-rows 0.55s cubic-bezier(0.25, 0.8, 0.25, 1),
+		opacity 0.46s ease-out;
 }
 .msg.is-bax {
 	justify-items: start;
@@ -622,7 +628,7 @@ p {
 	align-items: flex-end;
 	gap: 0.15rem;
 	max-width: 78%;
-	transition: transform 0.42s cubic-bezier(0.22, 0.85, 0.3, 1);
+	transition: transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 .msg.is-bax .msg-body {
 	align-items: flex-start;
@@ -690,26 +696,31 @@ p {
 	color: var(--ink-3);
 }
 
-/* Staged reveal: app.js adds .is-staged only when motion is welcome and the
+/* Staged reveal. Keyed on has-js, set by an inline script in <head>, so this
+   applies on the first paint — app.js adds its class several frames later and
+   the demo would flash fully-rendered before collapsing. The markup stays
+   complete for anyone without JS, which is the point of doing it this way.
+
+   (was: app.js adds .is-staged only when motion is welcome and the
    script is actually running, so all three conversations are complete without
    it. Enter from below, the way a message actually arrives. */
 /* A staged row has no height at all, so the thread sits at the bottom of the
    screen and grows upward, one message at a time, the way a real one does.
    The bubble rides up the last few pixels on its own transform so it arrives
    rather than simply appearing. */
-.chat-log.is-staged .msg {
+.has-js .chat-log .msg {
 	grid-template-rows: 0fr;
 	opacity: 0;
 }
-.chat-log.is-staged .msg > .msg-body {
+.has-js .chat-log .msg > .msg-body {
 	overflow: hidden;
 	transform: translateY(7px);
 }
-.chat-log.is-staged .msg.is-in {
+.has-js .chat-log .msg.is-in {
 	grid-template-rows: 1fr;
 	opacity: 1;
 }
-.chat-log.is-staged .msg.is-in > .msg-body {
+.has-js .chat-log .msg.is-in > .msg-body {
 	transform: none;
 }
 
@@ -738,7 +749,7 @@ p {
 	height: 6px;
 	border-radius: 50%;
 	background: #8e8e93;
-	animation: tdot 0.9s ease-in-out infinite;
+	animation: tdot 1.15s ease-in-out infinite;
 }
 .typing-dots i:nth-child(2) {
 	animation-delay: 0.15s;
@@ -761,11 +772,11 @@ p {
 	/* Must reset grid-template-rows as well as opacity: staging collapses the
 	   row to 0fr, so resetting only opacity would leave every message present,
 	   fully opaque, and zero pixels tall. */
-	.chat-log.is-staged .msg {
+	.has-js .chat-log .msg {
 		grid-template-rows: 1fr;
 		opacity: 1;
 	}
-	.chat-log.is-staged .msg > .msg-body {
+	.has-js .chat-log .msg > .msg-body {
 		transform: none;
 	}
 	.msg,
@@ -1371,4 +1382,17 @@ p {
 	text-transform: uppercase;
 	color: var(--ink-3);
 	margin-right: 0.3rem;
+}
+
+/* Hero signature. Separated from the facts above it by a hairline rather than
+   another bullet: those are product facts, this is a person putting their name
+   to it, and they shouldn't read as the same kind of statement. Quiet on
+   purpose — provenance stops working the moment it looks like a badge. */
+.hero-sig {
+	margin-top: 1.5rem;
+	padding-top: 1.1rem;
+	border-top: 1px solid var(--rule);
+	max-width: 26rem;
+	font: 400 0.8rem / 1.5 var(--mono);
+	color: var(--ink-3);
 }

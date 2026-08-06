@@ -32,12 +32,20 @@
 	// turn its reason: Baxter takes a moment to start typing, and Sam takes
 	// longer because Sam has to read the reply first. Waiting after a message
 	// instead collapses that difference and the blue bubbles pop straight in.
-	var DWELL = 2000; // pause on a finished thread before moving on
-	var LEAD = 400; // before the very first message
-	var BEFORE_BAX = 730; // Baxter starts typing
-	var BEFORE_SAM = 1150; // Sam reads the reply, then types
-	var TYPING = 900; // how long Baxter appears to be typing
-	var SETTLE = 300; // after a reply lands
+	//
+	// Tuned unhurried on purpose. A hero animation is ambient — it plays beside
+	// what someone is reading, so anything brisk enough to pull the eye away is
+	// working against the page. Slower here reads as calm, not as slow.
+	var DWELL = 2400; // pause on a finished thread before moving on
+	// A full beat of empty phone before anything arrives. The thread header is
+	// up, the screen is blank, and then the first message lands — which reads as
+	// a conversation starting rather than one already in progress. Also covers
+	// the tab switch, so each thread gets the same clean opening.
+	var LEAD = 1300; // empty phone before the first message
+	var BEFORE_BAX = 900; // Baxter starts typing
+	var BEFORE_SAM = 1450; // Sam reads the reply, then types
+	var TYPING = 1100; // how long Baxter appears to be typing
+	var SETTLE = 420; // after a reply lands
 
 	var active = 0;
 	// Two independent clocks. Sharing one meant a hover-pause cleared the
@@ -95,7 +103,8 @@
 		prepare(log);
 		var msgs = Array.prototype.slice.call(log.querySelectorAll(".msg"));
 
-		log.classList.add("is-staged");
+		// Staging itself is CSS, keyed on the has-js class set in <head>, so the
+		// demo is never painted un-staged. This only resets state for a replay.
 		msgs.forEach(function (m) {
 			m.classList.remove("is-in");
 			if (m.classList.contains("is-bax")) m.classList.add("is-typing");

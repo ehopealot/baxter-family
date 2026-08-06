@@ -24,6 +24,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<!-- Runs before first paint, so the demo is never seen un-staged. The markup
+     ships with all three panels visible and every message in place, which is
+     what a no-JS visitor should get — but with JS the browser would paint that
+     first and then collapse it, which is the flash of everything sliding away.
+     One class in <head> beats app.js to it. -->
+<script>document.documentElement.className += " has-js";</script>
 <!-- Turnstile. The widget only mints the token; /api/waitlist does the
      siteverify call server-side, which is the half that actually stops
      anything — the endpoint is public, so a widget alone is decorative. -->
@@ -68,6 +74,13 @@
           <li><span>Lots to organize, one Baxter</span></li>
           <li><span>Stop any time by replying STOP</span></li>
         </ul>
+
+        <!-- Provenance, not a boast: it says who is behind this and that they
+             have the same problem you do. Set as a signature rather than a
+             badge — the moment it looks like marketing it stops working. It
+             also sits next to the demo's Tilden Park thread, which a Berkeley
+             reader will place immediately. -->
+        <p class="hero-sig">Built by a parent in Berkeley,&nbsp;California.</p>
       </div>
 
       <!-- The signature element. Three real asks rather than a feature list in
@@ -254,6 +267,10 @@
              them. -->
         <div class="cards">
           <article class="card">
+            <h3>Remembers</h3>
+            <p>What you decided, what you tried, what everyone's allergic to. Nothing gets
+              re-explained, and nobody has to be the one who remembers.</p>
+          </article>          <article class="card">
             <h3>Holds the list</h3>
             <p>Groceries, the hardware store, the thing you keep meaning to deal with. Add
               to it from wherever you are, and whoever gets to the shop first has the same
@@ -274,11 +291,6 @@
             <p>Your household gets its own address — <code>smithfam@assistant.bax.bot</code>
               — alongside a number you can text. Same Baxter either way, same memory,
               whichever one's nearer to hand.</p>
-          </article>
-          <article class="card">
-            <h3>Remembers</h3>
-            <p>What you decided, what you tried, what everyone's allergic to. Nothing gets
-              re-explained, and nobody has to be the one who remembers.</p>
           </article>
         </div>
       </div>
