@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Baxter Family AI: one assistant for the whole house</title>
-<meta name="description" content="Text Baxter like you'd text a person who never forgets. Reminders, lists, the errands nobody has time for, for everyone under one roof.">
+<meta name="description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for everyone under one roof.">
 <meta property="og:title" content="Baxter Family AI: one assistant for the whole house">
-<meta property="og:description" content="Text Baxter like you'd text a person who never forgets. Reminders, lists, the errands nobody has time for, for everyone under one roof.">
+<meta property="og:description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for everyone under one roof.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://family.bax.bot/">
 <link rel="canonical" href="https://family.bax.bot/">
@@ -42,68 +42,182 @@
 
 <main id="main" tabindex="-1">
 
-  <!-- ───────────────────────── hero ─────────────────────────
-       DRAFT COPY. Written to the "shared household assistant" reading so the
-       page is real rather than lorem; replace with what the service actually
-       is. The #signup section below is the part that has to stay intact.
-       ───────────────────────────────────────────────────────── -->
+  <!-- ───────────────────────── hero ───────────────────────── -->
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">Baxter Family AI</p>
         <h1>One assistant for the <em>whole house</em>.</h1>
         <p class="lede">
-          Text Baxter the way you'd text someone who never forgets and never minds being
-          asked. The pickup times, the running list, the thing you meant to look up three
-          weeks ago.
+          Text it or email it, the way you'd ask someone who never forgets and never
+          minds being asked. The pickup times, the running list, something for the kids to
+          watch while dinner happens.
         </p>
         <div class="cta-row">
           <a class="btn btn-solid btn-lg" href="#signup">Sign up</a>
           <a class="btn btn-ghost" href="#what">See what it does</a>
         </div>
         <ul class="hero-facts">
-          <li><span>Works over plain text messages</span></li>
+          <li><span>Works over text and email</span></li>
           <li><span>Everyone in the house, one Baxter</span></li>
           <li><span>Stop any time by replying STOP</span></li>
         </ul>
       </div>
 
-      <div class="chat" role="img" aria-label="A conversation with Baxter Family AI. Sam texts asking what time swim practice is on Thursday and whether they have anything else that evening. Baxter replies that practice is at 5:15 and the only other thing is a dentist appointment for Rosa at 4, which is tight. Sam asks Baxter to add goggles to the list. Baxter confirms it is on the list and notes it also added sunscreen because the last bottle ran out on Sunday.">
-        <div class="chat-head">
-          <span class="ava ava-b ava-sm" aria-hidden="true">B</span>
-          <span class="chat-name">Baxter</span>
-          <span class="chat-meta">always on</span>
+      <!-- The signature element. Three real asks rather than a feature list in
+           speech marks; each thread shows capabilities doing work instead of
+           being named.
+
+           The device is drawn in the page's own materials (ink body, hard
+           border, offset shadow) while the screen is genuinely iOS. It should
+           read as a phone sitting on this page, not as this page dressed up as
+           iOS. Blue is the one imported colour, because blue is the product:
+           these arrive as iMessages, not as SMS.
+
+           Every panel is visible and complete before app.js runs. The script
+           hides the inactive ones and stages the messages; without it you get
+           three readable transcripts stacked up, which is a fine floor. -->
+      <div class="demo">
+        <div class="demo-tabs" role="tablist" aria-label="Things people ask Baxter" hidden>
+          <button class="demo-tab" type="button" role="tab" id="tab-watch"
+                  aria-controls="panel-watch" aria-selected="true">Something to watch</button>
+          <button class="demo-tab" type="button" role="tab" id="tab-recipe"
+                  aria-controls="panel-recipe" aria-selected="false">A recipe from a book</button>
+          <button class="demo-tab" type="button" role="tab" id="tab-trains"
+                  aria-controls="panel-trains" aria-selected="false">A day out</button>
         </div>
-        <ol class="chat-log" id="chat-log">
-          <li class="msg">
-            <span class="ava ava-m" aria-hidden="true">S</span>
-            <div class="msg-body">
-              <p class="msg-h"><b>sam</b><span>7:52 AM</span></p>
-              <p>what time is swim thursday? anything else that evening?</p>
+
+        <div class="demo-stage">
+
+          <div class="demo-panel" role="tabpanel" id="panel-watch" aria-labelledby="tab-watch">
+            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam asks for a link to a Sesame Street episode, something with counting. Baxter replies with Elmo's Number Party, eleven minutes, and a YouTube link. Sam thanks Baxter and asks it to add milk to the list. Baxter says it is on the list, notes this is the third week running, and asks whether it should just add milk every week. Sam says yes please, and Baxter confirms it will be on the list every Monday.">
+              <div class="phone-screen">
+                <div class="thread-head">
+                  <span class="thread-ava" aria-hidden="true">B</span>
+                  <span class="thread-name">Baxter</span>
+                </div>
+                <ol class="chat-log" data-thread="watch">
+                  <li class="msg">
+                    <div class="msg-body">
+                      <p class="bubble">got a link for sesame street? something with counting</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">Elmo's Number Party, 11 minutes.</p>
+                      <p class="bubble"><span class="msg-link">youtu.be/elmo-numbers</span></p>
+                    </div>
+                  </li>
+                  <li class="msg">
+                    <div class="msg-body">
+                      <p class="bubble">perfect thank you. also add milk to the list</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">On the list. That's three weeks running, want me to just add it every week?</p>
+                    </div>
+                  </li>
+                  <li class="msg">
+                    <div class="msg-body">
+                      <p class="bubble">oh yes please</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">Done. It'll be on there every Monday.</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
             </div>
-          </li>
-          <li class="msg is-bax">
-            <span class="ava ava-b" aria-hidden="true">B</span>
-            <div class="msg-body">
-              <p class="msg-h"><b>Baxter</b><span>7:52 AM</span></p>
-              <p>Practice at 5:15. Only other thing is Rosa's dentist at 4, and that's tight.</p>
+          </div>
+
+          <div class="demo-panel" role="tabpanel" id="panel-recipe" aria-labelledby="tab-recipe">
+            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam sends a photograph of a page from a cookbook and asks Baxter to save it, broken down step by step and ingredient by ingredient. Baxter says it is saved at home.bax.bot slash r slash banana nut bread, ten ingredients and seven steps, and offers to read it out. Sam declines and asks for the ingredients on a list. Baxter says it is done and the ingredients are on a Banana nut bread list.">
+              <div class="phone-screen">
+                <div class="thread-head">
+                  <span class="thread-ava" aria-hidden="true">B</span>
+                  <span class="thread-name">Baxter</span>
+                </div>
+                <ol class="chat-log" data-thread="recipe">
+                  <li class="msg">
+                    <div class="msg-body">
+                      <!-- alt="" on purpose: the whole thread is already narrated in
+                           the .phone aria-label, so alt text here would read twice. -->
+                      <p class="bubble bubble-media">
+                        <img class="bubble-photo" src="cookbook.jpg" alt=""
+                             width="194" height="260" decoding="async">
+                      </p>
+                      <p class="bubble">can you save this one? step by step, ingredient by ingredient</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">Saved. Ten ingredients, seven steps.</p>
+                      <p class="bubble"><span class="msg-link">home.bax.bot/r/banana-nut-bread</span></p>
+                      <p class="bubble">Want me to read it out here?</p>
+                    </div>
+                  </li>
+                  <li class="msg">
+                    <div class="msg-body">
+                      <p class="bubble">no thanks. can you put the ingredients on a list for me</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">Done, it's on your Banana nut bread list.</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
             </div>
-          </li>
-          <li class="msg">
-            <span class="ava ava-m" aria-hidden="true">S</span>
-            <div class="msg-body">
-              <p class="msg-h"><b>sam</b><span>7:54 AM</span></p>
-              <p>add goggles to the list</p>
+          </div>
+
+          <div class="demo-panel" role="tabpanel" id="panel-trains" aria-labelledby="tab-trains">
+            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam asks whether the Tilden Park steam trains are running today. Baxter says yes, eleven in the morning to five in the afternoon. Sam asks when their summer hours end. Baxter says the schedule switches back to weekends only after Labor Day. Sam asks how much tickets are. Baxter says five dollars per ride, or five rides for twenty dollars, and that children under two ride free.">
+              <div class="phone-screen">
+                <div class="thread-head">
+                  <span class="thread-ava" aria-hidden="true">B</span>
+                  <span class="thread-name">Baxter</span>
+                </div>
+                <ol class="chat-log" data-thread="trains">
+                  <li class="msg">
+                    <div class="msg-body">
+                      <p class="bubble">are the Tilden park steam trains running today?</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">They are, 11am to 5pm.</p>
+                    </div>
+                  </li>
+                  <li class="msg">
+                    <div class="msg-body">
+                      <p class="bubble">when do their summer hours end?</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">Their schedule switches back to weekends only after Labor Day.</p>
+                    </div>
+                  </li>
+                  <li class="msg">
+                    <div class="msg-body">
+                      <p class="bubble">how much are tickets?</p>
+                    </div>
+                  </li>
+                  <li class="msg is-bax">
+                    <div class="msg-body">
+                      <p class="bubble">$5 per ride, or 5 rides for $20. Children under 2 ride free.</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
             </div>
-          </li>
-          <li class="msg is-bax">
-            <span class="ava ava-b" aria-hidden="true">B</span>
-            <div class="msg-body">
-              <p class="msg-h"><b>Baxter</b><span>7:54 AM</span></p>
-              <p>On the list. Added sunscreen too, since the last bottle ran out Sunday.</p>
-            </div>
-          </li>
-        </ol>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
@@ -113,41 +227,42 @@
     <div class="wrap band-grid">
       <div class="band-label"><span class="tick"></span>What it does</div>
       <div class="band-body">
-        <h2 id="what-h">Just text it. Bax takes it from there.</h2>
+        <h2 id="what-h">Ask it like you'd ask a person.</h2>
         <p class="band-lede">
-          Nothing to install and no app to open. You text a number, and Baxter works out
+          Nothing to install and no app to open. Text it or email it, and Baxter works out
           what you need.
         </p>
+        <!-- Ordered by how often a household actually reaches for them, not by how
+             impressive they sound. The two channel-and-memory cards sit last on
+             purpose: they're what makes the rest work, but nobody arrives wanting
+             them. -->
         <div class="cards">
+          <article class="card">
+            <h3>Holds the list</h3>
+            <p>Groceries, the hardware store, the thing you keep meaning to deal with.
+              Anyone in the house can add from wherever they are, and it's the same list
+              when someone gets to the shop.</p>
+          </article>
           <article class="card">
             <h3>Keeps the week straight</h3>
             <p>Who's where, when, and what collides with what. Ask what Thursday looks like
               and get an answer, not a calendar to squint at.</p>
           </article>
           <article class="card">
-            <h3>Holds the list</h3>
-            <p>Groceries, the hardware store, the things you keep meaning to deal with.
-              Anyone in the house can add to it from wherever they are.</p>
+            <h3>Sorts out dinner</h3>
+            <p>Tell it what's in the fridge and it comes back with something you can
+              actually make tonight. Anything you're missing goes straight on the list.</p>
           </article>
           <article class="card">
-            <h3>Nudges you</h3>
-            <p>Ask for a reminder and it books it: once on Thursday, or every weekday at
-              nine. It shows up whether or not anyone's around.</p>
-          </article>
-          <article class="card">
-            <h3>Shops around</h3>
-            <p>Four dishwashers, three insurance quotes, the same flight on six sites. It
-              reads the listings and tells you which one wins, and why.</p>
-          </article>
-          <article class="card">
-            <h3>Does the reading</h3>
-            <p>The forty-page report, the school handbook, the terms nobody reads. You get
-              the answer, not a stack of links.</p>
+            <h3>Text it or email it</h3>
+            <p>Your household gets its own address — <code>smithfam@assistant.bax.bot</code>
+              — alongside a number you can text. Same Baxter either way, same memory,
+              whichever one's nearer to hand.</p>
           </article>
           <article class="card">
             <h3>Remembers</h3>
             <p>What you decided, what you tried, what everyone's allergic to. Nothing gets
-              re-explained.</p>
+              re-explained, and nobody has to be the one who remembers.</p>
           </article>
         </div>
       </div>

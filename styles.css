@@ -460,104 +460,213 @@ p {
 
 /* A boxed utility window: dark title bar, squared corners, and a hard peach
    offset shadow that reads like registration/overprint on a printed card. */
-.chat {
-	background: var(--surface);
-	border: 1.5px solid var(--ink-rule);
-	border-radius: var(--radius);
-	box-shadow: 7px 7px 0 var(--peach-mid);
+/* ── the phone ───────────────────────────────────────────── */
+
+/* Device drawn in this page's materials: ink body, hard rule, the same offset
+   shadow the buttons carry. The screen inside is genuinely iOS. That split is
+   the point — a phone resting on this page, not this page dressed as iOS. */
+.demo {
 	min-width: 0;
-	overflow: hidden;
+	display: grid;
+	gap: 1rem;
+	justify-items: center;
 }
 
-.chat-head {
+.demo-tabs {
 	display: flex;
-	align-items: center;
-	gap: 0.55rem;
-	padding: 0.7rem 1.1rem;
-	background: var(--ink);
-	color: var(--surface);
-	border-bottom: 2px solid var(--peach);
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.4rem;
 }
-.chat-name {
-	font-family: var(--mono);
+.demo-tab {
+	font: 500 0.76rem / 1 var(--mono);
+	letter-spacing: 0.01em;
+	color: var(--ink-2);
+	background: transparent;
+	border: 1.5px solid transparent;
+	border-radius: var(--radius);
+	padding: 0.5rem 0.7rem;
+	cursor: pointer;
+	transition:
+		color var(--tr),
+		border-color var(--tr),
+		background-color var(--tr);
+}
+.demo-tab:hover {
+	color: var(--ink);
+	border-color: var(--rule);
+}
+.demo-tab[aria-selected="true"] {
+	color: var(--ink);
+	background: var(--surface);
+	border-color: var(--ink-rule);
 	font-weight: 600;
-	font-size: 0.95rem;
-	color: var(--surface);
 }
-.chat-meta {
+@media (pointer: coarse) {
+	.demo-tab {
+		min-height: 44px;
+	}
+}
+
+/* Default is a readable vertical stack: with no JS you get three complete
+   conversations rather than three overlapping ones. app.js adds .is-tabbed,
+   which collapses them into a single cell so switching never changes the
+   hero's height. */
+/* Widths are definite the whole way down on purpose. Letting the stage
+   shrink-wrap the panel, the panel shrink-wrap the phone, and the phone size
+   itself with min(20rem, 100%) makes the 100% resolve against an indefinite
+   width — the chain is circular and the phone settles off-centre. */
+.demo-stage {
+	width: 100%;
+	display: grid;
+	gap: 1.75rem;
+	justify-items: center;
+	min-width: 0;
+}
+.demo-panel {
+	width: min(20rem, 100%);
+	min-width: 0;
+}
+.demo-stage.is-tabbed {
+	gap: 0;
+}
+.demo-stage.is-tabbed .demo-panel {
+	grid-area: 1 / 1;
+}
+
+.phone {
+	width: 100%;
+	background: var(--ink);
+	border: 1.5px solid var(--ink-rule);
+	border-radius: 2.4rem;
+	box-shadow: 7px 7px 0 var(--peach-mid);
+	padding: 0.55rem;
+}
+
+.phone-screen {
+	position: relative;
+	background: #fff;
+	border-radius: 1.95rem;
+	overflow: hidden;
 	display: flex;
+	flex-direction: column;
+	height: 30rem;
+	/* The recipe thread runs to ~28rem once the photo lands. Any shorter and
+	   justify-content: flex-end starts shoving earlier messages out the top,
+	   which shifts the whole stack on every arrival and reads as jitter.
+	   Containment stops the animating subtree from relaying out anything
+	   outside the screen regardless. */
+	contain: layout paint;
+}
+
+/* The thread header, as iOS draws it: translucent, hairline, name centred. */
+.thread-head {
+	display: flex;
+	flex-direction: column;
 	align-items: center;
-	gap: 0.45rem;
-	margin-left: auto;
-	font: 400 0.72rem / 1 var(--mono);
-	color: rgba(255, 250, 244, 0.62);
-}
-/* The "always on" light: peach = powered. */
-.chat-meta::before {
-	content: "";
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	background: var(--peach-on-dark);
+	gap: 0.25rem;
+	padding: 1.5rem 1rem 0.5rem;
+	background: rgba(249, 249, 249, 0.94);
+	backdrop-filter: blur(12px);
+	border-bottom: 1px solid #dcdcdf;
 	flex: none;
-	animation: led 2.4s ease-in-out infinite;
 }
-@keyframes led {
-	0%,
-	100% {
-		opacity: 1;
-		box-shadow: 0 0 6px 0 rgba(255, 192, 155, 0.75);
-	}
-	50% {
-		opacity: 0.5;
-		box-shadow: 0 0 1px 0 rgba(255, 192, 155, 0.3);
-	}
+.thread-ava {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background: var(--peach);
+	color: var(--ink);
+	font: 600 0.8rem / 1 var(--mono);
 }
-@media (prefers-reduced-motion: reduce) {
-	.chat-meta::before {
-		animation: none;
-	}
+.thread-name {
+	font-family: var(--sans);
+	font-size: 0.7rem;
+	font-weight: 500;
+	color: #1c1c1e;
 }
 
 .chat-log {
 	list-style: none;
 	margin: 0;
-	padding: 0.9rem 0.5rem 1.1rem;
+	padding: 0.75rem 0.7rem 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	overflow: hidden;
+	flex: 1;
+	justify-content: flex-end;
 }
 
+/* Grid rather than flex so the row itself can collapse to nothing: a staged
+   message is 0fr tall, and expanding it to 1fr is what pushes the thread
+   upward as each new bubble lands. Flex has no equivalent you can transition. */
 .msg {
 	display: grid;
-	grid-template-columns: 34px minmax(0, 1fr);
-	gap: 0.7rem;
-	padding: 0.55rem 0.7rem;
-	border-radius: var(--radius);
+	grid-template-rows: 1fr;
+	justify-items: end;
+	transition:
+		grid-template-rows 0.42s cubic-bezier(0.22, 0.85, 0.3, 1),
+		opacity 0.34s ease-out;
 }
 .msg.is-bax {
-	background: var(--peach-wash);
+	justify-items: start;
+}
+.msg .msg-body {
+	min-height: 0;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.15rem;
+	max-width: 78%;
+	transition: transform 0.42s cubic-bezier(0.22, 0.85, 0.3, 1);
+}
+.msg.is-bax .msg-body {
+	align-items: flex-start;
 }
 
-.ava {
-	display: grid;
-	place-items: center;
-	width: 34px;
-	height: 34px;
-	border-radius: 4px;
-	font: 600 0.8rem / 1 var(--mono);
+/* Bubbles. Sent is blue and right, received is grey and left, which is the
+   arrangement everyone already knows how to read. The blue is two steps
+   deeper than Apple's #007AFF so white text clears 4.5:1 instead of 4.0. */
+.bubble {
+	max-width: 100%;
+	padding: 0.44rem 0.75rem;
+	border-radius: 1.15rem;
+	font-family: var(--sans);
+	font-size: 0.83rem;
+	line-height: 1.38;
+	background: #0a6ce0;
 	color: #fff;
-	flex: none;
+	border-bottom-right-radius: 0.35rem;
 }
-/* Warm brown, kept dark enough to clear 4.5:1 against white for the initial. */
-.ava-m {
-	background: #7c5647;
+.msg.is-bax .bubble {
+	background: #e9e9eb;
+	color: #1c1c1e;
+	border-bottom-right-radius: 1.15rem;
+	border-bottom-left-radius: 0.35rem;
 }
-.ava-b {
-	background: var(--peach);
-	color: var(--ink);
+/* Only the last bubble of a run gets the tail; the rest stay fully round. */
+.msg .bubble:not(:last-child) {
+	border-bottom-right-radius: 1.15rem;
 }
-.ava-sm {
-	width: 24px;
-	height: 24px;
-	font-size: 0.66rem;
+.msg.is-bax .bubble:not(:last-child) {
+	border-bottom-left-radius: 1.15rem;
+}
+
+.bubble-media {
+	padding: 0;
+	overflow: hidden;
+	background: #d9d9dd;
+	line-height: 0;
+}
+.bubble-photo {
+	display: block;
+	width: 7.5rem;
+	height: auto;
+	border-radius: inherit;
 }
 
 .msg-body {
@@ -581,77 +690,54 @@ p {
 	color: var(--ink-3);
 }
 
-.msg-body > p:not(.msg-h) {
-	font-size: 0.92rem;
-	line-height: 1.55;
-	color: var(--ink-2);
-}
 /* Staged reveal: app.js adds .is-staged only when motion is welcome and the
-   script is actually running, so the conversation is complete without it. */
+   script is actually running, so all three conversations are complete without
+   it. Enter from below, the way a message actually arrives. */
+/* A staged row has no height at all, so the thread sits at the bottom of the
+   screen and grows upward, one message at a time, the way a real one does.
+   The bubble rides up the last few pixels on its own transform so it arrives
+   rather than simply appearing. */
 .chat-log.is-staged .msg {
+	grid-template-rows: 0fr;
 	opacity: 0;
+}
+.chat-log.is-staged .msg > .msg-body {
+	overflow: hidden;
+	transform: translateY(7px);
 }
 .chat-log.is-staged .msg.is-in {
+	grid-template-rows: 1fr;
 	opacity: 1;
-	animation: msgIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-@keyframes msgIn {
-	from {
-		opacity: 0;
-		transform: translateY(7px);
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
+.chat-log.is-staged .msg.is-in > .msg-body {
+	transform: none;
 }
 
-/* .msg-body is the anchor; the reply's text <p> is the box. While .is-typing, the
-   subtree is hidden (the box stays the same) and the dots overlay it,
-   so the row's height matches the final reply and the panel never
-   resizes between the typing beat and the reply.
-
-   We use opacity instead of color: transparent so children with their
-   own color (refs, ems, bs) get hidden too. color: transparent
-   inherits, but a child's explicit color wins, which would leave
-   highlighted spans visible during the typing beat. */
-.msg-body { position: relative; }
-.msg-body > p:not(.msg-h) {
-	transition: opacity 0.28s ease;
-}
-.msg.is-typing .msg-body > p:not(.msg-h) {
-	opacity: 0;
-	/* Snap out of view so the text doesn't visibly fade away; we want the
-     reply to fade IN, not the text to fade OUT and then back in. */
-	transition: none;
-}
-
-/* The typing dots overlay the reply's text area. Absolute + inset:0 keeps
-   the row's height determined by the (still-present, hidden) text, not
-   the dots themselves. padding-top skips past msg-h so the dots land in
-   the area where the reply text will be. */
+/* Typing indicator, drawn the way iOS draws it: its own small grey bubble
+   rather than dots floating over the reply. The real bubbles are removed from
+   flow while it shows, so the thread grows when the reply lands. The screen is
+   a fixed height with messages anchored to the bottom, so that growth reads as
+   a conversation filling up instead of the panel resizing. */
 .typing-dots {
-	position: absolute;
-	inset: 0;
-	padding-top: 1.2rem;
-	display: flex;
+	display: none;
 	align-items: center;
-	gap: 5px;
-	opacity: 0;
-	transition: opacity 0.22s ease;
-	pointer-events: none;
+	gap: 4px;
+	padding: 0.62rem 0.8rem;
+	background: #e9e9eb;
+	border-radius: 1.15rem;
+	border-bottom-left-radius: 0.35rem;
+}
+.msg.is-typing .msg-body > p {
+	display: none;
 }
 .msg.is-typing .typing-dots {
-	opacity: 1;
-	/* Snap the dots on the moment typing starts, so the arriving row is
-     already mid-typing rather than fading the dots up after the fact. */
-	transition: opacity 0s;
+	display: flex;
 }
 .typing-dots i {
 	width: 6px;
 	height: 6px;
 	border-radius: 50%;
-	background: var(--ink-3);
+	background: #8e8e93;
 	animation: tdot 0.9s ease-in-out infinite;
 }
 .typing-dots i:nth-child(2) {
@@ -672,9 +758,19 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
+	/* Must reset grid-template-rows as well as opacity: staging collapses the
+	   row to 0fr, so resetting only opacity would leave every message present,
+	   fully opaque, and zero pixels tall. */
 	.chat-log.is-staged .msg {
+		grid-template-rows: 1fr;
 		opacity: 1;
-		animation: none;
+	}
+	.chat-log.is-staged .msg > .msg-body {
+		transform: none;
+	}
+	.msg,
+	.msg .msg-body {
+		transition: none;
 	}
 	.typing-dots i {
 		animation: none;
@@ -1192,4 +1288,30 @@ p {
 	letter-spacing: 0.04em;
 	text-transform: none;
 	color: var(--ink-3);
+}
+
+/* A link as it arrives in a message: mono, underlined, clipped rather than
+   wrapped. Real messaging apps never wrap a URL across three lines, and a
+   demo that does reads as a mockup instead of a screenshot. */
+.msg-link {
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	vertical-align: bottom;
+	font-family: var(--mono);
+	font-size: 0.86em;
+	color: var(--plum-deep);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+/* The household address inside a card. Same mono treatment the join form uses
+   for it, so the one string that appears on both pages looks like one thing. */
+.card code {
+	font-family: var(--mono);
+	font-size: 0.88em;
+	color: var(--plum-deep);
+	white-space: nowrap;
 }
