@@ -42,8 +42,8 @@
           Baxter over text.
         </p>
 
-        <!-- Shown until join.js verifies ?key=. No JS means no form, which is the
-             right failure for an invite-only page. -->
+        <!-- Shown until join.js checks ?code= against /api/invite. No JS means no
+             form, which is the right failure for an invite-only page. -->
         <div class="gate" id="gate" hidden>
           <p id="gate-msg"></p>
         </div>
@@ -54,22 +54,18 @@
           </div>
         </noscript>
 
-        <!-- TODO: replace FORM_ID with the second Formspark form.
-             Hidden until the invite verifies; join.js unhides it.
-
-             Two things here shouldn't be "tidied":
+        <!-- Posts to /api/join, which re-checks the invite, verifies Turnstile,
+             writes the row and redirects to /welcome. Two things here are not
+             tidy-uppable:
                1. the consent checkbox is never pre-ticked;
                2. it is not marked required.
-             (2) is inherited from carrier vetting, where a required consent box is
-             an automatic rejection. Messages now go over iMessage, so that rule no
-             longer binds us directly, but delivery still falls back to a standard
-             text for Android recipients under carrier rules. The safe posture is
-             cheap to keep. Flip it only deliberately.
-
-             Anyone who submits without ticking it has not consented. Don't message
-             them; chase it by email instead. -->
+             (2) is inherited from carrier vetting, where a required consent box
+             is an automatic rejection. Messages go over iMessage now, so that
+             rule no longer binds us directly, but delivery still falls back to
+             a standard text for Android recipients under carrier rules. The
+             safe posture is cheap to keep. Flip it only deliberately. -->
         <form class="signup-form" id="join-form" hidden
-              action="https://submit-form.com/kmpldBAR5" method="POST">
+              action="/api/join" method="POST">
           <div class="field">
             <label for="name">Your name</label>
             <input type="text" id="name" name="name" autocomplete="name" required>
@@ -108,20 +104,36 @@
             </p>
           </div>
 
+          <!-- Two boxes, and they are not interchangeable. The terms box is
+               required: it's where the agreement is formed and where age is
+               confirmed. The messaging box is not, and must never be pre-ticked
+               — delivery still falls back to a standard text for Android
+               recipients under carrier rules, where a required consent box is a
+               registration failure. Bundling them would quietly make the
+               messaging consent mandatory, which is the thing to avoid. -->
+          <div class="consent">
+            <input type="checkbox" id="terms" name="terms" value="yes" required>
+            <label for="terms">
+              I'm 18 or older and I agree to the
+              <a href="terms.html">Terms &amp; Conditions</a> and
+              <a href="privacy.html">Privacy Policy</a>.
+            </label>
+          </div>
+
           <div class="consent">
             <input type="checkbox" id="consent" name="consent" value="yes">
             <label for="consent">
+              <span class="consent-optional">Optional.</span>
               Message me at the number above. Baxter replies when I message it and sends the
               reminders I set up. Message and data rates may apply. Reply STOP any time to
               stop.
             </label>
           </div>
 
-          <!-- The verified invite token, echoed back with the submission. Client-side
-               checking only gates the page; this is what lets a submission be
-               re-verified later against the signing key. -->
-          <input type="hidden" id="invite-key" name="invite_key" value="">
-          <!-- Formspark honeypot: hidden from people, irresistible to bots. -->
+          <!-- The code from the URL, sent back so the server can re-check it.
+               join.js only gates the page; /api/join re-validates this itself. -->
+          <input type="hidden" id="invite-code" name="invite_code" value="">
+          <!-- Honeypot: hidden from people, irresistible to bots. -->
           <input type="checkbox" name="_honeypot" tabindex="-1" autocomplete="off"
                  aria-hidden="true" style="display:none">
           <div class="cf-turnstile"
@@ -144,7 +156,7 @@
 <footer class="foot">
   <div class="wrap foot-inner">
     <span class="foot-mark">Baxter Family AI</span>
-    <span class="foot-dim">An assistant for the whole household. Operated by Mirabelle&nbsp;Studios.</span>
+    <span class="foot-dim">An assistant for every parent. Operated by Mirabelle&nbsp;Studios.</span>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
     <a href="https://oss.bax.bot">Self-host it<span aria-hidden="true"> ↗</span></a>

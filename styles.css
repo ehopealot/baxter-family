@@ -1315,3 +1315,60 @@ p {
 	color: var(--plum-deep);
 	white-space: nowrap;
 }
+
+/* A locked field still reads as a field, just not one you can argue with. The
+   invite decides this address, and the server overrides whatever is submitted,
+   so an editable box would only mislead. */
+.field input.is-locked {
+	background: var(--paper-alt);
+	color: var(--ink-2);
+	cursor: default;
+}
+
+/* ── 404 ─────────────────────────────────────────────────── */
+
+/* Vertically centred, because there is nothing below it to scroll to. The
+   min-height accounts for the sticky topbar so the block sits in the middle of
+   what's actually visible rather than the middle of the document. */
+.lost {
+	display: grid;
+	align-content: center;
+	min-height: calc(100svh - var(--topbar-h) - 6rem);
+	padding-block: clamp(3rem, 8vw, 6rem);
+	background: var(--paper);
+}
+.lost-inner {
+	max-width: 34rem;
+}
+
+/* The hero's bubbles outside a phone. .chat-log can't be reused here: it is
+   flex-end inside a fixed-height screen, which is meaningless on a page. */
+.lost-thread {
+	list-style: none;
+	margin: 1.9rem 0 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	max-width: 30rem;
+}
+.lost-thread .msg-body {
+	max-width: 88%;
+}
+
+.lost-cta {
+	margin-top: 2.25rem;
+}
+
+/* Marks the messaging box as the optional one. The terms box beside it is
+   required, and two identical-looking checkboxes with different obligations is
+   exactly the thing someone skims past. */
+.consent-optional {
+	font-family: var(--mono);
+	font-size: 0.82em;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--ink-3);
+	margin-right: 0.3rem;
+}

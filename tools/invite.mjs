@@ -1,122 +1,104 @@
 #!/usr/bin/env node
 /**
- * Invite keys for join.html.
+ * Invite codes for join.html. Thin wrapper over `wrangler d1 execute`, so
+ * there's no second source of truth — the database is the only one.
  *
- * ECDSA P-256, not HMAC, and that choice is the whole point. The verifying key
- * ships inside join.js where anyone can read it, so a shared secret would let a
- * reader mint their own valid invites — and the signature echoed back with the
- * submission would be forgeable too, which is exactly the evidence we wanted it
- * to be. With a keypair, the public half is safe to publish and only this
- * script's private half can produce a token that verifies.
+ *   node tools/invite.mjs new --email sam@example.com [--days 14]
+ *   node tools/invite.mjs new --open --label "Tilden QR card" --uses 50
+ *   node tools/invite.mjs list [--all]
+ *   node tools/invite.mjs revoke BAX-7K3M-QP2R
  *
- * Client-side verification is a gate, not a guarantee: anyone can POST straight
- * to the form endpoint. The value is that a submission carrying a token which
- * verifies against the public key could only have come from an invite we minted.
- * A submission with no token, or a bad one, is one you know to distrust.
+ * --local runs against the local dev database instead of production.
  *
- * Token layout — b64url(payload JSON) "." b64url(raw 64-byte r||s signature),
- * signed over the ASCII bytes of the first part. Same shape as a JWS with the
- * header dropped, so verifying it later from any language is unremarkable.
- *
- *   node tools/invite.mjs keygen
- *   node tools/invite.mjs sign  --email sam@example.com [--days 14]
- *   node tools/invite.mjs verify <token>
- *
- * keygen prints the private JWK (keep it; it never goes in the repo) and the
- * public JWK (paste into join.js). Everything else reads the private key from
- * $BAXTER_INVITE_KEY or ./invite-key.json, neither of which is committed.
+ * A personal invite names an address: join.html fills the email field in and
+ * locks it, and /api/join overrides whatever is submitted with the invite's
+ * address, so the link can't be passed on to sign someone else up. An open
+ * invite names nobody — anyone holding the code can use it, up to --uses.
  */
 
-import { webcrypto as crypto } from "node:crypto";
-import { readFileSync, existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
 
-const ALG = { name: "ECDSA", namedCurve: "P-256" };
-const SIG = { name: "ECDSA", hash: "SHA-256" };
+const DB = "baxter-family";
 
-const b64u = (bytes) =>
-	Buffer.from(bytes).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-const unb64u = (s) => Buffer.from(s.replace(/-/g, "+").replace(/_/g, "/"), "base64");
+// Crockford-ish: no I, L, O or U, so nothing is ambiguous read off a card or
+// dictated over the phone, and it can't accidentally spell anything.
+const ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+
+function code() {
+	const bytes = randomBytes(8);
+	let out = "";
+	for (let i = 0; i < 8; i++) {
+		if (i === 4) out += "-";
+		out += ALPHABET[bytes[i] % ALPHABET.length];
+	}
+	return `BAX-${out}`; // BAX-7K3M-QP2R
+}
 
 function arg(name, fallback) {
 	const i = process.argv.indexOf(`--${name}`);
 	return i === -1 ? fallback : process.argv[i + 1];
 }
+const flag = (name) => process.argv.includes(`--${name}`);
 
-function loadPrivateJwk() {
-	const inline = process.env.BAXTER_INVITE_KEY;
-	if (inline) return JSON.parse(inline);
-	if (existsSync("invite-key.json")) return JSON.parse(readFileSync("invite-key.json", "utf8"));
-	console.error(
-		"No private key. Run `node tools/invite.mjs keygen`, save the private JWK to\n" +
-			"invite-key.json (gitignored) or export it as $BAXTER_INVITE_KEY.",
-	);
-	process.exit(1);
+function sql(query) {
+	const args = ["d1", "execute", DB, flag("local") ? "--local" : "--remote", "--command", query];
+	try {
+		return execFileSync("npx", ["wrangler", ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] });
+	} catch {
+		process.exit(1);
+	}
 }
 
-async function keygen() {
-	const { privateKey, publicKey } = await crypto.subtle.generateKey(ALG, true, ["sign", "verify"]);
-	const priv = await crypto.subtle.exportKey("jwk", privateKey);
-	const pub = await crypto.subtle.exportKey("jwk", publicKey);
-	console.log("PRIVATE JWK — save as invite-key.json, never commit it:\n");
-	console.log(JSON.stringify(priv));
-	console.log("\nPUBLIC JWK — paste into INVITE_PUBLIC_JWK in join.js:\n");
-	console.log(JSON.stringify({ kty: pub.kty, crv: pub.crv, x: pub.x, y: pub.y }));
-}
+const esc = (v) => (v === null || v === undefined ? "NULL" : `'${String(v).replace(/'/g, "''")}'`);
 
-async function sign() {
+function make() {
+	const open = flag("open");
 	const email = arg("email");
-	if (!email) {
-		console.error("Usage: node tools/invite.mjs sign --email <address> [--days 14]");
+	if (!open && !email) {
+		console.error("Give --email <address> for a personal invite, or --open for a shareable code.");
 		process.exit(1);
 	}
-	const days = Number(arg("days", "14"));
-	const payload = {
-		email,
-		exp: Math.floor(Date.now() / 1000) + days * 86400,
-		jti: b64u(crypto.getRandomValues(new Uint8Array(9))),
-	};
-	const key = await crypto.subtle.importKey("jwk", loadPrivateJwk(), ALG, false, ["sign"]);
-	const body = b64u(Buffer.from(JSON.stringify(payload), "utf8"));
-	const sig = await crypto.subtle.sign(SIG, key, Buffer.from(body, "ascii"));
-	const token = `${body}.${b64u(new Uint8Array(sig))}`;
-	console.log(`https://family.bax.bot/join.html?key=${token}`);
-	console.error(`\n  invited: ${email}\n  expires: ${new Date(payload.exp * 1000).toISOString()}\n  jti:     ${payload.jti}`);
-}
-
-async function verify() {
-	const token = process.argv[3];
-	if (!token) {
-		console.error("Usage: node tools/invite.mjs verify <token>");
-		process.exit(1);
-	}
-	const priv = loadPrivateJwk();
-	const pub = await crypto.subtle.importKey(
-		"jwk",
-		{ kty: priv.kty, crv: priv.crv, x: priv.x, y: priv.y },
-		ALG,
-		false,
-		["verify"],
+	const days = arg("days");
+	const uses = arg("uses", open ? null : "1");
+	const c = code();
+	sql(
+		`INSERT INTO invites (code, kind, email, label, max_uses, used_count, expires_at, revoked, created_at)
+		 VALUES (${esc(c)}, ${open ? "'open'" : "'personal'"}, ${esc(open ? null : email)}, ${esc(arg("label", null))},
+		         ${uses ? Number(uses) : "NULL"}, 0,
+		         ${days ? Math.floor(Date.now() / 1000) + Number(days) * 86400 : "NULL"}, 0,
+		         ${Math.floor(Date.now() / 1000)})`,
 	);
-	const [body, sig] = token.split(".");
-	if (!body || !sig) {
-		console.log("INVALID — malformed token");
-		process.exit(1);
-	}
-	const ok = await crypto.subtle.verify(SIG, pub, unb64u(sig), Buffer.from(body, "ascii"));
-	if (!ok) {
-		console.log("INVALID — signature does not verify; this was not minted by us");
-		process.exit(1);
-	}
-	const payload = JSON.parse(unb64u(body).toString("utf8"));
-	const expired = payload.exp * 1000 < Date.now();
-	console.log(expired ? "VALID SIGNATURE, BUT EXPIRED" : "VALID");
-	console.log(JSON.stringify({ ...payload, expires: new Date(payload.exp * 1000).toISOString() }, null, 2));
+	console.log(`\n  https://family.bax.bot/join?code=${c}\n`);
+	console.error(`  code:  ${c}`);
+	console.error(`  kind:  ${open ? "open" : `personal (${email})`}`);
+	console.error(`  uses:  ${uses || "unlimited"}`);
+	if (days) console.error(`  until: ${new Date(Date.now() + Number(days) * 86400000).toISOString().slice(0, 10)}`);
 }
 
-const cmd = process.argv[2];
-const run = { keygen, sign, verify }[cmd];
+const COMMANDS = {
+	new: make,
+	list: () =>
+		sql(
+			`SELECT code, kind, COALESCE(email, label, '') AS who, used_count, COALESCE(max_uses, 0) AS max_uses,
+			        COALESCE(datetime(expires_at,'unixepoch'), 'never') AS expires, revoked
+			 FROM invites ${flag("all") ? "" : "WHERE revoked = 0 AND (max_uses IS NULL OR used_count < max_uses)"}
+			 ORDER BY created_at DESC LIMIT 50`,
+		),
+	revoke: () => {
+		const c = process.argv[3];
+		if (!c || c.startsWith("--")) {
+			console.error("Usage: node tools/invite.mjs revoke <CODE>");
+			process.exit(1);
+		}
+		sql(`UPDATE invites SET revoked = 1 WHERE code = ${esc(c.toUpperCase())}`);
+		console.error(`  revoked ${c.toUpperCase()}`);
+	},
+};
+
+const run = COMMANDS[process.argv[2]];
 if (!run) {
-	console.error("Usage: node tools/invite.mjs <keygen|sign|verify>");
+	console.error("Usage: node tools/invite.mjs <new|list|revoke> [--local]");
 	process.exit(1);
 }
-await run();
+run();

@@ -1,0 +1,17 @@
+# Everything here is in the repo but is not the website. Without this the
+# assets directory is the repo root, so wrangler.jsonc (with the D1 database
+# id), the schema, the tooling and the Worker source would all be uploaded and
+# publicly fetchable.
+src/
+tools/
+schema.sql
+wrangler.jsonc
+README.md
+package.json
+package-lock.json
+node_modules/
+.dev.vars
+.gitignore
+.assetsignore
+.wrangler/
+.pi-subagents/

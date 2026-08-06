@@ -1,0 +1,36 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "baxter-family",
+	"main": "src/index.js",
+	"compatibility_date": "2026-08-05",
+
+	"assets": {
+		// The site is the repo root. `.assetsignore` keeps the things that
+		// aren't the site — this config, the schema, tools, the Worker source —
+		// from being uploaded and served.
+		"directory": ".",
+		"binding": "ASSETS",
+		// Serve 404.html for unknown paths rather than falling back to index,
+		// which would hand a 200 to every typo.
+		"not_found_handling": "404-page",
+		// Only /api/* reaches the Worker; everything else is served off the
+		// edge without invoking it at all.
+		"run_worker_first": ["/api/*"]
+	},
+
+	// One binding, named DB because that's what the handlers read: env.DB.
+	// `wrangler d1 create` appends its own block using the database name as the
+	// binding — delete that if it turns up again rather than ending up with two
+	// bindings onto the same database.
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "baxter-family",
+			"database_id": "53525086-7fe9-4b90-ade4-09cef82f0687"
+		}
+	]
+
+	// TURNSTILE_SECRET is a secret, not a var — never put it here:
+	//   wrangler secret put TURNSTILE_SECRET
+	// and for local dev, a .dev.vars file (gitignored).
+}

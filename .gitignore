@@ -2,6 +2,7 @@
 node_modules/
 .pi-subagents/
 
-# Private half of the invite signing key. Publishing it would let anyone
-# mint invites that pass both the client gate and later verification.
-invite-key.json
+
+# Cloudflare local dev: .dev.vars holds TURNSTILE_SECRET.
+.dev.vars
+.wrangler/

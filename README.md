@@ -1,8 +1,8 @@
 # `baxter-family`: the family.bax.bot landing page
 
 The marketing and signup page for **Baxter Family AI**, the hosted version of Baxter that
-people reach by text message. Static, no build step, no dependencies: `index.html`,
-`privacy.html`, `terms.html`, and one `styles.css` shared between them.
+people reach by message. Static pages with no build step, plus a Worker in `/src`
+backing the two forms with D1.
 
 This is deliberately a separate site from [bax.bot](https://bax.bot). That one describes
 the open-source project you self-host; this one is a consumer service with an account and
@@ -12,13 +12,11 @@ a phone number. Keeping them apart is not cosmetic — see *Why the split* below
 
 Hosted on **Cloudflare Pages**, which is where the DNS and email routing already live.
 
-1. Push this directory to a Git repo and connect it in *Cloudflare Dashboard → Workers &
-   Pages → Create → Pages → Connect to Git*.
-2. Build command: **none**. Build output directory: **`/`**.
-3. *Custom domains → Set up a custom domain →* `family.bax.bot`. Cloudflare adds the CNAME
-   for you since the zone is already there.
+Deployed as a **Worker with static assets**, built from the linked GitHub repo —
+pushing to `main` deploys. `wrangler deploy` from here does the same thing by hand.
 
-Direct upload (`npx wrangler pages deploy .`) also works if you'd rather not connect a repo.
+Not Pages. Workers is where Cloudflare puts new work now, and it's the only one
+of the two that serves static files and runs an API off one config.
 
 `bax.bot` stays on GitHub Pages out of the `baxter-site` repo and is untouched by any of
 this. GitHub Pages only allows one custom domain per repository, which is the reason this
@@ -30,62 +28,101 @@ subdomain isn't just another directory over there.
 python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-## The signup section is load-bearing
+## The backend
 
-`#signup` in `index.html` is not ordinary marketing copy. It is the evidence a carrier
-looks at when vetting the A2P campaign, and a campaign gets rejected — Twilio error
-[30908](https://www.twilio.com/docs/api/errors/30908) — when it's missing or contradicts
-the privacy policy. It has to keep showing, on this domain and next to the point of
-consent:
+Two forms, both posting to a Worker in `/src`, both writing to D1. The site is
+static assets on the same Worker, so it all deploys together — one domain, no
+CORS.
 
-- the program name (**Baxter Family AI**)
-- what we send
-- **message frequency varies**
-- **message and data rates may apply**
-- STOP / START / HELP
-- links to both `privacy.html` and `terms.html`
+| Route | Does |
+|---|---|
+| `POST /api/waitlist` | homepage form → `waitlist` table → `/thanks` |
+| `POST /api/join` | `join.html` → `signups` table → `/welcome` |
+| `GET /api/invite?code=` | tells `join.js` whether a code is usable |
 
-The embedded Google Form must match it. The form needs a short-answer mobile number
-question and a **Checkboxes question with a single option that is never pre-ticked and is
-*not* marked Required**, whose text is the same consent sentence the page shows. The
-"not required" part is counter-intuitive and it is the one carriers are strict about:
-consent may not be a condition of submitting the form, and a required consent box is a
-denial reason. Someone who submits without ticking it simply doesn't get texted.
+`run_worker_first` in `wrangler.jsonc` is set to `/api/*`, so every other
+request is served straight off the edge and never reaches Worker code.
+`.assetsignore` keeps `wrangler.jsonc`, the schema, the tooling and the Worker
+source from being uploaded as public files — without it the assets directory is
+the repo root and all of that would be fetchable.
 
-The form must also be reachable **without a Google sign-in**. Turn off *Collect email
-addresses* and *Limit to 1 response* in the form's settings — both put a login wall in
-front of it, and a vetter who can't load the form treats the opt-in as missing.
+### Setup
 
-If the page and the form drift apart, the vetter sees the inconsistency.
+```bash
+wrangler d1 create baxter-family                              # paste the id into wrangler.jsonc
+wrangler d1 execute baxter-family --remote --file=schema.sql
+wrangler secret put TURNSTILE_SECRET
+```
 
-The form is wired up. Its embed URL is the `/viewform` path with `?embedded=true`, in two
-places in `index.html` — the iframe and the fallback link. If the form is ever replaced,
-change both.
+For local work, put `TURNSTILE_SECRET` in `.dev.vars` (gitignored) and run
+`wrangler dev`. Cloudflare's always-passes test secret is
+`1x0000000000000000000000000000000AA`. Add `--local` to the invite commands to
+hit the local database rather than production.
 
-`privacy.html` §3 must list every field the form collects. It currently covers name, email,
-account name, and mobile number; if you add a question to the form, add it there too —
-"policy lacks clear explanation of collected data" is a 30908 cause.
+### Viewing submissions
 
-## The hosted opt-in screenshots
+D1's console in the Cloudflare dashboard renders any query as a table:
+*Storage & Databases → D1 → baxter-family → Console*. Or from the CLI:
 
-Two PNGs in this directory are cited from the campaign's message flow and are **not
-decorative** — Twilio error [30896](https://www.twilio.com/docs/api/errors/30896) lists
-missing hosted screenshots as a rejection cause. Don't rename or delete them.
+```bash
+wrangler d1 execute baxter-family --remote --command \
+  "SELECT datetime(created_at,'unixepoch') AS when_, name, household, email, phone, consent, status FROM signups ORDER BY created_at DESC"
 
-| File | Served at | Shows |
-|---|---|---|
-| `optin.png` | `/optin.png` | The `#signup` section on our own domain, browser URL bar visible |
-| `optin-form.png` | `/optin-form.png` | The signup form in full — every field label, and the consent box |
+wrangler d1 execute baxter-family --remote --command \
+  "SELECT datetime(created_at,'unixepoch') AS when_, name, email FROM waitlist ORDER BY created_at DESC"
+```
 
-Re-shoot both whenever the form or `#signup` changes, so a reviewer sees what is actually
-live. Two rules when re-shooting, both learned the hard way:
+`signups.status` defaults to `new` and nothing reads it yet. It's the seam for
+provisioning later — a cron Worker or Queue consumer can pick up `WHERE status
+= 'new'`, do the work, and move the row on, without this schema changing.
 
-- **Use a private/incognito window.** Signed in, Google renders the account row at the top
-  of the form. That publishes the operator's email address on a public URL, and it reads
-  to a reviewer as a sign-in wall — the opposite of what the screenshot is meant to prove.
-- **Keep the `* Indicates required question` legend in frame.** The consent question has no
-  asterisk while the four fields above it do. That contrast is the evidence that consent
-  isn't required to submit, which is the single thing 30896 most often turns on.
+### Invites
+
+```bash
+node tools/invite.mjs new --email sam@example.com --days 14   # personal, one use
+node tools/invite.mjs new --open --label "Tilden card" --uses 50
+node tools/invite.mjs list
+node tools/invite.mjs revoke BAX-7K3M-QP2R
+```
+
+Both kinds are rows in `invites`. A **personal** invite names an address:
+`join.html` fills the email in and locks it, and `/api/join` overrides whatever
+is submitted with the invite's address, so forwarding the link can't sign
+somebody else up. An **open** invite names nobody — anyone holding the code can
+use it, up to `--uses`. That's the one to put on a QR card; the URL is 46
+characters, which scans at low density.
+
+Codes live in the database rather than being signed tokens, which is what an
+earlier version did. A signed token can't be revoked without a server, can't be
+counted or use-limited, and has to carry its whole payload in the URL, which
+makes for a dense QR. A row can be revoked instantly and tells you how often it
+was used.
+
+`join.js` gates the page, but it is **not** the security boundary — anyone can
+POST straight at `/api/join`. That handler re-checks the code, verifies
+Turnstile server-side, and claims the invite with the use limit in the `WHERE`
+clause so two simultaneous posts can't both win. Nothing from the browser is
+trusted.
+
+## What the signup section still owes
+
+`#signup` used to be carrier-vetting evidence: messages went out as A2P SMS, so
+the page had to carry frequency, rates and STOP/HELP next to the point of
+consent or the campaign got rejected. Messages now go over iMessage, so that
+wall is gone and the section is one honest sentence instead.
+
+Two things are still not optional, and neither is about carriers:
+
+- **The consent box on `join.html` is never pre-ticked, and is not required.**
+  Delivery still falls back to a standard text for Android recipients, under
+  carrier rules, so the safe posture is cheap to keep.
+- **`privacy.html` §3 lists every field the forms collect.** Add a field, add it
+  there. It currently covers name, household name, email and mobile number.
+
+`optin.png` and `optin-form.png` are leftovers from the A2P era. They show a
+Google Form flow that no longer exists, and the campaign they were filed against
+described carrier SMS we no longer send. Delete both once that campaign is
+retired; until then they're stale evidence, not documentation.
 
 ## Why the split
 

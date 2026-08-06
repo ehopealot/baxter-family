@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Baxter Family AI: one assistant for the whole house</title>
-<meta name="description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for everyone under one roof.">
+<meta name="description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for every parent.">
 <meta property="og:title" content="Baxter Family AI: one assistant for the whole house">
-<meta property="og:description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for everyone under one roof.">
+<meta property="og:description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for every parent.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://family.bax.bot/">
 <link rel="canonical" href="https://family.bax.bot/">
@@ -24,9 +24,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<!-- Turnstile. The widget only mints the token; Formspark does the siteverify
-     call server-side, which is the half that actually stops anything; the
-     endpoint is public, so a widget alone would be decorative. -->
+<!-- Turnstile. The widget only mints the token; /api/waitlist does the
+     siteverify call server-side, which is the half that actually stops
+     anything — the endpoint is public, so a widget alone is decorative. -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
@@ -65,7 +65,7 @@
         </div>
         <ul class="hero-facts">
           <li><span>Works over text and email</span></li>
-          <li><span>Everyone in the house, one Baxter</span></li>
+          <li><span>Lots to organize, one Baxter</span></li>
           <li><span>Stop any time by replying STOP</span></li>
         </ul>
       </div>
@@ -255,9 +255,9 @@
         <div class="cards">
           <article class="card">
             <h3>Holds the list</h3>
-            <p>Groceries, the hardware store, the thing you keep meaning to deal with.
-              Anyone in the house can add from wherever they are, and it's the same list
-              when someone gets to the shop.</p>
+            <p>Groceries, the hardware store, the thing you keep meaning to deal with. Add
+              to it from wherever you are, and whoever gets to the shop first has the same
+              list.</p>
           </article>
           <article class="card">
             <h3>Keeps the week straight</h3>
@@ -308,7 +308,7 @@
           you the signup form when there's room.
         </p>
 
-        <form class="signup-form" action="https://submit-form.com/JLf4JW6hg" method="POST">
+        <form class="signup-form" action="/api/waitlist" method="POST">
           <div class="field">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" autocomplete="name" required>
@@ -317,7 +317,7 @@
             <label for="email">Email</label>
             <input type="email" id="email" name="email" autocomplete="email" required>
           </div>
-          <!-- Formspark honeypot: hidden from people, irresistible to bots. -->
+          <!-- Honeypot: hidden from people, irresistible to bots. -->
           <input type="checkbox" name="_honeypot" tabindex="-1" autocomplete="off"
                  aria-hidden="true" style="display:none">
           <!-- Renders the challenge and posts cf-turnstile-response with the form.
@@ -363,7 +363,7 @@
 <footer class="foot">
   <div class="wrap foot-inner">
     <span class="foot-mark">Baxter Family AI</span>
-    <span class="foot-dim">An assistant for the whole household. Operated by Mirabelle&nbsp;Studios.</span>
+    <span class="foot-dim">An assistant for every parent. Operated by Mirabelle&nbsp;Studios.</span>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
     <a href="https://oss.bax.bot">Self-host it<span aria-hidden="true"> ↗</span></a>
