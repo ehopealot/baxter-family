@@ -59,44 +59,28 @@ For local work, put `TURNSTILE_SECRET` in `.dev.vars` (gitignored) and run
 `1x0000000000000000000000000000000AA`. Add `--local` to the invite commands to
 hit the local database rather than production.
 
-### Viewing submissions
+### Operating it
 
-D1's console in the Cloudflare dashboard renders any query as a table:
-*Storage & Databases → D1 → baxter-family → Console*. Or from the CLI:
-
-```bash
-wrangler d1 execute baxter-family --remote --command \
-  "SELECT datetime(created_at,'unixepoch') AS when_, name, household, email, phone, consent, status FROM signups ORDER BY created_at DESC"
-
-wrangler d1 execute baxter-family --remote --command \
-  "SELECT datetime(created_at,'unixepoch') AS when_, name, email FROM waitlist ORDER BY created_at DESC"
-```
-
-`signups.status` defaults to `new` and nothing reads it yet. It's the seam for
-provisioning later — a cron Worker or Queue consumer can pick up `WHERE status
-= 'new'`, do the work, and move the row on, without this schema changing.
-
-### Invites
+Handing out invites and reading the submissions is its own job, and it has its
+own runbook: **[OPERATIONS.md](OPERATIONS.md)**. The short version —
 
 ```bash
 node tools/invite.mjs new --email sam@example.com --days 14   # personal, one use
 node tools/invite.mjs new --open --label "Tilden card" --uses 50
-node tools/invite.mjs list
+node tools/invite.mjs list [--all]
 node tools/invite.mjs revoke BAX-7K3M-QP2R
 ```
 
-Both kinds are rows in `invites`. A **personal** invite names an address:
-`join.html` fills the email in and locks it, and `/api/join` overrides whatever
-is submitted with the invite's address, so forwarding the link can't sign
-somebody else up. An **open** invite names nobody — anyone holding the code can
-use it, up to `--uses`. That's the one to put on a QR card; the URL is 46
-characters, which scans at low density.
+Submissions are rows in D1; the dashboard's console renders any `SELECT` as a
+table. Two rules from that document are worth repeating here, because breaking
+either is quiet and hard to walk back:
 
-Codes live in the database rather than being signed tokens, which is what an
-earlier version did. A signed token can't be revoked without a server, can't be
-counted or use-limited, and has to carry its whole payload in the URL, which
-makes for a dense QR. A row can be revoked instantly and tells you how often it
-was used.
+- **Never `DELETE` a signup row.** Household names are taken permanently — a
+  promise in `terms.html` §13, enforced by the `UNIQUE` index on
+  `signups.household`. Deleting frees the name for somebody else. Set a status.
+- **`TERMS_VERSION` in `src/api/join.js` must match the date on `terms.html`.**
+  Two lines in two files, nothing to catch you if they drift, and a stored
+  agreement is worth little without knowing which terms it was to.
 
 `join.js` gates the page, but it is **not** the security boundary — anyone can
 POST straight at `/api/join`. That handler re-checks the code, verifies

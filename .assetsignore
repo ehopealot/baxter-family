@@ -7,6 +7,7 @@ tools/
 schema.sql
 wrangler.jsonc
 README.md
+OPERATIONS.md
 package.json
 package-lock.json
 node_modules/
