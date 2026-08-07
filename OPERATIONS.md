@@ -285,6 +285,9 @@ Then mint an invite with `--local`, and open the printed URL against localhost.
 ## What isn't built yet
 
 - **Nothing emails the invitee.** `new` prints a link; sending it is you, by hand.
+  The wording is written and waiting in [emails/](emails/) — an invite mail and a
+  welcome-from-Baxter mail, each in HTML and plain text. `node emails/preview.mjs
+  --open` shows you what they look like.
 - **Nothing provisions anything.** `status` is a column that stays at `new` until you move
   it. The Worker writes rows and that's all.
 - **No admin page.** The D1 console and this file are the interface, on purpose — an admin

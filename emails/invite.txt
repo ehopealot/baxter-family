@@ -1,0 +1,27 @@
+Subject: Your invite to Baxter
+
+
+Hi {{name}},
+
+Thanks for putting your name down. Here's your link.
+
+  {{invite_url}}
+
+The link is tied to this address, so it won't work for anyone
+else. {{expires_sentence}}
+
+Setting up takes about a minute. You'll pick a name for your
+household -- that becomes your address for Baxter -- and say
+whether you'd like Baxter over text as well as email.
+
+-- {{sender_name}}
+Built by a parent in Berkeley, California.
+
+
+---
+You're getting this because you asked for an invite at
+family.bax.bot. This is the only email we'll send about it.
+
+Baxter Family AI, operated by Mirabelle Studios
+Privacy: https://family.bax.bot/privacy.html
+Terms:   https://family.bax.bot/terms.html

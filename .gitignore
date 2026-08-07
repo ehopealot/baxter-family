@@ -6,3 +6,6 @@ node_modules/
 # Cloudflare local dev: .dev.vars holds TURNSTILE_SECRET.
 .dev.vars
 .wrangler/
+
+# Filled-in copies of the email templates, from emails/preview.mjs.
+emails/.preview/

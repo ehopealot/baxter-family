@@ -4,16 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Baxter Family AI: one assistant for the whole house</title>
-<meta name="description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for every parent.">
+<meta name="description" content="Shared lists parents can tackle together — groceries, the birthday party, the back-to-school supplies — kept by an assistant that remembers who picked up what.">
 <meta property="og:title" content="Baxter Family AI: one assistant for the whole house">
-<meta property="og:description" content="Text or email Baxter like you'd ask a person who never forgets. Lists, calendars, dinner, reminders, something for the kids to watch. One assistant for every parent.">
+<meta property="og:description" content="Shared lists parents can tackle together — groceries, the birthday party, the back-to-school supplies — kept by an assistant that remembers who picked up what.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://family.bax.bot/">
 <link rel="canonical" href="https://family.bax.bot/">
-<!-- Rendered from this page's own tokens and fonts at 1200x630. Bump the ?v=
-     whenever it is re-rendered: Slack, Discord and the rest cache preview
-     images by URL, so anywhere the page was already shared keeps serving the
-     old card until the query string changes. -->
+<!-- TODO: og.png still shows the old lede. Re-render and bump ?v= — previews
+     are cached by URL, so the old card serves forever otherwise. -->
 <meta property="og:image" content="https://family.bax.bot/og.png?v=1">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -24,15 +22,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<!-- Runs before first paint, so the demo is never seen un-staged. The markup
-     ships with all three panels visible and every message in place, which is
-     what a no-JS visitor should get — but with JS the browser would paint that
-     first and then collapse it, which is the flash of everything sliding away.
-     One class in <head> beats app.js to it. -->
+<!-- Don't remove: sets the staging class before first paint, or the demo
+     flashes fully open and collapses. -->
 <script>document.documentElement.className += " has-js";</script>
-<!-- Turnstile. The widget only mints the token; /api/waitlist does the
-     siteverify call server-side, which is the half that actually stops
-     anything — the endpoint is public, so a widget alone is decorative. -->
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
@@ -61,49 +53,31 @@
         <p class="eyebrow">Baxter Family AI</p>
         <h1>One assistant for the <em>whole house</em>.</h1>
         <p class="lede">
-          Text it or email it, the way you'd ask someone who never forgets and never
-          minds being asked. The pickup times, the running list, something for the kids to
-          watch while dinner happens.
+          Do we have all the back-to-school supplies? Did we get a present for the
+          birthday party yet? Do we have everything we need for Taco Tuesday? Did anyone
+          pick up the dish soap? Let Baxter keep it all under control.
         </p>
         <div class="cta-row">
           <a class="btn btn-solid btn-lg" href="#signup">Sign up</a>
           <a class="btn btn-ghost" href="#what">See what it does</a>
         </div>
         <ul class="hero-facts">
-          <li><span>Works over text and email</span></li>
+          <li><span>Shared lists parents can tackle together</span></li>
           <li><span>Lots to organize, one Baxter</span></li>
           <li><span>Stop any time by replying STOP</span></li>
         </ul>
 
-        <!-- Provenance, not a boast: it says who is behind this and that they
-             have the same problem you do. Set as a signature rather than a
-             badge — the moment it looks like marketing it stops working. It
-             also sits next to the demo's Tilden Park thread, which a Berkeley
-             reader will place immediately. -->
         <p class="hero-sig">Built by a parent in Berkeley,&nbsp;California.</p>
       </div>
 
-      <!-- The signature element. Three real asks rather than a feature list in
-           speech marks; each thread shows capabilities doing work instead of
-           being named.
-
-           The device is drawn in the page's own materials (ink body, hard
-           border, offset shadow) while the screen is genuinely iOS. It should
-           read as a phone sitting on this page, not as this page dressed up as
-           iOS. Blue is the one imported colour, because blue is the product:
-           these arrive as iMessages, not as SMS.
-
-           Every panel is visible and complete before app.js runs. The script
-           hides the inactive ones and stages the messages; without it you get
-           three readable transcripts stacked up, which is a fine floor. -->
       <div class="demo">
         <div class="demo-tabs" role="tablist" aria-label="Things people ask Baxter" hidden>
           <button class="demo-tab" type="button" role="tab" id="tab-watch"
                   aria-controls="panel-watch" aria-selected="true">Something to watch</button>
           <button class="demo-tab" type="button" role="tab" id="tab-recipe"
                   aria-controls="panel-recipe" aria-selected="false">A recipe</button>
-          <button class="demo-tab" type="button" role="tab" id="tab-trains"
-                  aria-controls="panel-trains" aria-selected="false">A day out</button>
+          <button class="demo-tab" type="button" role="tab" id="tab-list"
+                  aria-controls="panel-list" aria-selected="false">At the store</button>
         </div>
 
         <div class="demo-stage">
@@ -153,7 +127,7 @@
           </div>
 
           <div class="demo-panel" role="tabpanel" id="panel-recipe" aria-labelledby="tab-recipe">
-            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam sends a photograph of a page from a cookbook and asks Baxter to save it, broken down step by step and ingredient by ingredient. Baxter says it is saved at home.bax.bot slash r slash banana nut bread, ten ingredients and seven steps, and offers to read it out. Sam declines and asks for the ingredients on a list. Baxter says it is done and the ingredients are on a Banana nut bread list.">
+            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam sends a photograph of a page from a cookbook and asks Baxter to save it, broken down step by step and ingredient by ingredient. Baxter says it is saved at home.bax.bot slash r slash banana nut bread, ten ingredients and seven steps, and offers to read it out. Sam declines and asks Baxter to put the ingredients on their shopping list. Baxter says it is done and all ten are on the list.">
               <div class="phone-screen">
                 <div class="thread-head">
                   <span class="thread-ava" aria-hidden="true">B</span>
@@ -162,8 +136,7 @@
                 <ol class="chat-log" data-thread="recipe">
                   <li class="msg">
                     <div class="msg-body">
-                      <!-- alt="" on purpose: the whole thread is already narrated in
-                           the .phone aria-label, so alt text here would read twice. -->
+                      <!-- alt="" is deliberate: the .phone label above narrates the thread. -->
                       <p class="bubble bubble-media">
                         <img class="bubble-photo" src="cookbook.jpg" alt=""
                              width="194" height="260" decoding="async">
@@ -180,12 +153,12 @@
                   </li>
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">no thanks. can you put the ingredients on a list for me</p>
+                      <p class="bubble">no thanks. can you put the ingredients on our shopping list?</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">Done, it's on your Banana nut bread list.</p>
+                      <p class="bubble">Done. All ten on the list.</p>
                     </div>
                   </li>
                 </ol>
@@ -193,52 +166,43 @@
             </div>
           </div>
 
-          <div class="demo-panel" role="tabpanel" id="panel-trains" aria-labelledby="tab-trains">
-            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam asks whether the Tilden Park steam trains are running today. Baxter says yes, eleven in the morning to five in the afternoon. Sam asks when their summer hours end. Baxter says the schedule switches back to weekends only after Labor Day. Sam asks how much tickets are. Baxter says five dollars per ride, or five rides for twenty dollars, and that children under two ride free. Sam asks Baxter to loop in Erik and send him the information, and Baxter says it is done.">
+          <div class="demo-panel" role="tabpanel" id="panel-list" aria-labelledby="tab-list">
+            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam texts from the store to say they have got bananas, milk and spaghetti. Baxter checks all three off the list. Sam asks whether they need any laundry detergent. Baxter says no, Erik picked some up this afternoon. Sam asks Baxter to pull up the rest of the grocery list. Baxter says there are six more things on it, and sends a link to the list at home.bax.bot slash l slash groceries.">
               <div class="phone-screen">
                 <div class="thread-head">
                   <span class="thread-ava" aria-hidden="true">B</span>
                   <span class="thread-name">Baxter</span>
                 </div>
-                <ol class="chat-log" data-thread="trains">
+                <ol class="chat-log" data-thread="list">
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">are the Tilden park steam trains running today?</p>
+                      <p class="bubble">at the store — got bananas, milk, spaghetti</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">They are, 11am to 5pm.</p>
+                      <p class="bubble">Bananas <span class="tick-mark" aria-hidden="true">✓</span>, milk <span class="tick-mark" aria-hidden="true">✓</span>, spaghetti <span class="tick-mark" aria-hidden="true">✓</span></p>
                     </div>
                   </li>
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">when do their summer hours end?</p>
+                      <p class="bubble">do we need any laundry detergent?</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">Their schedule switches back to weekends only after Labor Day.</p>
+                      <p class="bubble">Nope, Erik picked some up this afternoon.</p>
                     </div>
                   </li>
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">how much are tickets?</p>
+                      <p class="bubble">while we're here, can you pull up the rest of the grocery list?</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">$5 per ride, or 5 rides for $20. Children under 2 ride free.</p>
-                    </div>
-                  </li>
-                  <li class="msg">
-                    <div class="msg-body">
-                      <p class="bubble">ok. can you loop in Erik and send him the info?</p>
-                    </div>
-                  </li>
-                  <li class="msg is-bax">
-                    <div class="msg-body">
-                      <p class="bubble">Done.</p>
+                      <p class="bubble">Six more things on it.</p>
+                      <p class="bubble"><span class="msg-link">home.bax.bot/l/groceries</span></p>
                     </div>
                   </li>
                 </ol>
@@ -256,21 +220,18 @@
     <div class="wrap band-grid">
       <div class="band-label"><span class="tick"></span>What it does</div>
       <div class="band-body">
-        <h2 id="what-h">Ask it like you'd ask a person.</h2>
+        <h2 id="what-h">Talk to Baxter like a person.</h2>
         <p class="band-lede">
           Nothing to install and no app to open. Text it or email it, and Baxter works out
           what you need.
         </p>
-        <!-- Ordered by how often a household actually reaches for them, not by how
-             impressive they sound. The two channel-and-memory cards sit last on
-             purpose: they're what makes the rest work, but nobody arrives wanting
-             them. -->
         <div class="cards">
           <article class="card">
             <h3>Remembers</h3>
             <p>What you decided, what you tried, what everyone's allergic to. Nothing gets
               re-explained, and nobody has to be the one who remembers.</p>
-          </article>          <article class="card">
+          </article>
+          <article class="card">
             <h3>Holds the list</h3>
             <p>Groceries, the hardware store, the thing you keep meaning to deal with. Add
               to it from wherever you are, and whoever gets to the shop first has the same
@@ -297,19 +258,7 @@
     </div>
   </section>
 
-  <!-- ───────────────────────── signup ─────────────────────────
-       Two-step: this page captures an email, and join.html (where consent is
-       actually collected) is sent on from there.
-
-       Messages go over iMessage via Sendblue, not carrier A2P, so the carrier
-       vetting block that used to live here is gone. Two things it carried are
-       NOT optional and stay on join.html: an unticked consent box, and a way
-       to opt out. Sendblue falls back to SMS for Android recipients, so the
-       rates line stays too, just proportionate rather than a wall.
-
-       Keep the line saying an email here is not itself a signup. An email
-       field sitting under messaging copy otherwise reads as the opt-in.
-       ───────────────────────────────────────────────────────────────────── -->
+  <!-- ───────────────────────── signup ───────────────────────── -->
   <section id="signup" class="band band-alt" aria-labelledby="signup-h">
     <div class="wrap band-grid">
       <div class="band-label"><span class="tick"></span>Sign up</div>
@@ -329,12 +278,9 @@
             <label for="email">Email</label>
             <input type="email" id="email" name="email" autocomplete="email" required>
           </div>
-          <!-- Honeypot: hidden from people, irresistible to bots. -->
+          <!-- Honeypot. Hidden from people, irresistible to bots — don't delete. -->
           <input type="checkbox" name="_honeypot" tabindex="-1" autocomplete="off"
                  aria-hidden="true" style="display:none">
-          <!-- Renders the challenge and posts cf-turnstile-response with the form.
-               data-theme is pinned light: the page has no dark mode, and "auto"
-               would hand a dark widget to anyone whose OS is set that way. -->
           <div class="cf-turnstile"
                data-sitekey="0x4AAAAAAEDQIGUcv8dkdD5w"
                data-theme="light"></div>
@@ -382,10 +328,8 @@
   </div>
 </footer>
 
-<!-- Hero chat reveal: stages the demo conversation when motion is welcome. -->
 <script src="app.js"></script>
 
-<!-- Analytics: GoatCounter: cookieless, pageview counts only. -->
 <script data-goatcounter="https://lawnmaster.goatcounter.com/count"
         async src="https://gc.zgo.at/count.js"></script>
 </body>

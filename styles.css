@@ -1318,6 +1318,17 @@ p {
 	text-underline-offset: 0.2em;
 }
 
+/* Items ticked off a list, inside one of Baxter's replies. Brand colour on the
+   same reasoning as .msg-link above; the size and shift settle the glyph, which
+   otherwise floats above the baseline of the word it belongs to. */
+.tick-mark {
+	color: var(--peach-deep);
+	font-weight: 600;
+	font-size: 0.95em;
+	vertical-align: -0.02em;
+	padding-left: 0.06em;
+}
+
 /* The household address inside a card. Same mono treatment the join form uses
    for it, so the one string that appears on both pages looks like one thing. */
 .card code {
