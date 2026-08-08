@@ -1437,3 +1437,16 @@ p {
 	font: 400 0.8rem / 1.5 var(--mono);
 	color: var(--ink-3);
 }
+
+/* The address has to clear 4.5:1 against paper, which --ink-3 around it does
+   not; the deeper peach carries the link on its own without turning a quiet
+   signature into a call to action. */
+.hero-sig a {
+	color: var(--peach-deep);
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+	text-decoration-thickness: 1px;
+}
+.hero-sig a:hover {
+	color: var(--ink);
+}
