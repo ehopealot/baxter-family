@@ -74,53 +74,53 @@
 
       <div class="demo">
         <div class="demo-tabs" role="tablist" aria-label="Things people ask Baxter" hidden>
-          <button class="demo-tab" type="button" role="tab" id="tab-watch"
-                  aria-controls="panel-watch" aria-selected="true">Something to watch</button>
-          <button class="demo-tab" type="button" role="tab" id="tab-recipe"
-                  aria-controls="panel-recipe" aria-selected="false">A recipe</button>
+          <button class="demo-tab" type="button" role="tab" id="tab-todo"
+                  aria-controls="panel-todo" aria-selected="true">To-dos</button>
+          <button class="demo-tab" type="button" role="tab" id="tab-school"
+                  aria-controls="panel-school" aria-selected="false">School updates</button>
           <button class="demo-tab" type="button" role="tab" id="tab-list"
                   aria-controls="panel-list" aria-selected="false">At the store</button>
         </div>
 
         <div class="demo-stage">
 
-          <div class="demo-panel" role="tabpanel" id="panel-watch" aria-labelledby="tab-watch">
-            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam asks for a link to a Sesame Street episode, something with counting. Baxter replies with Elmo's Number Party, eleven minutes, and a YouTube link. Sam thanks Baxter and asks it to add milk to their husband's shopping list. Baxter says it is on the list, notes this is the third week running, and asks whether it should just add milk every week. Sam says yes please, and Baxter confirms it will be on the list every Monday.">
+          <div class="demo-panel" role="tabpanel" id="panel-todo" aria-labelledby="tab-todo">
+            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam says they talked to Dana today and asks what else is on their to-do list. Baxter says there are three open to-dos left: get Nora's birth certificate, apply to Oakwood for Theo for 2027 to 28, and pay the dog license fee. It adds that it marked text Dana about the co-op done, since Sam talked to her today. Sam then asks Baxter to put toothpaste on the Costco list, and Baxter confirms it is added. Sam asks for bananas too, unless they are already on it, and Baxter says they weren't already on the Costco list, so it added them.">
               <div class="phone-screen">
                 <div class="thread-head">
                   <span class="thread-ava" aria-hidden="true">B</span>
                   <span class="thread-name">Baxter</span>
                 </div>
-                <ol class="chat-log" data-thread="watch">
+                <ol class="chat-log" data-thread="todo">
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">got a link for sesame street? something with counting</p>
+                      <p class="bubble">I talked to Dana today. What else is on my to-do list?</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">Elmo's Number Party, 11 minutes.</p>
-                      <p class="bubble"><span class="msg-link">youtu.be/elmo-numbers</span></p>
+                      <p class="bubble">You've got 3 open to-dos left:<br>• Get Nora's birth certificate<br>• Apply to Oakwood for Theo (2027-28)<br>• Pay the dog license fee</p>
+                      <p class="bubble">I marked &ldquo;text Dana about the co-op&rdquo; done since you talked to her today.</p>
                     </div>
                   </li>
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">perfect thank you. also add milk to my husband's shopping list</p>
+                      <p class="bubble">thanks, put toothpaste on the Costco list</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">On the list. That's three weeks running, want me to just add it every week?</p>
+                      <p class="bubble">Added toothpaste to the Costco list.</p>
                     </div>
                   </li>
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">oh yes please</p>
+                      <p class="bubble">also add bananas unless they're already on</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">Done. It'll be on there every Monday.</p>
+                      <p class="bubble">Bananas weren't already on the Costco list, so I added them.</p>
                     </div>
                   </li>
                 </ol>
@@ -128,39 +128,37 @@
             </div>
           </div>
 
-          <div class="demo-panel" role="tabpanel" id="panel-recipe" aria-labelledby="tab-recipe">
-            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam sends a photograph of a page from a cookbook and asks Baxter to save it, broken down step by step and ingredient by ingredient. Baxter says it is saved at home.bax.bot slash r slash banana nut bread, ten ingredients and seven steps, and offers to read it out. Sam declines and asks Baxter to put the ingredients on their shopping list. Baxter says it is done and all ten are on the list.">
+          <div class="demo-panel" role="tabpanel" id="panel-school" aria-labelledby="tab-school">
+            <div class="phone" role="img" aria-label="A text conversation with Baxter. Sam sends a photograph of a school newsletter from Oakwood Elementary and asks whether there is anything they need to know from it. Baxter replies with three dates: picture day on Friday October 3, the fall festival on Saturday October 18, and no school on November 27 and 28. Sam asks Baxter to put them on the calendar, and Baxter says all three are on.">
               <div class="phone-screen">
                 <div class="thread-head">
                   <span class="thread-ava" aria-hidden="true">B</span>
                   <span class="thread-name">Baxter</span>
                 </div>
-                <ol class="chat-log" data-thread="recipe">
+                <ol class="chat-log" data-thread="school">
                   <li class="msg">
                     <div class="msg-body">
                       <!-- alt="" is deliberate: the .phone label above narrates the thread. -->
                       <p class="bubble bubble-media">
-                        <img class="bubble-photo" src="cookbook.jpg" alt=""
-                             width="194" height="260" decoding="async">
+                        <img class="bubble-photo" src="newsletter.png" alt=""
+                             width="240" height="320" decoding="async">
                       </p>
-                      <p class="bubble">can you save this one? step by step, ingredient by ingredient</p>
+                      <p class="bubble">anything I need to know from this?</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">Saved. Ten ingredients, seven steps.</p>
-                      <p class="bubble"><span class="msg-link">home.bax.bot/r/banana-nut-bread</span></p>
-                      <p class="bubble">Want me to read it out here?</p>
+                      <p class="bubble">Three dates for Oakwood:<br>• Picture day, Fri Oct 3<br>• Fall festival, Sat Oct 18<br>• No school, Nov 27-28</p>
                     </div>
                   </li>
                   <li class="msg">
                     <div class="msg-body">
-                      <p class="bubble">no thanks. can you put the ingredients on our shopping list?</p>
+                      <p class="bubble">put them on the calendar please</p>
                     </div>
                   </li>
                   <li class="msg is-bax">
                     <div class="msg-body">
-                      <p class="bubble">Done. All ten on the list.</p>
+                      <p class="bubble">Done. All three are on the calendar.</p>
                     </div>
                   </li>
                 </ol>
@@ -222,10 +220,10 @@
     <div class="wrap band-grid">
       <div class="band-label"><span class="tick"></span>What it does</div>
       <div class="band-body">
-        <h2 id="what-h">Baxter reduces your mental load./h2>
+        <h2 id="what-h">Baxter reduces your mental load.</h2>
         <p class="band-lede">
-          No install required. Text or email Baxter like you would a person, and Baxter works out what you
-          need.
+          Text or email Baxter like you would a person, and Baxter works out what you
+          need. No install required.
         </p>
         <div class="cards">
           <article class="card">
@@ -302,20 +300,17 @@
     </div>
   </section>
 
-  <!-- ───────────────────────── open source ───────────────────────── -->
-  <section class="close" aria-labelledby="oss-h">
+  <!-- ───────────────────────── privacy ───────────────────────── -->
+  <section class="close" aria-labelledby="privacy-h">
     <div class="wrap band-grid close-inner">
-      <div class="band-label"><span class="tick"></span>Open source</div>
+      <div class="band-label"><span class="tick"></span>Privacy</div>
       <div class="band-body">
-        <h2 id="oss-h">Baxter is open source.</h2>
+        <h2 id="privacy-h">Your family's data stays private.</h2>
         <p class="band-lede">
-          Baxter Family AI is the version we host for you. The project underneath is public,
-          so you can read exactly what it does with your household's day before you hand any
-          of it over, or run your own copy instead.
+          Baxter only sees what you decide to share with it, and can't access your
+          inbox, your calendar or your files on its own. The models it uses are developed
+          and hosted in America, and your data is never sold or used for training.
         </p>
-        <div class="cta-row">
-          <a class="btn btn-solid" href="https://github.com/ehopealot/baxter-ai">See the code<span aria-hidden="true">&nbsp;↗</span></a>
-        </div>
       </div>
     </div>
   </section>
