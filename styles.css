@@ -508,6 +508,36 @@ p {
 	}
 }
 
+/* Three tabs on one row is the whole point of a tablist — wrapped, the odd one
+   out reads as a different control. At the labels' current lengths the row
+   needs about 411px of viewport, which is wider than every common phone, so
+   these two steps tighten the type and padding just enough to keep it in line:
+   the first covers 375px and up, the second 360px, which is where most Android
+   sits. The 44px tap target is set on min-height and is unaffected by either.
+
+   Below 360px it wraps, and that is the right place to stop — the type would
+   have to go under 10px to hold the line, and two rows of legible tabs beat
+   one row nobody can read. flex-wrap is the backstop, here and for whatever
+   longer label comes later. */
+@media (max-width: 30rem) {
+	.demo-tabs {
+		gap: 0.3rem;
+	}
+	.demo-tab {
+		font-size: 0.68rem;
+		padding: 0.5rem 0.55rem;
+	}
+}
+@media (max-width: 23rem) {
+	.demo-tabs {
+		gap: 0.25rem;
+	}
+	.demo-tab {
+		font-size: 0.63rem;
+		padding: 0.5rem 0.42rem;
+	}
+}
+
 /* Default is a readable vertical stack: with no JS you get three complete
    conversations rather than three overlapping ones. app.js adds .is-tabbed,
    which collapses them into a single cell so switching never changes the

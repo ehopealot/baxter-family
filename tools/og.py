@@ -41,7 +41,7 @@ d.text((px(PX + PW / 2), px(hy + 47)), "Baxter", font=fn, fill=GREY_INK, anchor=
 fbub = f(sans, 15)
 ASCENT = fbub.getmetrics()[0] / S
 
-# Neither Archivo nor Plex Mono carries U+2713 — it comes out as tofu — so the
+# Neither Archivo nor Plex Mono carries U+2713 (it comes out as tofu), so the
 # tick is drawn rather than typed. Which is the better answer anyway: it takes
 # the page's peach the way the .tick-mark rule does, and it can't be broken by
 # a font swap.
@@ -93,7 +93,7 @@ def bubble(lines, y, mine):
 # the thing this product does that nothing else does. It ends on Erik: the
 # answer is about what the other parent already did.
 THREAD = [
-    (["at the store — got", "bananas, milk, spaghetti"], True),
+    (["at the store. got", "bananas, milk, spaghetti"], True),
     ([f"Bananas {TICK}, milk {TICK},", f"spaghetti {TICK}"], False),
     (["do we need any", "laundry detergent?"], True),
     (["Nope, Erik picked some", "up this afternoon."], False),
@@ -112,7 +112,9 @@ d.text((px(130), px(93)), "Baxter Family AI", font=f(mono_b, 22), fill=INK, anch
 
 # ── headline ──
 fh = f(mono_b, 62)
-d.text((px(80), px(214)), "One assistant for", font=fh, fill=INK)
+# The accent goes on "whole house", matching the page's <em>: with a plain noun
+# like "helper" the sharing is the surprising half, not the thing itself.
+d.text((px(80), px(214)), "One helper for", font=fh, fill=INK)
 x = 80
 for part, col in (("the ", INK), ("whole house.", PEACH_DEEP)):
     d.text((px(x), px(292)), part, font=fh, fill=col)
@@ -123,7 +125,7 @@ for part, col in (("the ", INK), ("whole house.", PEACH_DEEP)):
 # lines that still work at the size a feed shows this.
 fs = f(sans, 25)
 d.text((px(80), px(404)), "Did anyone pick up the dish soap?", font=fs, fill=INK2)
-d.text((px(80), px(440)), "Let Baxter keep it all under control.", font=fs, fill=INK2)
+d.text((px(80), px(440)), "Nobody has to remember. Baxter's got this.", font=fs, fill=INK2)
 
 d.line([(px(80), px(516)), (px(150), px(516))], fill=PEACH_DEEP, width=2 * S)
 d.text((px(80), px(548)), "family.bax.bot", font=f(mono_r, 22), fill=INK3)
@@ -136,10 +138,10 @@ for lines, _ in THREAD:
         if w > inner:
             print(f"  OVERFLOW ({w:.0f} > {inner}): {ln}")
 for label, s, font, limit in [
-    ("head 1", "One assistant for", fh, 660),
+    ("head 1", "One helper for", fh, 660),
     ("head 2", "the whole house.", fh, 660),
     ("lede 1", "Did anyone pick up the dish soap?", fs, 660),
-    ("lede 2", "Let Baxter keep it all under control.", fs, 660),
+    ("lede 2", "Nobody has to remember. Baxter's got this.", fs, 660),
 ]:
     w = d.textlength(s, font=font) / S
     print(f"  {label}: {w:5.0f}px {'OVERFLOW' if w > limit else 'ok'}")
