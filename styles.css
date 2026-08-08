@@ -425,6 +425,15 @@ p {
 	line-height: 1.62;
 }
 
+/* 600 and a step darker rather than a full 700 bold. The lede is five sentences
+   and the emphasis only has to mark where the questions stop and the answer
+   starts; a hard bold at this size turns into a slab and pulls the eye off the
+   headline above it. */
+.lede strong {
+	font-weight: 600;
+	color: var(--ink);
+}
+
 .cta-row {
 	display: flex;
 	flex-wrap: wrap;

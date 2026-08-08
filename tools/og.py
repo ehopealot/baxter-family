@@ -125,7 +125,12 @@ for part, col in (("the ", INK), ("whole house.", PEACH_DEEP)):
 # lines that still work at the size a feed shows this.
 fs = f(sans, 25)
 d.text((px(80), px(404)), "Did anyone pick up the dish soap?", font=fs, fill=INK2)
-d.text((px(80), px(440)), "Nobody has to remember. Baxter's got this.", font=fs, fill=INK2)
+# "Nobody has to remember" is emphasised on the page too. Only the 400 weight of
+# Archivo is vendored, so the lift here is colour rather than weight.
+x = 80
+for part, col in (("Nobody has to remember.", INK), (" Baxter's got this.", INK2)):
+    d.text((px(x), px(440)), part, font=fs, fill=col)
+    x += d.textlength(part, font=fs) / S
 
 d.line([(px(80), px(516)), (px(150), px(516))], fill=PEACH_DEEP, width=2 * S)
 d.text((px(80), px(548)), "family.bax.bot", font=f(mono_r, 22), fill=INK3)
