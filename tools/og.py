@@ -112,11 +112,10 @@ d.text((px(130), px(93)), "Baxter Family AI", font=f(mono_b, 22), fill=INK, anch
 
 # ── headline ──
 fh = f(mono_b, 62)
-# The accent goes on "whole house", matching the page's <em>: with a plain noun
-# like "helper" the sharing is the surprising half, not the thing itself.
-d.text((px(80), px(214)), "One helper for", font=fh, fill=INK)
+# Accent on "one text", matching the page's <em>.
+d.text((px(80), px(214)), "A helper who's", font=fh, fill=INK)
 x = 80
-for part, col in (("the ", INK), ("whole house.", PEACH_DEEP)):
+for part, col in (("one text", PEACH_DEEP), (" away.", INK)):
     d.text((px(x), px(292)), part, font=fh, fill=col)
     x += d.textlength(part, font=fh) / S
 
@@ -143,8 +142,8 @@ for lines, _ in THREAD:
         if w > inner:
             print(f"  OVERFLOW ({w:.0f} > {inner}): {ln}")
 for label, s, font, limit in [
-    ("head 1", "One helper for", fh, 660),
-    ("head 2", "the whole house.", fh, 660),
+    ("head 1", "A helper who's", fh, 660),
+    ("head 2", "one text away.", fh, 660),
     ("lede 1", "Did anyone pick up the dish soap?", fs, 660),
     ("lede 2", "Nobody has to remember. Baxter's got this.", fs, 660),
 ]:
