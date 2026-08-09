@@ -77,8 +77,9 @@
       <p>
         Baxter Family AI is a hosted assistant for the adults running a household, reached by message or at your household's own email address. This
         policy describes that service: the signup form, the number we message you from, and what
-        Baxter remembers for you. Baxter is also open-source software you can run on your
-        own hardware, in which case none of your data reaches us at all; see
+        Baxter remembers for you. Baxter is open core: its agent runtime is open-source
+        software you can run on your own hardware, in which case none of your data reaches us
+        at all, while the hosted service around it is not published; see
         <a href="#selfhost">Self-hosted installs</a>.
       </p>
 
@@ -386,15 +387,25 @@
 
       <h2 id="selfhost">10. Self-hosted installs</h2>
       <p>
-        Baxter Family AI is the hosted service. Baxter is also open-source software you can run
-        yourself, published at
-        <a href="https://github.com/ehopealot/baxter-ai">github.com/ehopealot/baxter-ai</a>. If you installed Baxter
-        on your own machine, your conversations, notes, and API keys stay on your hardware
-        and we never see them; there is no account, no middleman, and nothing reported back
-        to us. This policy does not describe that data, because we do not have it. If you
-        connect your own self-hosted Baxter to your own messaging account, you are the
-        operator of that service and responsible for its privacy practices and carrier
-        registrations, not us.
+        Baxter is <strong>open core</strong>, and the distinction matters for what this policy
+        covers. One part of it is open source: the <strong>agent runtime</strong>, which reads
+        what you send, decides what to do about it and writes the reply. That is published at
+        <a href="https://github.com/ehopealot/baxter-ai">github.com/ehopealot/baxter-ai</a>
+        and you can download it and run it yourself.
+      </p>
+      <p>
+        Baxter Family AI is the hosted service built around that runtime, and the parts that
+        make it a service are not open source: this website, the signup and account handling,
+        the database, the integrations that deliver your messages and mail, and the
+        infrastructure it all runs on. Those are ours and are not published.
+      </p>
+      <p>
+        If you installed the open-source runtime on your own machine, your conversations,
+        notes, and API keys stay on your hardware and we never see them; there is no account,
+        no middleman, and nothing reported back to us. This policy does not describe that
+        data, because we do not have it. If you connect your own self-hosted Baxter to your
+        own messaging account, you are the operator of that service and responsible for its
+        privacy practices and carrier registrations, not us.
       </p>
 
       <h2 id="children">11. Children</h2>
