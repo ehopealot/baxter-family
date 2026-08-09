@@ -79,7 +79,7 @@ and a test send can't disagree about what they're showing you.
 | Token | Example | Notes |
 |---|---|---|
 | `{{name}}` | `Sam` | `signups.name`, or `waitlist.name` for the invite |
-| `{{household}}` | `smithfam` | `signups.household`. Also forms the address |
+| `{{household}}` | `andersons` | `signups.household`. Also forms the address |
 | `{{invite_url}}` | `https://bax.bot/?code=BAX-7K3M` | exactly what `invite.mjs new` prints |
 | `{{expires_sentence}}` | `It's good for the next 14 days.` | **invite only.** A whole sentence, not a date — delete the token *and* the space before it when you mint without `--days` |
 | `{{sender_name}}` | `Erik` | **invite only.** Signs the invite; the welcome is signed by Baxter |

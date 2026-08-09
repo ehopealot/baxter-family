@@ -1022,6 +1022,16 @@ p {
 	color: var(--ink);
 	font-size: 1rem;
 }
+/* It links home, but it should still read as the wordmark rather than as a
+   third footer link: no rule under it, and the dark ink kept. Specificity has
+   to beat `.foot a`, which would otherwise underline it and lighten it. */
+.foot a.foot-mark {
+	color: var(--ink);
+	text-decoration: none;
+}
+.foot a.foot-mark:hover {
+	color: var(--peach-deep);
+}
 .foot-dim {
 	margin-right: auto;
 }

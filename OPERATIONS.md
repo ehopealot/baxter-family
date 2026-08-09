@@ -253,7 +253,7 @@ later — a cron Worker or a Queue consumer picks up `WHERE status = 'new'`, doe
 and moves the row on, without this schema changing. Move one by hand meanwhile:
 
 ```sql
-UPDATE signups SET status = 'active' WHERE household = 'smithfam';
+UPDATE signups SET status = 'active' WHERE household = 'andersons';
 ```
 
 The intended path is `new → provisioning → active`. Nothing enforces it.
