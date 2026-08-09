@@ -1,6 +1,6 @@
 /* POST /api/waitlist — the "request an invite" form on the homepage.
    Collects a name and an email, nothing more. Signing up here is explicitly
-   not a messaging opt-in; that happens on join.html against an unticked box. */
+   not a messaging opt-in; that happens on the invite form against an unticked box. */
 import { turnstileOk, seeOther, page, clientMeta, now } from "../lib.js";
 
 export async function onRequestPost(ctx) {

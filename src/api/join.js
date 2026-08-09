@@ -1,6 +1,6 @@
-/* POST /api/join — the invite-gated signup on join.html.
+/* POST /api/join — the invite-gated signup on the homepage.
 
-   This handler is the security boundary, not join.js. The page checks the code
+   This handler is the security boundary, not signup.js. The page checks the code
    to decide what to show; anyone can skip the page and POST here directly, so
    everything is re-checked from scratch below. */
 import { turnstileOk, checkInvite, seeOther, page, clientMeta, now } from "../lib.js";
@@ -98,4 +98,4 @@ export async function onRequestPost(ctx) {
 	return seeOther("/welcome");
 }
 
-export const onRequestGet = () => seeOther("/join");
+export const onRequestGet = () => seeOther("/#signup");

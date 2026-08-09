@@ -1,4 +1,4 @@
-# `baxter-family`: the family.bax.bot landing page
+# `baxter-family`: the bax.bot landing page
 
 The marketing and signup page for **Baxter Family AI**, the hosted version of Baxter that
 people reach by message. Static pages with no build step, plus a Worker in `/src`
@@ -37,8 +37,8 @@ CORS.
 | Route | Does |
 |---|---|
 | `POST /api/waitlist` | homepage form → `waitlist` table → `/thanks` |
-| `POST /api/join` | `join.html` → `signups` table → `/welcome` |
-| `GET /api/invite?code=` | tells `join.js` whether a code is usable |
+| `POST /api/join` | homepage invite form → `signups` table → `/welcome` |
+| `GET /api/invite?code=` | tells `signup.js` whether a code is usable; rate limited |
 
 `run_worker_first` in `wrangler.jsonc` is set to `/api/*`, so every other
 request is served straight off the edge and never reaches Worker code.
@@ -68,7 +68,7 @@ own runbook: **[OPERATIONS.md](OPERATIONS.md)**. The short version —
 node tools/invite.mjs new --email sam@example.com --days 14   # personal, one use
 node tools/invite.mjs new --open --label "Tilden card" --uses 50
 node tools/invite.mjs list [--all]
-node tools/invite.mjs revoke BAX-7K3M-QP2R
+node tools/invite.mjs revoke BAX-7K3M
 ```
 
 Submissions are rows in D1; the dashboard's console renders any `SELECT` as a
@@ -82,7 +82,7 @@ either is quiet and hard to walk back:
   Two lines in two files, nothing to catch you if they drift, and a stored
   agreement is worth little without knowing which terms it was to.
 
-`join.js` gates the page, but it is **not** the security boundary — anyone can
+`signup.js` gates the form, but it is **not** the security boundary — anyone can
 POST straight at `/api/join`. That handler re-checks the code, verifies
 Turnstile server-side, and claims the invite with the use limit in the `WHERE`
 clause so two simultaneous posts can't both win. Nothing from the browser is
@@ -97,7 +97,7 @@ wall is gone and the section is one honest sentence instead.
 
 Two things are still not optional, and neither is about carriers:
 
-- **The consent box on `join.html` is never pre-ticked, and is not required.**
+- **The messaging consent box is never pre-ticked, and is not required.**
   Delivery still falls back to a standard text for Android recipients, under
   carrier rules, so the safe posture is cheap to keep.
 - **`privacy.html` §3 lists every field the forms collect.** Add a field, add it

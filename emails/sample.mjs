@@ -8,7 +8,7 @@
 export const SAMPLE = {
 	name: "Sam",
 	household: "smithfam",
-	invite_url: "https://family.bax.bot/join?code=BAX-7K3M-QP2R",
+	invite_url: "https://bax.bot/?code=BAX-7K3M",
 	expires_sentence: "It's good for the next 14 days.",
 	sender_name: "Erik",
 	assistant_phone: "(510) 555-0123",

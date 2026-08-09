@@ -20,8 +20,8 @@ Built by a parent in Berkeley, California.
 
 ---
 You're getting this because you asked for an invite at
-family.bax.bot. This is the only email we'll send about it.
+bax.bot. This is the only email we'll send about it.
 
 Baxter Family AI, operated by Mirabelle Studios
-Privacy: https://family.bax.bot/privacy.html
-Terms:   https://family.bax.bot/terms.html
+Privacy: https://bax.bot/privacy.html
+Terms:   https://bax.bot/terms.html

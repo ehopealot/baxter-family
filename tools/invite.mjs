@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
- * Invite codes for join.html. Thin wrapper over `wrangler d1 execute`, so
+ * Invite codes for the signup form. Thin wrapper over `wrangler d1 execute`, so
  * there's no second source of truth — the database is the only one.
  *
  *   node tools/invite.mjs new --email sam@example.com [--days 14]
  *   node tools/invite.mjs new --open --label "Tilden QR card" --uses 50
  *   node tools/invite.mjs list [--all]
- *   node tools/invite.mjs revoke BAX-7K3M-QP2R
+ *   node tools/invite.mjs revoke BAX-7K3M
  *
  * --local runs against the local dev database instead of production.
  *
- * A personal invite names an address: join.html fills the email field in and
+ * A personal invite names an address: the form fills the email field in and
  * locks it, and /api/join overrides whatever is submitted with the invite's
  * address, so the link can't be passed on to sign someone else up. An open
  * invite names nobody — anyone holding the code can use it, up to --uses.
@@ -27,14 +27,17 @@ const DB = "baxter-family";
 // dictated over the phone, and it can't accidentally spell anything.
 const ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 
+// Four characters, so 32^4 = ~1.05M codes: short enough to read off a card and
+// dictate over the phone, and small enough that the space is guessable. What
+// keeps it honest is that a code only opens a signup form, is use-limited, and
+// can be revoked the moment a run of bad guesses shows up. Rate-limit
+// /api/invite before handing many of these out. 256 % 32 == 0, so taking the
+// byte modulo the alphabet introduces no bias.
 function code() {
-	const bytes = randomBytes(8);
+	const bytes = randomBytes(4);
 	let out = "";
-	for (let i = 0; i < 8; i++) {
-		if (i === 4) out += "-";
-		out += ALPHABET[bytes[i] % ALPHABET.length];
-	}
-	return `BAX-${out}`; // BAX-7K3M-QP2R
+	for (let i = 0; i < 4; i++) out += ALPHABET[bytes[i] % ALPHABET.length];
+	return `BAX-${out}`; // BAX-7K3M
 }
 
 function arg(name, fallback) {
@@ -68,14 +71,33 @@ function make() {
 	}
 	const days = arg("days");
 	const uses = arg("uses", open ? null : "1");
-	const c = code();
-	sql(
-		`INSERT INTO invites (code, kind, email, label, max_uses, used_count, expires_at, revoked, created_at)
-		 VALUES (${esc(c)}, ${open ? "'open'" : "'personal'"}, ${esc(open ? null : email)}, ${esc(arg("label", null))},
-		         ${uses ? Number(uses) : "NULL"}, 0,
-		         ${days ? Math.floor(Date.now() / 1000) + Number(days) * 86400 : "NULL"}, 0,
-		         ${Math.floor(Date.now() / 1000)})`,
-	);
+
+	// Four characters is a small enough space that a collision is worth handling
+	// rather than hoping about. OR IGNORE turns the primary-key clash into an
+	// empty RETURNING instead of an error, so we can just draw again.
+	let c = null;
+	for (let attempt = 0; attempt < 8 && !c; attempt++) {
+		const candidate = code();
+		const out = sql(
+			`INSERT OR IGNORE INTO invites (code, kind, email, label, max_uses, used_count, expires_at, revoked, created_at)
+			 VALUES (${esc(candidate)}, ${open ? "'open'" : "'personal'"}, ${esc(open ? null : email)}, ${esc(arg("label", null))},
+			         ${uses ? Number(uses) : "NULL"}, 0,
+			         ${days ? Math.floor(Date.now() / 1000) + Number(days) * 86400 : "NULL"}, 0,
+			         ${Math.floor(Date.now() / 1000)})
+			 RETURNING code`,
+			{ json: true },
+		);
+		try {
+			if (JSON.parse(out)?.[0]?.results?.length) c = candidate;
+		} catch {
+			console.error("  couldn't read wrangler's response; check `list` before minting again");
+			process.exit(1);
+		}
+	}
+	if (!c) {
+		console.error("  couldn't find a free code in 8 tries, which shouldn't happen — check `list --all`");
+		process.exit(1);
+	}
 	// The summary is for you and goes to stderr; the link is the output and goes
 	// to stdout on its own, so `… | pbcopy` and `… | qrencode` get the URL and
 	// nothing else.
@@ -84,7 +106,7 @@ function make() {
 	console.error(`  uses:  ${uses || "unlimited"}`);
 	if (days) console.error(`  until: ${new Date(Date.now() + Number(days) * 86400000).toISOString().slice(0, 10)}`);
 	console.error("");
-	console.log(`https://family.bax.bot/join?code=${c}`);
+	console.log(`https://bax.bot/?code=${c}`);
 }
 
 /* wrangler prints a pretty table only to a terminal; piped, it emits JSON. This

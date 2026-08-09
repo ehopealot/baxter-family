@@ -8,11 +8,11 @@
 <meta property="og:title" content="Baxter Family AI: a helper who's one text away">
 <meta property="og:description" content="Shared lists parents can tackle together: groceries, the birthday party, the back-to-school supplies. Kept by an assistant that remembers who picked up what.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://family.bax.bot/">
-<link rel="canonical" href="https://family.bax.bot/">
+<meta property="og:url" content="https://bax.bot/">
+<link rel="canonical" href="https://bax.bot/">
 <!-- Rendered by tools/og.py. Bump ?v= on every re-render. Previews are cached
      by URL, so anywhere already shared keeps serving the old card. -->
-<meta property="og:image" content="https://family.bax.bot/og.png?v=8">
+<meta property="og:image" content="https://bax.bot/og.png?v=9">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Baxter Family AI. A helper who's one text away. Did anyone pick up the dish soap? Nobody has to remember, Baxter's got this. Beside the words, a phone showing a text conversation: someone texts from the store to say they got bananas, milk and spaghetti, and Baxter ticks all three off the list. They ask whether they need laundry detergent and Baxter says no, Erik picked some up this afternoon. They ask for the rest of the grocery list and Baxter says there are six more things on it.">
@@ -265,38 +265,163 @@
     <div class="wrap band-grid">
       <div class="band-label"><span class="tick"></span>Sign up</div>
       <div class="band-body">
-        <h2 id="signup-h">Request an invite.</h2>
-        <p class="band-lede">
-          We're opening up a household at a time. Leave your name and email, and we'll send
-          you the signup form when there's room. Baxter is free while we're in beta. There
-          will be a price eventually, and we'll tell you what it is before you ever pay it.
+        <h2 id="signup-h">Claim your invite.</h2>
+        <p class="band-lede" id="signup-lede">
+          Got a code from a card or an email? Enter it below and you can set your household
+          up right now.
         </p>
 
-        <form class="signup-form" action="/api/waitlist" method="POST">
+        <!-- Revealed by signup.js, because a code can't be checked without it.
+             No JS and you get the waiting list below, which posts and works. -->
+        <form class="code-form" id="code-form" hidden novalidate>
           <div class="field">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" autocomplete="name" required>
+            <label for="invite-code">Invite code</label>
+            <div class="code-row">
+              <!-- The BAX- prefix is furniture, not a value: every code has it,
+                   so typing it is four wasted keystrokes. signup.js puts it back
+                   before asking the server, and strips it again if somebody
+                   pastes a whole code or a whole invite URL in here. -->
+              <div class="code-input">
+                <span class="code-prefix" aria-hidden="true">BAX-</span>
+                <input type="text" id="invite-code" autocomplete="off" spellcheck="false"
+                       autocapitalize="characters" placeholder="7K3M" size="6"
+                       aria-describedby="code-hint">
+              </div>
+              <button class="btn btn-solid" type="submit" id="code-check">Claim invite</button>
+            </div>
+            <p class="field-hint" id="code-hint">
+              The four characters after <code>BAX-</code> on your card or in your email.
+            </p>
           </div>
-          <div class="field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
-          </div>
-          <!-- Honeypot. Hidden from people, irresistible to bots. Don't delete. -->
-          <input type="checkbox" name="_honeypot" tabindex="-1" autocomplete="off"
-                 aria-hidden="true" style="display:none">
-          <div class="cf-turnstile"
-               data-sitekey="0x4AAAAAAEDQIGUcv8dkdD5w"
-               data-theme="light"></div>
-          <button class="btn btn-solid" type="submit">Request an invite</button>
         </form>
+        <noscript>
+          <p class="signup-note">
+            Checking a code needs JavaScript. If you have an invite link, open that instead
+            and it'll work; otherwise leave your name below.
+          </p>
+        </noscript>
+        <p class="gate" id="code-msg" role="status" hidden></p>
 
-        <p class="signup-note">
-          This just puts you on the list; it doesn't start any messages. When there's room
-          we'll send you the <a href="join.html">signup form</a>, and that's where you give
-          us your number. See our
-          <a href="privacy.html">Privacy Policy</a> and
-          <a href="terms.html">Terms</a>.
-        </p>
+        <!-- Shown until a code checks out, and again if one doesn't. -->
+        <div id="waitlist-block">
+          <h3 class="signup-alt">No invite yet?</h3>
+          <p class="signup-alt-lede">
+            We're opening up a household at a time. Leave your name and email and we'll send
+            you a code when there's room. Baxter is free while we're in beta. There will be
+            a price eventually, and we'll tell you what it is before you ever pay it.
+          </p>
+
+          <form class="signup-form" action="/api/waitlist" method="POST">
+            <div class="field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" required>
+            </div>
+            <!-- Honeypot. Hidden from people, irresistible to bots. Don't delete. -->
+            <input type="checkbox" name="_honeypot" tabindex="-1" autocomplete="off"
+                   aria-hidden="true" style="display:none">
+            <div class="cf-turnstile"
+                 data-sitekey="0x4AAAAAAEDQIGUcv8dkdD5w"
+                 data-theme="light"></div>
+            <button class="btn btn-ghost" type="submit">Join the waiting list</button>
+          </form>
+
+          <p class="signup-note">
+            This just puts you on the list; it doesn't start any messages. When there's room
+            we'll send you an invite code, and that's where you give us your number. See our
+            <a href="privacy.html">Privacy Policy</a> and
+            <a href="terms.html">Terms</a>.
+          </p>
+        </div>
+
+        <!-- The invite-gated form. Field ids are namespaced because the waiting
+             list above already owns "name" and "email" on this page; the name
+             attributes are what /api/join reads and are unchanged.
+
+             Two checkboxes, and they are not interchangeable. The terms box is
+             required: it's where the agreement is formed and age is confirmed.
+             The messaging box is not, and is never pre-ticked — delivery still
+             falls back to a standard text for Android recipients under carrier
+             rules, where a required consent box is a registration failure. -->
+        <div id="join-block" hidden>
+          <form class="signup-form" id="join-form" action="/api/join" method="POST">
+            <div class="field">
+              <label for="join-name">Your name</label>
+              <input type="text" id="join-name" name="name" autocomplete="name" required>
+            </div>
+
+            <div class="field">
+              <label for="join-household">Household name</label>
+              <input type="text" id="join-household" name="household" autocomplete="off"
+                     spellcheck="false" aria-describedby="join-household-hint" required>
+              <p class="field-hint" id="join-household-hint">
+                This becomes your household's address for Baxter. Pick
+                <code>smithfam</code> and you'll write to
+                <code>smithfam@assistant.bax.bot</code>.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="join-email">Email</label>
+              <input type="email" id="join-email" name="email" autocomplete="email"
+                     aria-describedby="join-email-hint" required>
+              <p class="field-hint" id="join-email-hint">
+                Where Baxter writes to you once your household is set up.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="join-phone">
+                Mobile number <span class="field-optional">optional</span>
+              </label>
+              <input type="tel" id="join-phone" name="phone" autocomplete="tel"
+                     inputmode="tel" aria-describedby="join-phone-hint">
+              <p class="field-hint" id="join-phone-hint">
+                Adds texting to your household. Blue bubble on iPhone, a text everywhere
+                else. Leave it blank and Baxter works over email.
+              </p>
+            </div>
+
+            <div class="consent">
+              <input type="checkbox" id="join-terms" name="terms" value="yes" required>
+              <label for="join-terms">
+                I'm 18 or older and I agree to the
+                <a href="terms.html">Terms &amp; Conditions</a> and
+                <a href="privacy.html">Privacy Policy</a>.
+              </label>
+            </div>
+
+            <div class="consent">
+              <input type="checkbox" id="join-consent" name="consent" value="yes">
+              <label for="join-consent">
+                <span class="consent-optional">Optional.</span>
+                Message me at the number above. Baxter replies when I message it and sends
+                the reminders I set up. Message and data rates may apply. Reply STOP any
+                time to stop.
+              </label>
+            </div>
+
+            <input type="hidden" id="join-invite-code" name="invite_code" value="">
+            <!-- Honeypot. Hidden from people, irresistible to bots. Don't delete. -->
+            <input type="checkbox" name="_honeypot" tabindex="-1" autocomplete="off"
+                   aria-hidden="true" style="display:none">
+            <!-- No cf-turnstile class: this widget is rendered by signup.js when
+                 the form is revealed. Turnstile does not render reliably inside a
+                 hidden container. -->
+            <div id="join-turnstile" data-sitekey="0x4AAAAAAEDQIGUcv8dkdD5w"></div>
+
+            <button class="btn btn-solid" type="submit">Meet Baxter</button>
+          </form>
+
+          <p class="signup-note">
+            We don't share your number, ever. See our
+            <a href="privacy.html">Privacy Policy</a> and
+            <a href="terms.html">Terms</a>.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -333,6 +458,7 @@
 </footer>
 
 <script src="app.js"></script>
+<script src="signup.js"></script>
 
 <script data-goatcounter="https://lawnmaster.goatcounter.com/count"
         async src="https://gc.zgo.at/count.js"></script>

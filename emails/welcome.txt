@@ -52,9 +52,9 @@ Baxter
 
 ---
 You're getting this because you set up a Baxter household at
-family.bax.bot. If you'd rather I didn't text you, reply STOP to
+bax.bot. If you'd rather I didn't text you, reply STOP to
 a message and I'll stop.
 
 Baxter Family AI, operated by Mirabelle Studios
-Privacy: https://family.bax.bot/privacy.html
-Terms:   https://family.bax.bot/terms.html
+Privacy: https://bax.bot/privacy.html
+Terms:   https://bax.bot/terms.html

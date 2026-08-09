@@ -132,7 +132,7 @@ for part, col in (("Nobody has to remember.", INK), (" Baxter's got this.", INK2
     x += d.textlength(part, font=fs) / S
 
 d.line([(px(80), px(516)), (px(150), px(516))], fill=PEACH_DEEP, width=2 * S)
-d.text((px(80), px(548)), "family.bax.bot", font=f(mono_r, 22), fill=INK3)
+d.text((px(80), px(548)), "bax.bot", font=f(mono_r, 22), fill=INK3)
 
 # Fit report, so a too-long line is caught here rather than by eye.
 inner = (PX + PW - 11) - (PX + 11) - 44

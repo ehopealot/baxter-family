@@ -1306,6 +1306,87 @@ p {
 
    Same hard offset shadow the buttons and the chat panel use, in red. It pops
    because the chassis is already built that way, not because it's louder. */
+/* The invite code, sitting above the waiting list. Mono and uppercased on
+   sight so a code read off a card looks like the thing on the card; the value
+   is uppercased again on the way out, and /api/join does it a third time. */
+.code-form {
+	margin-top: 2rem;
+	max-width: 30rem;
+}
+.code-row {
+	display: flex;
+	align-items: stretch;
+	gap: 0.6rem;
+}
+/* The border lives on the wrapper so the prefix and the field read as one
+   control; the input inside is stripped bare and the focus ring is raised to
+   the wrapper with :focus-within. */
+.code-input {
+	display: flex;
+	align-items: center;
+	background: var(--surface);
+	border: 1.5px solid var(--ink-rule);
+	border-radius: var(--radius);
+	padding: 0.7rem 0.85rem;
+	transition:
+		box-shadow var(--tr),
+		border-color var(--tr);
+}
+.code-input:focus-within {
+	border-color: var(--peach-deep);
+	box-shadow: 3px 3px 0 var(--peach);
+}
+.code-prefix {
+	font: 400 1rem / 1.4 var(--mono);
+	letter-spacing: 0.06em;
+	color: var(--ink-3);
+	user-select: none;
+	flex: none;
+}
+.code-input input {
+	font: 400 1rem / 1.4 var(--mono);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink);
+	background: none;
+	border: 0;
+	border-radius: 0;
+	padding: 0;
+	width: 5.5ch;
+	min-width: 0;
+}
+.code-input input:focus-visible {
+	outline: none;
+	box-shadow: none;
+}
+.code-input input::placeholder {
+	color: var(--ink-3);
+	text-transform: none;
+	opacity: 0.65;
+}
+.code-row .btn {
+	flex: none;
+}
+.code-row .btn[disabled] {
+	opacity: 0.55;
+	cursor: default;
+}
+
+/* The waiting list, demoted to the fallback under the code field. The rule is
+   the divider: what's above it is for people who already have an invite, what's
+   below is for everyone else. */
+.signup-alt {
+	margin-top: 2.75rem;
+	padding-top: 1.75rem;
+	border-top: 1px solid var(--rule);
+	color: var(--ink);
+}
+.signup-alt-lede {
+	margin-top: 0.7rem;
+	max-width: 58ch;
+	color: var(--ink-2);
+}
+
 .gate {
 	margin-top: 2rem;
 	max-width: 34rem;

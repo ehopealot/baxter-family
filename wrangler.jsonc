@@ -28,6 +28,21 @@
 			"database_name": "baxter-family",
 			"database_id": "53525086-7fe9-4b90-ade4-09cef82f0687"
 		}
+	],
+
+	// GET /api/invite answers "is this code good?" for anyone who asks, and
+	// codes are only four characters, so the endpoint is a guessing oracle
+	// unless it is throttled. Four a minute per IP: a person typing a code off a
+	// card gets it right first or second go, and a scan gets nowhere.
+	//
+	// namespace_id is just a label; it needs to be unique among this Worker's
+	// limiters, not registered anywhere. period only accepts 10 or 60.
+	"ratelimits": [
+		{
+			"name": "INVITE_CHECK",
+			"namespace_id": "1001",
+			"simple": { "limit": 4, "period": 60 }
+		}
 	]
 
 	// TURNSTILE_SECRET is a secret, not a var — never put it here:

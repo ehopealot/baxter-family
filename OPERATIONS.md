@@ -43,7 +43,7 @@ and differ in one respect: whether the invite names a person.
 | Default uses | 1 | unlimited |
 | For | a person you're inviting | QR cards, events, a note in a mailbox |
 
-A personal invite is the stronger of the two. `join.html` locks the email field to the
+A personal invite is the stronger of the two. The form locks the email field to the
 invited address, and `/api/join` **overrides whatever is submitted** with the invite's
 address — so forwarding the link to a friend doesn't sign the friend up, it just fails
 sideways into your invitee's row. An open code makes no such promise, which is the whole
@@ -60,12 +60,12 @@ node tools/invite.mjs new --open --label "Tilden steam trains card" --uses 50
 ```
 
 ```
-  code:  BAX-9AXD-RFG0
+  code:  BAX-9AXD
   kind:  personal (sam@example.com)
   uses:  1
   until: 2026-08-20
 
-https://family.bax.bot/join?code=BAX-9AXD-RFG0
+https://bax.bot/?code=BAX-9AXD
 ```
 
 The summary goes to stderr and **the link alone goes to stdout**, so it pipes cleanly:
@@ -85,10 +85,15 @@ node tools/invite.mjs new --open --label "Farmers market" --uses 100 \
 | `--days <n>` | expires this many days out | never |
 | `--local` | the sandbox instead of production | off |
 
-Codes look like `BAX-7K3M-QP2R`: 40 bits of entropy from a Crockford-ish alphabet with no
-I, L, O or U in it, so nothing is ambiguous read off a card or dictated over the phone, and
-a code can't accidentally spell something. The whole URL is 46 characters, which scans at
-low QR density — big, chunky squares that survive being printed small.
+Codes look like `BAX-7K3M`: four characters from a Crockford-ish alphabet with no I, L, O
+or U in it, so nothing is ambiguous read off a card or dictated over the phone, and a code
+can't accidentally spell something. The signup form prefills the `BAX-` part so only those
+four characters get typed, and it maps a typed I or L to 1 and O to 0. The whole URL is 34
+characters, which scans at very low QR density: big, chunky squares that survive being
+printed small.
+
+**That is 32^4, about 1.05 million codes, which is small enough to guess at.** See
+[Rate-limit the code check](#rate-limit-the-code-check) before handing out many.
 
 ### See what's out there
 
@@ -100,10 +105,10 @@ node tools/invite.mjs list --all    # plus spent, expired and revoked
 ```
   CODE           KIND      WHO                  USED  EXPIRES              STATUS
   ─────────────  ────────  ───────────────────  ────  ───────────────────  ───────
-  BAX-ZN5P-9BXP  personal  jo@example.com       0/1   never                live
-  BAX-4HE8-VDKC  open      Farmers market card  0/25  never                live
-  BAX-SWK6-KVZQ  open      Tilden card          3/50  never                revoked
-  BAX-9AXD-RFG0  personal  sam@example.com      1/1   2026-08-20 14:32:58  spent
+  BAX-ZN5P  personal  jo@example.com       0/1   never                live
+  BAX-4HE8  open      Farmers market card  0/25  never                live
+  BAX-SWK6  open      Tilden card          3/50  never                revoked
+  BAX-9AXD  personal  sam@example.com      1/1   2026-08-20 14:32:58  spent
 ```
 
 `--all` is the one to reach for when somebody says their link doesn't work: `status` tells
@@ -111,10 +116,39 @@ you which of the four reasons it is, and they're distinguishable — `spent` mea
 and somebody used it, `revoked` means you turned it off, `expired` means you gave it a
 `--days` that has passed. A code that doesn't appear at all was mistyped.
 
+### Rate-limit the code check
+
+Four characters is 1.05 million possibilities, and `GET /api/invite?code=` will tell anyone
+who asks whether a guess is good. What matters is not the size of the space but how densely
+you fill it: with 100 live codes out there, roughly 1 guess in 10,000 lands, which is
+minutes of scripted traffic, not years.
+
+That is survivable because a found code only opens a signup form, is use-limited, and can be
+revoked. It is not survivable if nobody is watching. Before handing out many codes:
+
+- **Done in the Worker.** `/api/invite` is throttled to 4 requests a minute per IP by the
+  `ratelimits` binding in `wrangler.jsonc`; over that it answers `429` with a message the
+  form shows. Far above anyone typing a code off a card, far below a scan. Note it is
+  per-colo rather than global, so it raises the cost of a distributed attempt rather than
+  stopping one.
+- Keep `--uses` tight. An open code with `--uses 50` is 50 free accounts if it leaks; the
+  same code with `--uses 5` is five.
+- Watch `list --all` for codes going `spent` faster than you handed them out. That is the
+  signal, and revoking is instant.
+
+The other half of this is that `/api/join` verifies Turnstile **before** it looks at the
+code, so a guessed code still cannot become an account without solving a challenge. The
+oracle leaks which codes exist; the challenge is what makes each one expensive to use. The
+code check itself carries no Turnstile, on purpose — it is the first thing a visitor
+touches and the rate limit does that job more cheaply.
+
+Going back to eight characters removes the problem outright, at the cost of four more
+characters to read off a card.
+
 ### Turn one off
 
 ```bash
-node tools/invite.mjs revoke BAX-7K3M-QP2R
+node tools/invite.mjs revoke BAX-7K3M
 ```
 
 Immediate, and it reports honestly — an unknown code says so and exits non-zero rather than
@@ -129,7 +163,7 @@ list anyway, can't be counted or use-limited, and has to carry its whole payload
 URL — which makes for a dense QR that a phone camera has to work at. A row can be revoked
 instantly, tells you how often it was used, and needs only a short code in the link.
 
-### `join.js` is not the security boundary
+### `signup.js` is not the security boundary
 
 The page checks the code to decide what to show. Anyone can skip the page and POST at
 `/api/join` directly, so that handler re-checks everything from scratch: the code, the
@@ -138,14 +172,14 @@ invite **before** inserting, with the use limit inside the `WHERE` clause, so tw
 racing on a single-use code can't both win.
 
 Nothing from the browser is trusted. If you add a field to the form, add its validation
-there — not in `join.js`.
+there — not in `signup.js`.
 
 ---
 
 ## Signups and the waiting list
 
 Two tables. `waitlist` is the homepage form — name and email, no invite needed. `signups`
-is the invite-gated form on `join.html`, and it's the one that matters.
+is the invite-gated form on the homepage, and it's the one that matters.
 
 ### In the dashboard
 
@@ -257,8 +291,8 @@ Rare, and it means a use was burnt without a signup landing. `/api/join` hands t
 if the insert fails, but a crash in between would leave it spent. Check, then hand it back:
 
 ```sql
-SELECT * FROM signups WHERE invite_code = 'BAX-7K3M-QP2R';   -- nothing? then it burnt
-UPDATE invites SET used_count = used_count - 1 WHERE code = 'BAX-7K3M-QP2R';
+SELECT * FROM signups WHERE invite_code = 'BAX-7K3M';   -- nothing? then it burnt
+UPDATE invites SET used_count = used_count - 1 WHERE code = 'BAX-7K3M';
 ```
 
 **"That household name is taken."**
