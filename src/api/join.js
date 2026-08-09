@@ -7,7 +7,7 @@ import { turnstileOk, checkInvite, seeOther, page, clientMeta, now } from "../li
 
 // The effective date on terms.html. Bump both together when the terms change,
 // so a stored row says which version was agreed to.
-const TERMS_VERSION = "2026-08-04";
+const TERMS_VERSION = "2026-08-06";
 
 const oops = (heading, body, status = 400) =>
 	page({ status, title: "Something went wrong", heading, body });
