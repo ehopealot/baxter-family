@@ -103,11 +103,6 @@ Two things are still not optional, and neither is about carriers:
 - **`privacy.html` §3 lists every field the forms collect.** Add a field, add it
   there. It currently covers name, household name, email and mobile number.
 
-`optin.png` and `optin-form.png` are leftovers from the A2P era. They show a
-Google Form flow that no longer exists, and the campaign they were filed against
-described carrier SMS we no longer send. Delete both once that campaign is
-retired; until then they're stale evidence, not documentation.
-
 ## Why the split
 
 `bax.bot` says "self-hosted", "runs on your own machine", "no account to sign up for". All
