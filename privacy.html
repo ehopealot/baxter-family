@@ -225,15 +225,27 @@
       <p>
         We share information with a small set of providers who process it on our behalf, only
         to the extent they need it to make the service work, and only under agreements that
-        bar them from using it for their own purposes.
+        bar them from using it for their own purposes. This is the whole list. Two of them
+        handle the things you actually say to Baxter, so they are first.
       </p>
       <dl class="plate">
         <div>
           <dt>Messaging provider</dt>
           <dd>A message cannot reach your phone without one. Our messaging provider receives
             your number and the content of the message in order to deliver it, over iMessage
-            or as a standard text. Where it goes out as a text, the mobile networks carry it
-            the last stretch, the same as any message you send yourself.</dd>
+            or as a standard text. <strong>It does not only pass them through: like any
+            messaging service it keeps its own delivery records, so your number and the text
+            of your messages are stored on its systems as well as ours</strong>, for as long
+            as its own retention policy says. Where a message goes out as a text, the mobile
+            networks carry it the last stretch, the same as any message you send yourself.</dd>
+        </div>
+        <div>
+          <dt>Email provider</dt>
+          <dd>Mail is the same story. Anything Baxter emails you, and anything you send to
+            your household's address, passes through an email provider, which receives your
+            email address and the contents of that mail in order to deliver it, and
+            <strong>likewise keeps its own copy in its delivery records</strong>. That
+            includes the invite and welcome mails we send when you sign up.</dd>
         </div>
         <div>
           <dt>AI model provider</dt>
@@ -285,11 +297,25 @@
         is what guarantees we don't message you again.
       </p>
 
+      <h3>Copies our providers hold</h3>
+      <p>
+        The times above are ours. The providers in
+        <a href="#share">Who we share it with</a> keep their own delivery records, and those
+        run on their retention schedules, not this one. In practice that means a message or
+        an email can still exist in a provider's logs for a while after we have deleted our
+        copy of it. Each of them is under contract to use what they hold only to run the
+        service for us, and never for their own purposes, and we ask them to delete on
+        request where their systems allow it. We would rather write that down than let
+        "deleted" sound more absolute than it is.
+      </p>
+
       <h3>Closing your account</h3>
       <p>
         Ask us to close your account and everything Baxter holds for you is deleted from
         our servers: your messages, the notes and documents it kept, your lists, and your
-        mobile number. That is the substance of it, and it does not come back.
+        mobile number. That is the substance of it, and it does not come back. Copies sitting
+        in a provider's delivery logs age out on their own schedules, as described just
+        above.
       </p>
       <p>
         Three narrow things outlive the account, and we would rather say so than imply
@@ -328,7 +354,10 @@
 
       <h2 id="security">8. Security</h2>
       <p>
-        Data is encrypted in transit. Access to the systems holding message content is
+        <strong>Your data is encrypted in transit and at rest.</strong> Everything we hold
+        on our own servers is encrypted on disk: the database with your signup details, your
+        mobile number and the record of your consent, and the storage behind the messages,
+        lists and notes Baxter keeps for you. Access to the systems holding message content is
         limited to those who need it to operate the service. Baxter's own runtime is
         deliberately constrained: it runs in a container, confined to its own workspace,
         and by default cannot read the credentials it runs under. No system is perfectly
