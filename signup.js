@@ -42,7 +42,14 @@
 		if (!box || box.dataset.rendered) return;
 		if (!window.turnstile) return void setTimeout(mountTurnstile, 150);
 		box.dataset.rendered = "1";
-		window.turnstile.render(box, { sitekey: box.dataset.sitekey, theme: "light" });
+		// interaction-only: the widget stays invisible while Turnstile runs its
+		// non-interactive checks, and only appears if a visitor actually needs to
+		// complete a challenge.
+		window.turnstile.render(box, {
+			sitekey: box.dataset.sitekey,
+			theme: "light",
+			appearance: "interaction-only",
+		});
 	}
 
 	function busy(on) {
