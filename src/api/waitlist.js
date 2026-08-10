@@ -2,6 +2,7 @@
    Collects a name and an email, nothing more. Signing up here is explicitly
    not a messaging opt-in; that happens on the invite form against an unticked box. */
 import { turnstileOk, seeOther, page, clientMeta, now } from "../lib.js";
+import { notifySignup } from "../notify.js";
 
 export async function onRequestPost(ctx) {
 	const { request, env } = ctx;
@@ -33,6 +34,8 @@ export async function onRequestPost(ctx) {
 	)
 		.bind(now(), name, email, ip, ua)
 		.run();
+
+	ctx.waitUntil(notifySignup(env, { type: "waitlist", name, email }));
 
 	return seeOther("/thanks");
 }

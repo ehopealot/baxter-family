@@ -4,6 +4,7 @@
    to decide what to show; anyone can skip the page and POST here directly, so
    everything is re-checked from scratch below. */
 import { turnstileOk, checkInvite, seeOther, page, clientMeta, now } from "../lib.js";
+import { notifySignup } from "../notify.js";
 
 // The effective date on terms.html. Bump both together when the terms change,
 // so a stored row says which version was agreed to.
@@ -94,6 +95,8 @@ export async function onRequestPost(ctx) {
 		}
 		throw err;
 	}
+
+	ctx.waitUntil(notifySignup(env, { type: "join", name, household, email, phone: phone || undefined }));
 
 	return seeOther("/welcome");
 }
