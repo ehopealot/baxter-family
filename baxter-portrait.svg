@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 400" role="img" aria-labelledby="baxter-title">
+  <title id="baxter-title">Baxter, a friendly silver robot mascot with blond hair and glasses, wearing a plum collared shirt and waving hello</title>
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef1f3"/>
+      <stop offset="0.55" stop-color="#ccd1d7"/>
+      <stop offset="1" stop-color="#a6adb6"/>
+    </linearGradient>
+    <radialGradient id="ledGlow">
+      <stop offset="0" stop-color="#f2794a" stop-opacity="0.9"/>
+      <stop offset="0.45" stop-color="#f2794a" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#f2794a" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="faceClip">
+      <rect x="118" y="76" width="134" height="142" rx="32"/>
+    </clipPath>
+  </defs>
+
+  <!-- ===== raised waving arm (his right / viewer left), casual bend, hand angled outward ===== -->
+  <g>
+    <!-- silver forearm -->
+    <path d="M86 232 L67 150" stroke="#2b2f34" stroke-width="28" stroke-linecap="round" fill="none"/>
+    <path d="M86 232 L67 150" stroke="url(#metal)" stroke-width="22" stroke-linecap="round" fill="none"/>
+    <!-- wrist joint seam -->
+    <path d="M62 169 L81 165" stroke="#7a828c" stroke-width="2" stroke-linecap="round"/>
+    <!-- plum sleeve over the bent upper arm -->
+    <path d="M122 280 L84 238" stroke="#7c2f51" stroke-width="38" stroke-linecap="round" fill="none"/>
+    <path d="M122 280 L84 238" stroke="#a04c70" stroke-width="34" stroke-linecap="round" fill="none"/>
+    <path d="M77 254 L101 233" stroke="#7c2f51" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+    <!-- open waving hand, tilted outward: segmented robot fingers + palm plate -->
+    <g transform="translate(-12 16) rotate(-20 78 130)" fill="url(#metal)" stroke="#2b2f34" stroke-width="3" stroke-linejoin="round">
+      <rect x="48" y="64" width="12" height="40" rx="6" transform="rotate(-20 54 100)"/>
+      <rect x="63" y="54" width="13" height="48" rx="6.5" transform="rotate(-9 69.5 100)"/>
+      <rect x="79" y="50" width="13" height="52" rx="6.5"/>
+      <rect x="95" y="56" width="12" height="46" rx="6" transform="rotate(12 101 100)"/>
+      <rect x="98" y="97.5" width="28" height="13" rx="6.5" transform="rotate(-55 100 104)"/>
+      <g transform="rotate(-4 80 110)">
+        <rect x="54" y="90" width="52" height="40" rx="13"/>
+        <path d="M62 101 Q80 108 98 101" fill="none" stroke="#7a828c" stroke-width="1.8"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===== neck: short silver cylinder with a segment ring ===== -->
+  <g>
+    <path d="M164 200 H206 V236 Q206 244 185 244 Q164 244 164 236 Z" fill="url(#metal)" stroke="#2b2f34" stroke-width="2.5"/>
+    <rect x="165.5" y="214" width="39" height="10" fill="#5c646d" opacity="0.25"/>
+    <path d="M164 229 H206" stroke="#7a828c" stroke-width="2"/>
+  </g>
+
+  <!-- ===== torso: graphic plum-shirt bust (phone overlaps below ~y250) ===== -->
+  <g>
+    <!-- rounded shoulder slab, balanced to the head -->
+    <path d="M64 400 V286 C64 258 82 242 112 242 H258 C288 242 306 258 306 286 V400 Z"
+          fill="#a04c70" stroke="#7c2f51" stroke-width="2.5" stroke-linejoin="round"/>
+    <!-- crisp collar: stand band, small dark V, two flat flaps -->
+    <rect x="158" y="232" width="54" height="14" rx="7" fill="#7c2f51"/>
+    <path d="M177 253 L185 268 L193 253 Z" fill="#7c2f51"/>
+    <path d="M152 240 C162 252 173 257 184 258 L172 276 C159 270 151 256 152 240 Z"
+          fill="#a04c70" stroke="#7c2f51" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M218 240 C208 252 197 257 186 258 L198 276 C211 270 219 256 218 240 Z"
+          fill="#a04c70" stroke="#7c2f51" stroke-width="3" stroke-linejoin="round"/>
+    <!-- placket + buttons -->
+    <path d="M185 268 V398" stroke="#7c2f51" stroke-width="2"/>
+    <circle cx="185" cy="306" r="3.5" fill="#fdf1e9" stroke="#7c2f51" stroke-width="1"/>
+    <circle cx="185" cy="344" r="3.5" fill="#fdf1e9" stroke="#7c2f51" stroke-width="1"/>
+    <!-- pinned BAXTER nametag -->
+    <g transform="rotate(3 247 317)">
+      <rect x="209" y="304" width="76" height="27" rx="5" fill="#fdf1e9" stroke="#211c19" stroke-width="1.8"/>
+      <!-- "BAXTER" drawn as vector letterforms (no font dependency) -->
+      <g stroke="#211c19" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g transform="translate(219 311)"><path d="M0 0 H4.5 L6 1.5 V3.5 L4.5 5 H0 M4.5 5 L6 6.5 V8.5 L4.5 10 H0 V0"/></g>
+        <g transform="translate(229 311)"><path d="M0 10 L3 0 L6 10 M1.5 6.2 H4.5"/></g>
+        <g transform="translate(239 311)"><path d="M0 0 L6 10 M6 0 L0 10"/></g>
+        <g transform="translate(249 311)"><path d="M0 0 H6 M3 0 V10"/></g>
+        <g transform="translate(259 311)"><path d="M6 0 H0 V10 H6 M0 5 H4.5"/></g>
+        <g transform="translate(269 311)"><path d="M0 10 V0 H4.5 L6 1.5 V3.5 L4.5 5 H0 M3.6 5 L6 10"/></g>
+      </g>
+      <circle cx="247" cy="304" r="3.2" fill="#f2794a" stroke="#7c2f51" stroke-width="1.2"/>
+    </g>
+  </g>
+
+  <!-- ===== head: friendly rounded-rectangle retro-robot head ===== -->
+  <!-- mechanical ear-ports -->
+  <g>
+    <rect x="104" y="146" width="14" height="32" rx="5" fill="url(#metal)" stroke="#2b2f34" stroke-width="2.5"/>
+    <circle cx="111" cy="162" r="4" fill="#5c646d"/>
+    <rect x="252" y="146" width="14" height="32" rx="5" fill="url(#metal)" stroke="#2b2f34" stroke-width="2.5"/>
+    <circle cx="259" cy="162" r="4" fill="#5c646d"/>
+  </g>
+
+  <!-- silver face plate -->
+  <rect x="118" y="76" width="134" height="142" rx="32"
+        fill="url(#metal)" stroke="#2b2f34" stroke-width="3" stroke-linejoin="round"/>
+  <!-- one confident graphic shine (clipped to the face) -->
+  <g clip-path="url(#faceClip)" fill="#ffffff" opacity="0.5">
+    <rect x="126" y="109" width="30" height="9" rx="4.5" transform="rotate(-18 141 113.5)"/>
+    <rect x="128" y="122" width="13" height="8" rx="4" transform="rotate(-18 134.5 126)"/>
+  </g>
+
+  <!-- a few intentional panel seams + one rivet -->
+  <g stroke="#7a828c" fill="none" stroke-linecap="round" stroke-width="2">
+    <path d="M185 106 V127"/>
+    <path d="M132 190 Q136 200 148 208"/>
+    <path d="M238 190 Q234 200 222 208"/>
+  </g>
+  <circle cx="185" cy="133" r="2" fill="#7a828c"/>
+
+  <!-- temple bolt (viewer right) -->
+  <g>
+    <polygon points="231.3,117.5 231.3,122.5 227,125 222.7,122.5 222.7,117.5 227,115"
+             fill="#ccd1d7" stroke="#5c646d" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle cx="227" cy="120" r="1.5" fill="#5c646d"/>
+  </g>
+
+  <!-- coral status LED (viewer left temple) -->
+  <g>
+    <circle cx="129" cy="176" r="9" fill="url(#ledGlow)"/>
+    <circle cx="129" cy="176" r="4" fill="#f2794a"/>
+    <circle cx="127.6" cy="174.6" r="1.2" fill="#fdf1e9"/>
+  </g>
+
+  <!-- nose seam + smile -->
+  <path d="M182 162 C179 172 177 179 181 185 Q184.5 189 190 185" stroke="#7a828c" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M163 191 Q185 206 207 191" stroke="#2b2f34" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- peach cheek blush -->
+  <ellipse cx="150" cy="194" rx="9" ry="5.5" fill="#f2a177" opacity="0.5"/>
+  <ellipse cx="220" cy="194" rx="9" ry="5.5" fill="#f2a177" opacity="0.5"/>
+
+  <!-- warm golden-blond hair: simple geometric cut, clean silhouette -->
+  <path d="M112 152 V106 C112 78 126 64 152 64 H218 C244 64 258 78 258 106 V152 L236 152 V112 Q236 102 226 102 H144 Q134 102 134 112 V152 L112 152 Z" fill="#e2a54c"/>
+
+  <!-- eyebrows -->
+  <path d="M137 125 Q152 117 169 123" stroke="#b8813a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M201 123 Q218 117 233 125" stroke="#b8813a" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- eyes: dark sensor lenses with coral catch-lights -->
+  <g>
+    <circle cx="154" cy="152" r="10" fill="#211c19"/>
+    <circle cx="157.5" cy="148.5" r="2.6" fill="#f2794a"/>
+    <circle cx="216" cy="152" r="10" fill="#211c19"/>
+    <circle cx="219.5" cy="148.5" r="2.6" fill="#f2794a"/>
+  </g>
+
+  <!-- glasses -->
+  <g stroke="#211c19" stroke-width="4" fill="none" stroke-linecap="round">
+    <rect x="132" y="132" width="44" height="38" rx="10" fill="#eef1f3" fill-opacity="0.18"/>
+    <rect x="194" y="132" width="44" height="38" rx="10" fill="#eef1f3" fill-opacity="0.18"/>
+    <path d="M176 149 Q185 143 194 149"/>
+    <path d="M132 149 C124 146 116 146 108 150"/>
+    <path d="M238 149 C246 146 254 146 260 150"/>
+  </g>
+</svg>

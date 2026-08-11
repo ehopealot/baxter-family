@@ -19,19 +19,22 @@
    ============================================================ */
 
 :root {
-	--paper: #fceddd; /* cream stock, warmed toward the fruit */
-	--paper-alt: #f7dfc9;
-	--surface: #fffaf4;
+	/* 2026 modernization: peach on WHITE, matching the home app. The cream stock is
+	   gone; the terminal chassis (mono display, hard offset shadows, the coral-LED
+	   panel, the engineering grid) stays as deliberate 198X flair on the new ground. */
+	--paper: #fbfaf8; /* warm near-white page, like the app */
+	--paper-alt: #f4f0ea; /* faint warm tint for banded surfaces */
+	--surface: #ffffff; /* white cards, lifting off the page */
 
-	--ink: #3b2419; /* roasted brown, never neutral black */
-	--ink-2: #5f4234;
-	--ink-3: #7f5b4b;
+	--ink: #211c19; /* warm near-black, like the app; never neutral black */
+	--ink-2: #574f49;
+	--ink-3: #6d665b; /* muted text; clears WCAG AA on both paper and the paper-alt band */
 
 	--peach: #f2a177; /* ripe peach, brand + "power" signal; carries ink, not white */
-	--peach-mid: #e8895a; /* deeper peach for hovers and the chat panel shadow */
+	--peach-mid: #e8895a; /* deeper peach for hovers and the panel's offset shadow */
 	--peach-deep: #9e5124; /* text-safe peach: small marks, links, focus ring */
 	--peach-tint: #fbdcc6;
-	--peach-wash: #fef0e6;
+	--peach-wash: #fdf1e9;
 
 	--plum: #a04c70; /* secondary accent, the "reference / code" layer */
 	--plum-deep: #7c2f51; /* text-safe plum: inline code, links, chips */
@@ -49,9 +52,11 @@
 	--plate: #33201a;
 	--plate-ink: #fbe9dc;
 
-	--rule: #eac9ae; /* warm hairline */
-	--rule-soft: #f2dbc6;
-	--ink-rule: #3b2419; /* hard, dark rule for boxed elements */
+	--rule: #ece6df; /* hairline on white (was warm cream) */
+	--rule-soft: #f4f0ea;
+	--line-strong: #dcd5cc; /* a bit more presence for input/secondary-button edges */
+	--ink-rule: #211c19; /* hard, dark rule for the kept 198X boxed elements */
+	--grid: rgba(158, 81, 36, 0.06); /* faint peach-cast engineering grid, on white */
 
 	--mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 	--sans: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -214,19 +219,20 @@ p {
 
 /* ── buttons ─────────────────────────────────────────────── */
 
-/* Hard offset shadow, collapses on press: the tactile chunk of a physical
-   key or an old software-box button. */
+/* Modern app-style buttons on the new white ground: solid peach with a soft warm
+   shadow, Archivo, square-ish 9px corners. The 198X flair now lives in the grid, the
+   mono headlines, and the boxed panels, not in a heavy key-cap button. */
 .btn {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.4rem;
-	font: 500 0.85rem / 1 var(--mono);
-	letter-spacing: 0.02em;
+	gap: 0.45rem;
+	font: 600 0.9rem / 1 var(--sans);
+	letter-spacing: 0.005em;
 	text-decoration: none;
-	padding: 0.8rem 1.3rem;
-	border: 1.5px solid var(--ink-rule);
-	border-radius: var(--radius);
-	box-shadow: 3px 3px 0 var(--ink-rule);
+	padding: 0.78rem 1.35rem;
+	border: 1.5px solid transparent;
+	border-radius: 9px;
+	cursor: pointer;
 	transition:
 		background-color var(--tr),
 		color var(--tr),
@@ -235,14 +241,13 @@ p {
 		transform var(--tr);
 }
 .btn:active {
-	transform: translate(2px, 2px);
-	box-shadow: 1px 1px 0 var(--ink-rule);
+	transform: translateY(1px);
 }
 
 .btn-solid {
 	background: var(--peach);
 	color: var(--ink);
-	font-weight: 600;
+	box-shadow: 0 1px 2px rgba(33, 28, 25, 0.06), 0 3px 10px rgba(33, 28, 25, 0.1);
 }
 .btn-solid:hover {
 	background: var(--peach-mid);
@@ -251,18 +256,16 @@ p {
 .btn-ghost {
 	background: var(--surface);
 	color: var(--ink);
+	border-color: var(--line-strong);
 }
 .btn-ghost:hover {
-	color: var(--plum-deep);
-	box-shadow: 3px 3px 0 var(--plum);
-}
-.btn-ghost:active {
-	box-shadow: 1px 1px 0 var(--plum);
+	background: var(--paper-alt);
+	border-color: var(--ink-3);
 }
 
 .btn-lg {
-	padding: 1rem 1.65rem;
-	font-size: 0.95rem;
+	padding: 0.95rem 1.7rem;
+	font-size: 0.98rem;
 }
 
 /* Touch pointers get the 44px target; the topbar CTA sits under it otherwise,
@@ -394,17 +397,17 @@ p {
 .hero {
 	padding-block: clamp(3.5rem, 7vw, 6.5rem) clamp(3.5rem, 6vw, 6rem);
 	border-bottom: 1.5px solid var(--ink-rule);
-	/* Faint engineering grid on manila: graph paper from a technical manual,
-     not a SaaS gradient glow. */
+	/* Faint engineering grid on white: graph paper from a technical manual with a
+	   peach cast, not a SaaS gradient glow. Kept as 198X flair on the new ground. */
 	background:
 		repeating-linear-gradient(
 			to right,
-			rgba(59, 36, 25, 0.045) 0 1px,
+			var(--grid) 0 1px,
 			transparent 1px 34px
 		),
 		repeating-linear-gradient(
 			to bottom,
-			rgba(59, 36, 25, 0.045) 0 1px,
+			var(--grid) 0 1px,
 			transparent 1px 34px
 		),
 		var(--paper);
@@ -1187,7 +1190,7 @@ p {
 	margin-top: 1.25rem;
 	padding: 1rem 1.25rem;
 	background: var(--peach-wash);
-	border-left: 3px solid var(--peach-deep);
+	border: 1.5px solid var(--peach-tint);
 	border-radius: var(--radius);
 	color: var(--ink-2);
 }
