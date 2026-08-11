@@ -16,6 +16,13 @@
 (function () {
 	"use strict";
 
+	// Show the top invite-code banner whenever a code arrived in the URL (a bax.bot/PNW1 redirect,
+	// or a pasted invite link). Done first, before the form-element guard below, so the nudge shows
+	// even if the signup form isn't on this page. Not validated here -- the form re-checks the code.
+	var urlCode = new URLSearchParams(location.search);
+	var banner = document.getElementById("code-banner");
+	if (banner && (urlCode.get("code") || urlCode.get("key"))) banner.hidden = false;
+
 	var codeForm = document.getElementById("code-form");
 	var codeInput = document.getElementById("invite-code");
 	var checkBtn = document.getElementById("code-check");

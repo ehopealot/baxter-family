@@ -45,6 +45,16 @@
   </div>
 </header>
 
+<!-- Revealed by signup.js when the URL carries ?code= (e.g. a bax.bot/PNW1 redirect or a
+     pasted invite link): a nudge straight to the signup form. Not validated here -- the form
+     re-checks the code. Hidden by default so it never shows without a code. -->
+<aside id="code-banner" class="code-banner" hidden>
+  <div class="wrap code-banner-inner">
+    <p class="code-banner-text">Looks like you have an invite code.</p>
+    <a class="btn btn-solid" href="#signup">Go to signup&nbsp;&rarr;</a>
+  </div>
+</aside>
+
 <main id="main" tabindex="-1">
 
   <!-- ───────────────────────── hero ───────────────────────── -->

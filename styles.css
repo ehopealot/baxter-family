@@ -292,6 +292,44 @@ p {
 	border-bottom: 1.5px solid var(--ink-rule);
 }
 
+/* Invite-code nudge banner (revealed by signup.js when ?code= is present). A peach band directly
+   under the topbar with a strong ink rule, matching the site's boxed 198X tell. */
+.code-banner {
+	background: var(--peach-wash);
+	border-bottom: 1.5px solid var(--ink-rule);
+}
+.code-banner[hidden] {
+	display: none;
+}
+.code-banner-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem 1.5rem;
+	flex-wrap: wrap;
+	padding-top: 0.85rem;
+	padding-bottom: 0.85rem;
+}
+.code-banner-text {
+	margin: 0;
+	font-weight: 600;
+	color: var(--ink);
+	font-size: 1.02rem;
+}
+.code-banner-text::before {
+	content: "";
+	display: inline-block;
+	width: 0.6rem;
+	height: 0.6rem;
+	margin-right: 0.55rem;
+	border-radius: 50%;
+	background: var(--peach-mid);
+	vertical-align: middle;
+}
+.code-banner .btn-solid {
+	flex: none;
+}
+
 .topbar-inner {
 	display: flex;
 	align-items: center;
