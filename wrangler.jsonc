@@ -10,11 +10,14 @@
 		// from being uploaded and served.
 		"directory": ".",
 		"binding": "ASSETS",
-		// Serve 404.html for unknown paths rather than falling back to index,
-		// which would hand a 200 to every typo.
-		"not_found_handling": "404-page",
-		// Only /api/* reaches the Worker; everything else is served off the
-		// edge without invoking it at all.
+		// "none" (not "404-page") so a path with no matching asset falls through to the Worker
+		// instead of being 404'd at the edge. The Worker turns a bare invite code (/PNW1, a
+		// bax.bot/<CODE> card link) into the /?code= entry point, and serves 404.html for
+		// everything else (see src/index.js) -- so unknown paths still get the real 404 page.
+		"not_found_handling": "none",
+		// The Worker runs first for /api/*, and (via not_found_handling above) for any path with
+		// no matching asset. A real asset -- the pages, css, js, images -- is still served off the
+		// edge without invoking it.
 		"run_worker_first": ["/api/*"]
 	},
 

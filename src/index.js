@@ -19,12 +19,30 @@ const ROUTES = {
 	"/api/waitlist": waitlist,
 };
 
+// A bare invite-code path -- /PNW1, or /BAX-PNW1 -- from a bax.bot/<CODE> card link (a Redirect
+// Rule would need a Business plan for regex, so it's done here). Four Crockford chars, optional
+// BAX- prefix; the alphabet excludes I/L/O/U (signup.js's own ALPHABET), which keeps it off
+// word-shaped paths. Only reached when no asset matched (not_found_handling: "none"), so it never
+// shadows a real page. Case-insensitive; signup.js uppercases whatever arrives.
+const CODE_RE = /^\/(BAX-)?[0-9A-HJKMNP-TV-Z]{4}$/i;
+
 export default {
 	async fetch(request, env, ctx) {
 		const url = new URL(request.url);
 		const route = ROUTES[url.pathname.replace(/\/+$/, "") || "/"];
 
-		if (!route) return env.ASSETS.fetch(request);
+		if (!route) {
+			// A bare code -> the /?code= entry point signup.js reads (it fills + validates the code).
+			if ((request.method === "GET" || request.method === "HEAD") && CODE_RE.test(url.pathname)) {
+				return Response.redirect(new URL("/?code=" + encodeURIComponent(url.pathname.slice(1)), url).toString(), 302);
+			}
+			// Otherwise serve the asset if there is one (a real file, or the wrangler-dev path where
+			// the Worker runs first); a miss falls to the 404 page, since not_found_handling is "none".
+			const res = await env.ASSETS.fetch(request);
+			if (res.status !== 404) return res;
+			const notFound = await env.ASSETS.fetch(new URL("/404.html", url).toString());
+			return new Response(notFound.body, { status: 404, headers: notFound.headers });
+		}
 
 		const handler =
 			request.method === "GET" || request.method === "HEAD"
