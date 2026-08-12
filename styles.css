@@ -1344,12 +1344,6 @@ p {
 	font-weight: 400;
 }
 
-/* Turnstile renders a fixed ~300x65 iframe; this just gives it room in the
-   grid and keeps it from butting against the submit button. */
-.cf-turnstile {
-	min-height: 65px;
-}
-
 /* Invite gate on join.html: shown when ?key= is missing, malformed, unsigned,
    or expired. Every one of those is a dead end, so it takes the alert red
    rather than a neutral note — this is the only thing on the page, and it
