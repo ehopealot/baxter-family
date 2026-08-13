@@ -27,6 +27,7 @@ export async function onRequestPost(ctx) {
 	if (form.get("_honeypot")) return seeOther("/welcome");
 
 	const name = (form.get("name") || "").toString().trim();
+	const nickname = (form.get("nickname") || "").toString().trim();
 	const household = (form.get("household") || "").toString().trim().toLowerCase();
 	const phone = (form.get("phone") || "").toString().trim();
 	const consent = form.get("consent") ? 1 : 0;
@@ -55,8 +56,8 @@ export async function onRequestPost(ctx) {
 		return oops("The terms weren't agreed to.", "Signing up means confirming you're 18 or older and agreeing to the Terms & Conditions. Head back and tick that box.");
 	}
 
-	if (!name || !household || !email || !email.includes("@")) {
-		return oops("Some details are missing.", "We need a name, a household name and an email address. Head back and fill those in.");
+	if (!name || !nickname || !household || !email || !email.includes("@")) {
+		return oops("Some details are missing.", "We need a name, a nickname, a household name and an email address. Head back and fill those in.");
 	}
 	if (!/^[a-z0-9][a-z0-9-]{1,30}$/.test(household)) {
 		return oops("That household name won't work.", "It becomes an email address, so it needs to be 2–31 characters: lowercase letters, numbers and hyphens, starting with a letter or number.");
@@ -81,10 +82,10 @@ export async function onRequestPost(ctx) {
 
 	try {
 		await env.DB.prepare(
-			`INSERT INTO signups (created_at, name, household, email, phone, consent, terms_agreed, terms_version, invite_code, ip, user_agent)
-			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			`INSERT INTO signups (created_at, name, nickname, household, email, phone, consent, terms_agreed, terms_version, invite_code, ip, user_agent)
+			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		)
-			.bind(now(), name, household, email, phone || null, consent, terms, TERMS_VERSION, code, ip, ua)
+			.bind(now(), name, nickname, household, email, phone || null, consent, terms, TERMS_VERSION, code, ip, ua)
 			.run();
 	} catch (err) {
 		// household has a UNIQUE index, so a clash lands here rather than in a
@@ -96,7 +97,7 @@ export async function onRequestPost(ctx) {
 		throw err;
 	}
 
-	ctx.waitUntil(notifySignup(env, { type: "join", name, household, email, phone: phone || undefined }));
+	ctx.waitUntil(notifySignup(env, { type: "join", name, nickname, household, email, phone: phone || undefined }));
 
 	return seeOther("/welcome");
 }

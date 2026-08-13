@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS signups (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   created_at  INTEGER NOT NULL,
   name        TEXT    NOT NULL,
+  nickname    TEXT    NOT NULL,   -- what Baxter calls you
   household   TEXT    NOT NULL,
   email       TEXT    NOT NULL,
   phone       TEXT,             -- optional: Baxter works over email alone

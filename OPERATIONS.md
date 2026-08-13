@@ -198,7 +198,7 @@ Remember `--remote`, or you're querying the empty sandbox:
 # Everyone who has signed up, newest first
 npx wrangler d1 execute baxter-family --remote --command "
   SELECT datetime(created_at,'unixepoch','localtime') AS when_,
-         name, household, email, phone,
+         name, nickname, household, email, phone,
          CASE WHEN consent THEN 'yes' ELSE '' END AS texts,
          status
   FROM signups ORDER BY created_at DESC"

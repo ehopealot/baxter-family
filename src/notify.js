@@ -11,7 +11,7 @@ const FROM = "Baxter Signups <signups@ops.bax.bot>";
 
 /**
  * @param {object} env — needs RESEND_SIGNUPS_KEY
- * @param {{ type: "waitlist" | "join", name: string, email: string, household?: string }} info
+ * @param {{ type: "waitlist" | "join", name: string, email: string, nickname?: string, household?: string }} info
  */
 export async function notifySignup(env, info) {
 	const key = env?.RESEND_SIGNUPS_KEY;
@@ -25,6 +25,7 @@ export async function notifySignup(env, info) {
 	const body =
 		info.type === "join"
 			? `${info.name} signed up.\n` +
+			  (info.nickname ? `Nickname: ${info.nickname}\n` : "") +
 			  `Household: ${info.household}\n` +
 			  `Email: ${info.email}\n` +
 			  (info.phone ? `Phone: ${info.phone}\n` : "") +
