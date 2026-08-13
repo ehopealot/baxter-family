@@ -411,10 +411,6 @@ p {
 		margin-inline: calc(var(--pad) * -1);
 		padding-inline: var(--pad);
 		scrollbar-width: none;
-		/* Fade the right edge so the strip reads as scrollable; the hidden
-       scrollbar otherwise gives no hint that Setup is off-screen. */
-		-webkit-mask-image: linear-gradient(to right, #000 84%, transparent 100%);
-		mask-image: linear-gradient(to right, #000 84%, transparent 100%);
 	}
 	.topnav::-webkit-scrollbar {
 		width: 0;
