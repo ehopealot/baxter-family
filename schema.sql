@@ -49,7 +49,10 @@ CREATE TABLE IF NOT EXISTS signups (
   invite_code TEXT REFERENCES invites(code),
   status      TEXT    NOT NULL DEFAULT 'new',
   ip          TEXT,
-  user_agent  TEXT
+  user_agent  TEXT,
+  -- Set (ISO time) by the fleet's signups reactor when the household is
+  -- provisioned + welcomed; NULL = not yet handled, so each row is processed once.
+  welcomed_at TEXT
 );
 
 -- ── waiting list (index.html) ──────────────────────────────────────────────
