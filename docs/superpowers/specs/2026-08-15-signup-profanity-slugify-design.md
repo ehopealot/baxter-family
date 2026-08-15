@@ -130,7 +130,8 @@ letters (`Andersons` → `-ndersons`):
    accepted (including consecutive hyphens like `a--b`) therefore produces a
    byte-identical outcome to today — no canonicalization, no new collisions
    among previously-valid names.
-6. Strip apostrophes (`O'Brien` → `obriens`, not `o-brien`).
+6. Strip apostrophes — both ASCII `'` and the typographic `’` (U+2019, what
+   iOS autocorrect inserts) (`O'Brien` → `obrien`, not `o-brien`).
 7. Replace any run of remaining non-`[a-z0-9]` with a single hyphen.
 8. Trim leading/trailing hyphens.
 
@@ -182,18 +183,22 @@ here the gate placement is a security property worth pinning). Add:
 - `tests/slugify.test.js`: identity for already-clean slugs; **pass-through
   preserves `a--b` unchanged**; `The Andersons` → `the-andersons` (no
   article stripping); space/underscore runs → single hyphen; apostrophe
-  stripping; accent folding; special-letter map in both cases (`Søren`,
+  stripping (both `'` and `’`: `O'Brien`/`O’Brien` → `obrien`); accent folding; special-letter map in both cases (`Søren`,
   `Ø`, `Æ`, `ẞ`, `Đ`, `Ł`); edge-hyphen trim; all-punctuation → empty;
   1-char and 32-char results.
 - `tests/join.test.js`: handler-level tests over `onRequestPost` with a
   stubbed `globalThis.fetch` (Turnstile siteverify → success) and a mock
   `env.DB` (`.prepare().bind().run()/.first()` chains). Assert: (1) profanity
-  in each of `name`, `nickname`, raw `household`, and a profane-only-after-
-  slugify `household` all return the generic 400; (2) for those cases the
-  invite-claim UPDATE and signup INSERT are never invoked (gate-before-claim);
-  (3) a clean request persists the slug, not the raw input, and notify fires;
-  (4) an already-valid input like `A--B` is stored lowercased and otherwise
-  unchanged.
+  in each of `name`, `nickname`, and `household` (raw) returns the generic
+  400; (2) for those cases the invite-claim UPDATE and signup INSERT are
+  never invoked (gate-before-claim); (3) a clean request persists the slug,
+  not the raw input, and notify fires; (4) an already-valid input like `A--B`
+  is stored lowercased and otherwise unchanged. Note: no input exists where
+  the raw union passes but the slug blocks — obscenity's confusables
+  transformer already folds every substitution slugify performs (verified:
+  `Fück`, `shìt`, `cøck` all block raw) — so the `profane(slug)` clause of
+  the gate is defense-in-depth pinned by code, not by a constructible test
+  case.
 
 `npm test` is the command; the repo deploys on push to main and has no CI, so
 tests are a local/pre-push tool, same as `wrangler dev`. The stale-token retry
