@@ -352,11 +352,11 @@
              list above already owns "name" and "email" on this page; the name
              attributes are what /api/join reads and are unchanged.
 
-             Two checkboxes, and they are not interchangeable. The terms box is
-             required: it's where the agreement is formed and age is confirmed.
-             The messaging box is not, and is never pre-ticked — delivery still
-             falls back to a standard text for Android recipients under carrier
-             rules, where a required consent box is a registration failure. -->
+             One checkbox. The terms box is required: it's where the agreement
+             is formed and age is confirmed. There is no messaging-consent box —
+             a number alone starts nothing, and the opt-in is the member's first
+             text to Baxter (see the phone hint), so a box here would add
+             friction without adding consent. -->
         <div id="join-block" hidden>
           <form class="signup-form" id="join-form" action="/api/join" method="POST">
             <div class="field">
@@ -401,7 +401,8 @@
                      inputmode="tel" aria-describedby="join-phone-hint">
               <p class="field-hint" id="join-phone-hint">
                 Adds texting to your household. Blue bubble on iPhone, a text everywhere
-                else. Leave it blank and Baxter works over email.
+                else. Baxter won't start texting you until you text him. Leave it blank and
+                Baxter works over email.
               </p>
             </div>
 
@@ -411,16 +412,6 @@
                 I'm 18 or older and I agree to the
                 <a href="terms.html">Terms &amp; Conditions</a> and
                 <a href="privacy.html">Privacy Policy</a>.
-              </label>
-            </div>
-
-            <div class="consent">
-              <input type="checkbox" id="join-consent" name="consent" value="yes">
-              <label for="join-consent">
-                <span class="consent-optional">Optional.</span>
-                Message me at the number above. Baxter replies when I message it and sends
-                the reminders I set up. Message and data rates may apply. Reply STOP any
-                time to stop.
               </label>
             </div>
 

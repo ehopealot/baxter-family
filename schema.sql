@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS signups (
   household   TEXT    NOT NULL,
   email       TEXT    NOT NULL,
   phone       TEXT,             -- optional: Baxter works over email alone
-  consent     INTEGER NOT NULL DEFAULT 0,   -- optional: messaging opt-in
+  consent     INTEGER NOT NULL DEFAULT 0,   -- legacy checkbox opt-in (pre-2026-08-14); opt-in is now the first inbound text. Nothing writes it.
   -- Required. Ticking it is where the agreement is formed and where the signer
   -- confirms they're 18, so the version they agreed to is worth keeping: terms
   -- change, and "they accepted the terms" is worth little without "which ones".

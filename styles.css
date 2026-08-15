@@ -1543,19 +1543,6 @@ p {
 	margin-top: 2.25rem;
 }
 
-/* Marks the messaging box as the optional one. The terms box beside it is
-   required, and two identical-looking checkboxes with different obligations is
-   exactly the thing someone skims past. */
-.consent-optional {
-	font-family: var(--mono);
-	font-size: 0.82em;
-	font-weight: 500;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	color: var(--ink-3);
-	margin-right: 0.3rem;
-}
-
 /* Hero signature. Separated from the facts above it by a hairline rather than
    another bullet: those are product facts, this is a person putting their name
    to it, and they shouldn't read as the same kind of statement. Quiet on

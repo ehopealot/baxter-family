@@ -30,7 +30,6 @@ export async function onRequestPost(ctx) {
 	const nickname = (form.get("nickname") || "").toString().trim();
 	const household = (form.get("household") || "").toString().trim().toLowerCase();
 	const phone = (form.get("phone") || "").toString().trim();
-	const consent = form.get("consent") ? 1 : 0;
 	const terms = form.get("terms") ? 1 : 0;
 	const code = (form.get("invite_code") || "").toString().trim().toUpperCase();
 	let email = (form.get("email") || "").toString().trim();
@@ -82,10 +81,10 @@ export async function onRequestPost(ctx) {
 
 	try {
 		await env.DB.prepare(
-			`INSERT INTO signups (created_at, name, nickname, household, email, phone, consent, terms_agreed, terms_version, invite_code, ip, user_agent)
-			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			`INSERT INTO signups (created_at, name, nickname, household, email, phone, terms_agreed, terms_version, invite_code, ip, user_agent)
+			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		)
-			.bind(now(), name, nickname, household, email, phone || null, consent, terms, TERMS_VERSION, code, ip, ua)
+			.bind(now(), name, nickname, household, email, phone || null, terms, TERMS_VERSION, code, ip, ua)
 			.run();
 	} catch (err) {
 		// household has a UNIQUE index, so a clash lands here rather than in a
