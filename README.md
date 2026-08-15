@@ -97,9 +97,9 @@ wall is gone and the section is one honest sentence instead.
 
 Two things are still not optional, and neither is about carriers:
 
-- **The messaging consent box is never pre-ticked, and is not required.**
-  Delivery still falls back to a standard text for Android recipients, under
-  carrier rules, so the safe posture is cheap to keep.
+- **There is no messaging consent box.** Giving a number starts nothing; the opt-in is
+  the member's first text to Baxter, and the standard-text fallback for Android
+  recipients still makes the safe posture cheap to keep.
 - **`privacy.html` §3 lists every field the forms collect.** Add a field, add it
   there. It currently covers name, household name, email and mobile number.
 

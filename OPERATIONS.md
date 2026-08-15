@@ -199,7 +199,7 @@ Remember `--remote`, or you're querying the empty sandbox:
 npx wrangler d1 execute baxter-family --remote --command "
   SELECT datetime(created_at,'unixepoch','localtime') AS when_,
          name, nickname, household, email, phone,
-         CASE WHEN consent THEN 'yes' ELSE '' END AS texts,
+         CASE WHEN phone IS NOT NULL THEN 'yes' ELSE '' END AS texts,
          status
   FROM signups ORDER BY created_at DESC"
 
@@ -232,12 +232,14 @@ FROM invites i LEFT JOIN signups s ON s.invite_code = i.code
 GROUP BY i.code ORDER BY signups DESC, i.created_at DESC;
 ```
 
-**Who said yes to messaging** — for when you start actually texting people. `consent` is
-optional on the form and never pre-ticked, so this is a real subset, not everyone:
+**Who gave a phone number** — who to expect a first text from. The form no longer has a
+consent box; the opt-in is each member's first inbound text to Baxter. (`consent` is a
+legacy column: pre-2026-08-14 rows recorded the old checkbox, and it has been 0 on every
+row since — nothing writes it.)
 
 ```sql
 SELECT name, household, email, phone
-FROM signups WHERE consent = 1 AND phone IS NOT NULL AND status = 'active';
+FROM signups WHERE phone IS NOT NULL AND status = 'active';
 ```
 
 **What's waiting to be provisioned:**
