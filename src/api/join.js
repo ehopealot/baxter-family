@@ -8,7 +8,7 @@ import { notifySignup } from "../notify.js";
 
 // The effective date on terms.html. Bump both together when the terms change,
 // so a stored row says which version was agreed to.
-const TERMS_VERSION = "2026-08-06";
+const TERMS_VERSION = "2026-08-14";
 
 const oops = (heading, body, status = 400) =>
 	page({ status, title: "Something went wrong", heading, body });
