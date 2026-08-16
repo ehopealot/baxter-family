@@ -3,13 +3,13 @@
    This handler is the security boundary, not signup.js. The page checks the code
    to decide what to show; anyone can skip the page and POST here directly, so
    everything is re-checked from scratch below. */
-import { turnstileOk, checkInvite, seeOther, page, clientMeta, now, slugify, HOUSEHOLD_RE } from "../lib.js";
+import { turnstileOk, checkInvite, seeOther, page, clientMeta, now, slugify, normalizePhone, HOUSEHOLD_RE } from "../lib.js";
 import { profane } from "../profanity.js";
 import { notifySignup } from "../notify.js";
 
 // The effective date on terms.html. Bump both together when the terms change,
 // so a stored row says which version was agreed to.
-const TERMS_VERSION = "2026-08-14";
+const TERMS_VERSION = "2026-08-15";
 
 const oops = (heading, body, status = 400) =>
 	page({ status, title: "Something went wrong", heading, body });
@@ -57,8 +57,15 @@ export async function onRequestPost(ctx) {
 		return oops("The terms weren't agreed to.", "Signing up means confirming you're 18 or older and agreeing to the Terms & Conditions. Head back and tick that box.");
 	}
 
-	if (!name || !nickname || !household || !email || !email.includes("@")) {
-		return oops("Some details are missing.", "We need a name, a nickname, a household name and an email address. Head back and fill those in.");
+	if (!name || !nickname || !household || !phone || !email || !email.includes("@")) {
+		return oops("Some details are missing.", "We need a name, a nickname, a household name, a mobile number and an email address. Head back and fill those in.");
+	}
+
+	// Canonical E.164 or nothing: provisioning dials the stored value with no
+	// second chance to clean it up. Bare numbers read as US; + overrides.
+	const phoneE164 = normalizePhone(phone);
+	if (!phoneE164) {
+		return oops("That number doesn't look right.", "Enter the mobile number we can text you on — for example 415 555 0100, or +44 7400 900123 from outside the US.");
 	}
 	// A result check, not an input check: slugify above did the tidying, so
 	// this only fires when the slug comes out one character or over 31 —
@@ -97,7 +104,7 @@ export async function onRequestPost(ctx) {
 			`INSERT INTO signups (created_at, name, nickname, household, email, phone, terms_agreed, terms_version, invite_code, ip, user_agent)
 			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		)
-			.bind(now(), name, nickname, household, email, phone || null, terms, TERMS_VERSION, code, ip, ua)
+			.bind(now(), name, nickname, household, email, phoneE164, terms, TERMS_VERSION, code, ip, ua)
 			.run();
 	} catch (err) {
 		// household has a UNIQUE index, so a clash lands here rather than in a
@@ -109,7 +116,7 @@ export async function onRequestPost(ctx) {
 		throw err;
 	}
 
-	ctx.waitUntil(notifySignup(env, { type: "join", name, nickname, household, email, phone: phone || undefined }));
+	ctx.waitUntil(notifySignup(env, { type: "join", name, nickname, household, email, phone: phoneE164 }));
 
 	return seeOther("/welcome");
 }

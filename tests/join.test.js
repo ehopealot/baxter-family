@@ -46,7 +46,7 @@ const CLEAN_FIELDS = {
 	nickname: "hopie",
 	household: "The Andersons",
 	email: "hope@example.com",
-	phone: "",
+	phone: "415 555 0100",
 	terms: "1",
 	invite_code: "BAX-7K3M",
 	"cf-turnstile-response": "tok",
@@ -67,6 +67,7 @@ test("clean signup stores the slug and claims the invite", async () => {
 	const insert = statements.find((s) => s.sql.startsWith("INSERT INTO signups"));
 	assert.ok(insert, "signup insert ran");
 	assert.equal(insert.args[3], "the-andersons"); // stored slug, not raw input
+	assert.equal(insert.args[5], "+14155550100"); // canonical E.164, not raw input
 	assert.ok(statements.some((s) => s.sql.includes("UPDATE invites")), "invite claim ran");
 	assert.equal(waitUntilCalls.length, 1); // notify scheduling fired once
 });
@@ -108,4 +109,32 @@ test("over-long household gets the won't-work error after tidying", async () => 
 	const res = await onRequestPost({ request: makeRequest({ ...CLEAN_FIELDS, household: "x".repeat(40) }), env, waitUntil });
 	assert.equal(res.status, 400);
 	assert.ok((await res.text()).includes("That household name won't work."));
+});
+
+test("missing phone rejects with the missing-details error, no invite claim", async () => {
+	const { env, waitUntil, statements } = makeEnv(OPEN_INVITE);
+	const fields = { ...CLEAN_FIELDS };
+	delete fields.phone;
+	const res = await onRequestPost({ request: makeRequest(fields), env, waitUntil });
+	assert.equal(res.status, 400);
+	assert.ok((await res.text()).includes("a mobile number"));
+	assert.ok(!statements.some((s) => s.sql.includes("UPDATE invites")));
+});
+
+test("garbage phone rejects with the number error, no invite claim", async () => {
+	const { env, waitUntil, statements } = makeEnv(OPEN_INVITE);
+	const res = await onRequestPost({ request: makeRequest({ ...CLEAN_FIELDS, phone: "asdf" }), env, waitUntil });
+	assert.equal(res.status, 400);
+	const body = await res.text();
+	assert.ok(body.includes("That number doesn't look right."));
+	assert.ok(!statements.some((s) => s.sql.includes("UPDATE invites")));
+	assert.ok(!statements.some((s) => s.sql.startsWith("INSERT INTO signups")));
+});
+
+test("international number stored as-is in E.164", async () => {
+	const { env, waitUntil, statements } = makeEnv(OPEN_INVITE);
+	const res = await onRequestPost({ request: makeRequest({ ...CLEAN_FIELDS, phone: "+44 7400 900123" }), env, waitUntil });
+	assert.equal(res.status, 303);
+	const insert = statements.find((s) => s.sql.startsWith("INSERT INTO signups"));
+	assert.equal(insert.args[5], "+447400900123");
 });

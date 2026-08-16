@@ -93,7 +93,7 @@
 		heading.textContent = "Let's meet Baxter.";
 		lede.textContent =
 			"Your code checks out. Pick a name for your household and tell us where Baxter " +
-			"should write to you. Add a mobile number too if you want Baxter over text.";
+			"should write to you, and the mobile number Baxter will text.";
 
 		mountTurnstile();
 		// Only chase focus when someone actually pressed the button. Doing it for

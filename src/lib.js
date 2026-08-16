@@ -1,4 +1,5 @@
 /* Shared bits for the form handlers. */
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 export const now = () => Math.floor(Date.now() / 1000);
 
@@ -20,6 +21,15 @@ export function slugify(input) {
 	s = s.replace(/['’]/g, "");
 	s = s.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 	return s;
+}
+
+/* A mobile number as the rest of the system dials it: canonical E.164, or
+   null when the input is unparsable or not a valid number. Bare numbers are
+   read as US (the invite flow is US-first); a leading + overrides, so
+   visitors from elsewhere type their full international number. */
+export function normalizePhone(raw) {
+	const p = parsePhoneNumberFromString(String(raw || ""), "US");
+	return p && p.isValid() ? p.number : null;
 }
 
 /* Turnstile's server check. The widget on the page only mints a token; this is
