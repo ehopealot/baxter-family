@@ -3,7 +3,8 @@
    This handler is the security boundary, not signup.js. The page checks the code
    to decide what to show; anyone can skip the page and POST here directly, so
    everything is re-checked from scratch below. */
-import { turnstileOk, checkInvite, seeOther, page, clientMeta, now } from "../lib.js";
+import { turnstileOk, checkInvite, seeOther, page, clientMeta, now, slugify, HOUSEHOLD_RE } from "../lib.js";
+import { profane } from "../profanity.js";
 import { notifySignup } from "../notify.js";
 
 // The effective date on terms.html. Bump both together when the terms change,
@@ -28,7 +29,8 @@ export async function onRequestPost(ctx) {
 
 	const name = (form.get("name") || "").toString().trim();
 	const nickname = (form.get("nickname") || "").toString().trim();
-	const household = (form.get("household") || "").toString().trim().toLowerCase();
+	const householdRaw = (form.get("household") || "").toString().trim();
+	const household = slugify(householdRaw);
 	const phone = (form.get("phone") || "").toString().trim();
 	const terms = form.get("terms") ? 1 : 0;
 	const code = (form.get("invite_code") || "").toString().trim().toUpperCase();
@@ -58,8 +60,19 @@ export async function onRequestPost(ctx) {
 	if (!name || !nickname || !household || !email || !email.includes("@")) {
 		return oops("Some details are missing.", "We need a name, a nickname, a household name and an email address. Head back and fill those in.");
 	}
-	if (!/^[a-z0-9][a-z0-9-]{1,30}$/.test(household)) {
-		return oops("That household name won't work.", "It becomes an email address, so it needs to be 2–31 characters: lowercase letters, numbers and hyphens, starting with a letter or number.");
+	// A result check, not an input check: slugify above did the tidying, so
+	// this only fires when the slug comes out one character or over 31 —
+	// empty input is caught by the missing-fields check above.
+	if (!HOUSEHOLD_RE.test(household)) {
+		return oops("That household name won't work.", "It becomes an email address, so pick something 2–31 characters after tidying.");
+	}
+
+	// Taste gate, deliberately unexplained: no field named, no reason given,
+	// the signup just doesn't happen. Runs before the invite claim, so a
+	// rejected attempt burns no invite use. Household is checked both as
+	// typed and as slugified — defense-in-depth over the persistent address.
+	if (profane(name) || profane(nickname) || profane(householdRaw) || profane(household)) {
+		return oops("That didn't work.", "We couldn't accept those details. Try different wording and submit again.");
 	}
 
 	// Claim the use first, with the limit in the WHERE clause so two posts
