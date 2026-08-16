@@ -17,6 +17,7 @@ function makeRequest(fields) {
 
 function makeEnv(inviteRow) {
 	const statements = [];
+	const waitUntilCalls = [];
 	const respond = (sql) => ({
 		bind: (...args) => {
 			statements.push({ sql, args });
@@ -31,7 +32,10 @@ function makeEnv(inviteRow) {
 	return {
 		statements,
 		env: { TURNSTILE_SECRET: "test-secret", DB: { prepare: (sql) => respond(sql) } },
-		waitUntil: () => {},
+		waitUntil: (p) => {
+			waitUntilCalls.push(p);
+		},
+		waitUntilCalls,
 	};
 }
 
@@ -56,13 +60,15 @@ after(() => {
 });
 
 test("clean signup stores the slug and claims the invite", async () => {
-	const { env, waitUntil, statements } = makeEnv(OPEN_INVITE);
+	const { env, waitUntil, statements, waitUntilCalls } = makeEnv(OPEN_INVITE);
 	const res = await onRequestPost({ request: makeRequest(CLEAN_FIELDS), env, waitUntil });
 	assert.equal(res.status, 303);
 	assert.equal(res.headers.get("location"), "/welcome");
 	const insert = statements.find((s) => s.sql.startsWith("INSERT INTO signups"));
 	assert.ok(insert, "signup insert ran");
 	assert.equal(insert.args[3], "the-andersons"); // stored slug, not raw input
+	assert.ok(statements.some((s) => s.sql.includes("UPDATE invites")), "invite claim ran");
+	assert.equal(waitUntilCalls.length, 1); // notify scheduling fired once
 });
 
 test("an already-valid household like A--B stores lowercased and otherwise unchanged", async () => {
