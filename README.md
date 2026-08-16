@@ -54,6 +54,10 @@ wrangler d1 execute baxter-family --remote --file=schema.sql
 wrangler secret put TURNSTILE_SECRET
 ```
 
+One-time: `npm install` — pulls `obscenity`, the only dependency, bundled into
+the Worker by wrangler. Run the test suite with `npm test` (node:test; a local
+tool — deploys don't run it).
+
 For local work, put `TURNSTILE_SECRET` in `.dev.vars` (gitignored) and run
 `wrangler dev`. Cloudflare's always-passes test secret is
 `1x0000000000000000000000000000000AA`. Add `--local` to the invite commands to

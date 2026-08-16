@@ -2,6 +2,26 @@
 
 export const now = () => Math.floor(Date.now() / 1000);
 
+/* The shape a household name must have once slugified: it becomes an email
+   address, so lowercase letters, digits, hyphens, 2–31 characters. */
+export const HOUSEHOLD_RE = /^[a-z0-9][a-z0-9-]{1,30}$/;
+
+/* Turn free-typed input into that shape. Accents fold (Bédard → bedard), a
+   few non-decomposing letters map explicitly (Søren → soren, Gauß → gauss),
+   apostrophes drop (O'Brien → obrien), any other junk run becomes a single
+   hyphen, edge hyphens trim. Input already matching HOUSEHOLD_RE passes
+   through byte-identical — everything the old validation accepted keeps its
+   exact old value, oddities like consecutive hyphens included. */
+export function slugify(input) {
+	let s = String(input || "").trim();
+	s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+	s = s.replace(/ø/g, "o").replace(/æ/g, "ae").replace(/ß/g, "ss").replace(/đ/g, "d").replace(/ł/g, "l");
+	if (HOUSEHOLD_RE.test(s)) return s;
+	s = s.replace(/['’]/g, "");
+	s = s.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+	return s;
+}
+
 /* Turnstile's server check. The widget on the page only mints a token; this is
    the half that stops anything, because the endpoint is public and anyone can
    POST straight at it. Tokens are single-use and expire after five minutes. */
